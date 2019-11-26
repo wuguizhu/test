@@ -1,0 +1,191 @@
+package ping
+
+import (
+	"math/rand"
+	"testnode-pinger/util"
+	"time"
+
+	"github.com/astaxie/beego/logs"
+)
+
+type Ping struct {
+	Station          string
+	IPRegionURL      string //获取Reagon IP的url
+	IPStationURL     string //获取Station IP的url
+	ResultURL        string //上传ping结果的url
+	PacketSize       int    //ping包的大小
+	PacketCount      int
+	ThreadCount      int
+	TimeoutMs        int
+	TickerMin        int
+	SendPackWait     int
+	SendPackInterMin int
+	Interval         int
+}
+
+//PingStat is the status of ping
+type PingStat struct {
+	Times    int           //返回ICMP包结果的次数
+	Duration time.Duration //返回所有ICMP包的rtt之和
+	MaxRtt   time.Duration //最大rtt
+	MinRtt   time.Duration //最小rtt
+}
+type PingResult struct {
+	PacketCount int     `json:"package"`
+	AverageRtt  float64 `json:"avgrtt"`
+	MinRtt      float64 `json:"minrtt"`
+	MaxRtt      float64 `json:"maxrtt"`
+	LossCount   int     `json:"loss"`
+	ProbeTime   string  `json:"ctime"`
+}
+
+func NewPing(conf *util.Conf) *Ping {
+	p := Ping{
+		Station:          conf.Station,
+		IPRegionURL:      conf.IPRegionGetUrl,
+		IPStationURL:     conf.IPStationGetUrl,
+		ResultURL:        conf.PingResultUrl,
+		PacketSize:       conf.PingPacketSize,
+		PacketCount:      conf.PingPacketCount,
+		ThreadCount:      conf.PingThreadCount,
+		TimeoutMs:        conf.PingTimeoutMs,
+		TickerMin:        conf.PingTickerMin,
+		SendPackWait:     conf.PingSendPackWaitMs,
+		SendPackInterMin: conf.PingSendPackInterMinMs,
+		Interval:         conf.PingInterval,
+	}
+	return &p
+}
+func (p *Ping) PingAll(ipsGetter util.IPsGetter, sip, sregion string) (result map[string]*PingResult, err error) {
+	result = make(map[string]*PingResult)
+	pips := ipsGetter.GetIPs()
+	ipmap := make(map[string]*util.PingIP)
+	for _, pip := range pips {
+		ipmap[pip.IP] = pip
+	}
+	logs.Debug(ipmap)
+
+	ips := make([]string, 0, len(pips))
+	//保存最新的ping stat
+	stat := make(map[string]*PingStat)
+
+	for _, pip := range pips {
+		result[pip.IP] = nil
+		ips = append(ips, pip.IP)
+	}
+	logs.Debug(ips)
+
+	if len(ips) > 0 {
+		// pingTime := time.Now().Format("2006-01-02 15:04:05")
+		res, send, err := ping(p.PacketCount, p.PacketSize, p.TimeoutMs, p.SendPackInterMin, p.SendPackWait, ips, sip)
+		if err != nil {
+			logs.Error("pips ping fail with error: ", err)
+			return nil, err
+		}
+		logs.Debug(res)
+
+		// 更新有ping结果的IP
+		for k, r := range res {
+			delete(stat, k)
+			stat[k] = r
+		}
+		for ip, r := range stat {
+			if r == nil {
+				logs.Debug("dst ip:%s,region:%s,rtt:%d,loss rate 100%%", ip, ipmap[ip].Region, util.MaxRtt)
+			} else {
+				logs.Debug("dst ip:%s,region:%s,MaxRtt:%v,MinRtt:%v,Durition:%s", ip, ipmap[ip].Region, r.MaxRtt, r.MinRtt, r.Duration.String())
+			}
+		}
+		// 将stat计算出result
+		for _, ip := range ips {
+			pingResult := new(PingResult)
+			pingResult.PacketCount = p.PacketCount
+			r, ok := stat[ip]
+			if !ok {
+				pingResult.LossCount = send
+			} else {
+				pingResult.LossCount = send - r.Times
+				pingResult.AverageRtt = float64(r.Duration) / float64(time.Millisecond) / float64(r.Times)
+				pingResult.MinRtt = float64(r.MinRtt) / float64(time.Millisecond)
+				pingResult.MaxRtt = float64(r.MaxRtt) / float64(time.Millisecond)
+				pingResult.ProbeTime = r.Duration.String()
+			}
+			result[ip] = pingResult
+			logs.Debug("packages:%d,avgRtt:%.2f,minRtt:%.2f,maxRtt:%.2f,loss:%d,probeTime:%s", result[ip].PacketCount, result[ip].AverageRtt, result[ip].MinRtt, result[ip].MaxRtt, result[ip].LossCount, result[ip].ProbeTime)
+		}
+
+	}
+	return result, nil
+}
+
+// ping perform a ping operation
+func ping(times, size, timeout, sendPackageInterMin, sendPackageWait int, ips []string, sip string) (result map[string]*PingStat, send int, err error) {
+	result = make(map[string]*PingStat)
+	//给每个ip生成随机id放入icmp报文，保证同一个ip的id相同
+	ip2id := make(map[string]int)
+	rand.Seed(time.Now().UnixNano())
+	for _, ip := range ips {
+		ip2id[ip] = rand.Intn(0xffff)
+	}
+	// 开始ping指定次数
+	logs.Debug("pingCount:", times)
+	// startTime := time.Now()
+	for send = 0; send < times; send++ {
+		logs.Debug("ping round:%d start", send)
+		pinger := util.NewPinger(send+1, "")
+		for _, ip := range ips {
+			err := pinger.AddIP(ip, ip2id[ip])
+			if err != nil {
+				logs.Error("p.AddIP(ip) for ip %s fails with error %s\n", ip, err)
+				continue
+			}
+			logs.Debug("AddIP success!", ip)
+		}
+		pinger.Size = size
+		pinger.MaxRTT = time.Duration(timeout) * time.Millisecond
+		timer := time.NewTimer(time.Duration(sendPackageInterMin) * time.Millisecond)
+		now := time.Now()
+		// 启动本次ping
+		m, _, err := pinger.Run()
+		if err != nil {
+			logs.Error("ping run fails:%s", err)
+			continue
+		}
+		logs.Debug("ping %s success!", ips)
+		// 本次ping,与之前ping所有结果打包
+		logs.Debug("alllllllll", m)
+		for ip, d := range m {
+			r := result[ip]
+			// 已经有结果，则更新
+			if r != nil {
+				r.Times++
+				r.Duration += d
+				if d >= r.MaxRtt {
+					r.MaxRtt = d
+				}
+				if d < r.MinRtt {
+					r.MinRtt = d
+				}
+			} else {
+				// 首次ping
+				result[ip] = &PingStat{
+					Times:    1,
+					Duration: d,
+					MaxRtt:   d,
+					MinRtt:   d,
+				}
+			}
+		}
+		diff := time.Since(now)
+		select {
+		case <-timer.C:
+			logs.Info("ping round:%d finished, %dip ping use time %s", send, len(ips), diff.String())
+		default:
+			logs.Info("finish %d ip ping with %s,less than %d ms,so wait %d ms",
+				len(ips), diff.String(), sendPackageInterMin, sendPackageWait)
+			time.Sleep(time.Duration(sendPackageWait) * time.Millisecond)
+		}
+		timer.Stop()
+	}
+	return
+}
