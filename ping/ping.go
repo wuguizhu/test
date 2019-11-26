@@ -56,7 +56,7 @@ func NewPing(conf *util.Conf) *Ping {
 	}
 	return &p
 }
-func (p *Ping) PingAll(ipsGetter util.IPsGetter, sip, sregion string) (result map[string]*PingResult, err error) {
+func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (result map[string]*PingResult, err error) {
 	result = make(map[string]*PingResult)
 	pips := ipsGetter.GetIPs()
 	ipmap := make(map[string]*util.PingIP)
@@ -76,7 +76,6 @@ func (p *Ping) PingAll(ipsGetter util.IPsGetter, sip, sregion string) (result ma
 	logs.Debug(ips)
 
 	if len(ips) > 0 {
-		// pingTime := time.Now().Format("2006-01-02 15:04:05")
 		res, send, err := ping(p.PacketCount, p.PacketSize, p.TimeoutMs, p.SendPackInterMin, p.SendPackWait, ips, sip)
 		if err != nil {
 			logs.Error("pips ping fail with error: ", err)
@@ -129,7 +128,6 @@ func ping(times, size, timeout, sendPackageInterMin, sendPackageWait int, ips []
 	}
 	// 开始ping指定次数
 	logs.Debug("pingCount:", times)
-	// startTime := time.Now()
 	for send = 0; send < times; send++ {
 		logs.Debug("ping round:%d start", send)
 		pinger := util.NewPinger(send+1, "")

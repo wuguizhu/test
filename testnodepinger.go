@@ -23,6 +23,7 @@ type IPs struct {
 	StationMu  *sync.RWMutex
 }
 
+// NewIPs gets an instance of *IPs
 func NewIPs(conf *util.Conf, sip string) (*IPs, error) {
 	regionIPs, err := util.GetRegionIPs(conf.IPRegionGetUrl, conf.Station, sip)
 	if err != nil {
@@ -61,16 +62,15 @@ func main() {
 	}
 	sip := srcIPs[0]
 	logs.Debug("local ip is ", sip)
-	// request to update ips per 10s
-	// regionIPs = new(util.RegionIPs)
-	// stationIPs = new(util.StationIPs)
-	// updateIPs(conf, sip)
-	// start := make(chan bool)
 	ips, _ := NewIPs(conf, sip)
+	// request to update ips at a certain interval
 	go ips.updateIPs(conf, sip)
+	// ping and post at a certain interval
 	ips.pingRun(conf, sip)
 
 }
+
+// updateIPs update IPs from the API response
 func (ips *IPs) updateIPs(conf *util.Conf, sip string) {
 	count := 0
 	for {
@@ -107,33 +107,40 @@ func (ips *IPs) updateIPs(conf *util.Conf, sip string) {
 
 	}
 }
+
+// pingRun integrated ping,tcp ping and post
 func (ips *IPs) pingRun(conf *util.Conf, sip string) {
 	for {
 		timer := time.NewTimer(time.Duration(conf.PingResultPostInterval) * time.Second)
 		pinger := ping.NewPing(conf)
 		logs.Debug("begion ping reagionIP")
-		regionRes, err := pinger.PingAll(ips.RegionIPs, sip, ips.RegionIPs.Region)
+		// ping regionIPs
+		regionRes, err := pinger.TestNodePing(ips.RegionIPs, sip, ips.RegionIPs.Region)
 		if err != nil {
-			logs.Error("PingAll fails with error:", err)
+			logs.Error("TestNodePing fails with error:", err)
 			return
 		}
 		logs.Debug("reagion ping result:", regionRes)
 		logs.Debug("begion ping stationIP")
-		stationRes, err := pinger.PingAll(ips.StationIPs, sip, ips.StationIPs.Region)
+		// ping stationIPs
+		stationRes, err := pinger.TestNodePing(ips.StationIPs, sip, ips.StationIPs.Region)
 		if err != nil {
-			logs.Error("PingAll fails with error:", err)
+			logs.Error("TestNodePing fails with error:", err)
 			return
 		}
 		logs.Debug("station ping result:", stationRes)
 		logs.Debug("begion tcpping stationIP")
+		// tcp ping stationIPs
 		stationTCPRes := ping.TCPPing(ips.StationIPs, conf)
 		logs.Debug("station tcpping result:", stationTCPRes)
+		// convert all res into JSON
 		jsonData, err := ips.Res2Json(regionRes, stationRes, stationTCPRes)
 		if err != nil {
 			logs.Error("ips.Res2Json fail with err:", jsonData)
 			return
 		}
-		logs.Info("json result:",string( jsonData))
+		logs.Info("json result:", string(jsonData))
+		// post JSON
 		err = Post(jsonData, conf)
 		if err != nil {
 			logs.Error("Post fail with err:", err)

@@ -51,6 +51,7 @@ type StationIP struct {
 	IsPhyIP       int    `json:"isPhyIp"`
 }
 
+// ReqForm is a request to testnode-collecter
 type ReqForm struct {
 	Status int     `json:"status"`
 	Msg    Message `json:"message"`
