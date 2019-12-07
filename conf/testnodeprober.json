@@ -1,11 +1,5 @@
 {	
-	"log_level":6,
-	"api_request_interval_s":100,
-	"ping_result_post_interval_s":30,
     "station":"test-cn1",
-	"ip_region_get_url":"http://www.mockhttp.cn/mock/test/regionips",
-	"ip_station_get_url":"http://www.mockhttp.cn/mock/test/regionips",
-	"ping_result_url":"http://www.mockhttp.cn/mock/test/result",
 	"ping_packet_size":56,
 	"ping_packet_count":10,
 	"ping_thread_count":1024,
@@ -21,5 +15,5 @@
 	"tcpping_send_go_count":1,
 	"tcpping_receive_go_count":1,
 	"tcpping_process_go_count":4,
-	"tcpping_interval_ms":50
+	"tcpping_interval_ms":500
 }

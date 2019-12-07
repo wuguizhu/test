@@ -1,0 +1,13 @@
+2019/12/06 17:10:20.953 [I] [main.go:37]  Beego start to run 
+2019/12/06 17:10:21.007 [I] [asm_amd64.s:1357]  http server Running on http://:8043
+2019/12/06 17:10:30.953 [I] [asm_amd64.s:1357]  ping is not running,beacuse ping switcher status is false. Check status another time after: 10s
+2019/12/06 17:10:40.955 [I] [asm_amd64.s:1357]  ping is not running,beacuse ping switcher status is false. Check status another time after: 10s
+2019/12/06 17:10:50.964 [I] [asm_amd64.s:1357]  ping is not running,beacuse ping switcher status is false. Check status another time after: 10s
+2019/12/06 17:11:00.966 [I] [asm_amd64.s:1357]  ping is not running,beacuse ping switcher status is false. Check status another time after: 10s
+2019/12/06 17:11:10.968 [I] [asm_amd64.s:1357]  ping is not running,beacuse ping switcher status is false. Check status another time after: 10s
+2019/12/06 17:11:20.969 [I] [asm_amd64.s:1357]  ping is not running,beacuse ping switcher status is false. Check status another time after: 10s
+2019/12/06 17:11:30.970 [I] [asm_amd64.s:1357]  ping is not running,beacuse ping switcher status is false. Check status another time after: 10s
+2019/12/06 17:11:40.974 [I] [asm_amd64.s:1357]  ping is not running,beacuse ping switcher status is false. Check status another time after: 10s
+2019/12/06 17:11:50.977 [I] [asm_amd64.s:1357]  ping is not running,beacuse ping switcher status is false. Check status another time after: 10s
+2019/12/06 17:12:00.978 [I] [asm_amd64.s:1357]  ping is not running,beacuse ping switcher status is false. Check status another time after: 10s
+2019/12/06 17:12:10.978 [I] [asm_amd64.s:1357]  ping is not running,beacuse ping switcher status is false. Check status another time after: 10s

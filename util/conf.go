@@ -18,16 +18,7 @@ var conf Conf
 
 // BaseConf is the base config file
 type BaseConf struct {
-	// 日志等级
-	LogLevel int `json:"log_level"`
-	// API请求间隔
-	APIRequestInterval int `json:"api_request_interval_s"`
-	// ping result发送间隔
-	PingResultPostInterval int    `json:"ping_result_post_interval_s"`
-	Station                string `json:"station"`
-	IPRegionGetUrl         string `json:"ip_region_get_url"`
-	IPStationGetUrl        string `json:"ip_station_get_url"`
-	PingResultUrl          string `json:"ping_result_url"`
+	Station string `json:"station"`
 	// icmp包大小，56Bytes,不包含IP头
 	PingPacketSize int `json:"ping_packet_size"`
 	// icmp ping的包个数

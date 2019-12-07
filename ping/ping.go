@@ -42,9 +42,6 @@ type PingResult struct {
 func NewPing(conf *util.Conf) *Ping {
 	p := Ping{
 		Station:          conf.Station,
-		IPRegionURL:      conf.IPRegionGetUrl,
-		IPStationURL:     conf.IPStationGetUrl,
-		ResultURL:        conf.PingResultUrl,
 		PacketSize:       conf.PingPacketSize,
 		PacketCount:      conf.PingPacketCount,
 		ThreadCount:      conf.PingThreadCount,
@@ -58,12 +55,13 @@ func NewPing(conf *util.Conf) *Ping {
 }
 func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (result map[string]*PingResult, err error) {
 	result = make(map[string]*PingResult)
+
 	pips := ipsGetter.GetIPs()
 	ipmap := make(map[string]*util.PingIP)
 	for _, pip := range pips {
 		ipmap[pip.IP] = pip
 	}
-	logs.Debug(ipmap)
+	logs.Debug("ip map is", ipmap)
 
 	ips := make([]string, 0, len(pips))
 	//保存最新的ping stat
@@ -76,6 +74,7 @@ func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (resu
 	logs.Debug(ips)
 
 	if len(ips) > 0 {
+		// pingTime := time.Now().Format("2006-01-02 15:04:05")
 		res, send, err := ping(p.PacketCount, p.PacketSize, p.TimeoutMs, p.SendPackInterMin, p.SendPackWait, ips, sip)
 		if err != nil {
 			logs.Error("pips ping fail with error: ", err)
@@ -128,6 +127,7 @@ func ping(times, size, timeout, sendPackageInterMin, sendPackageWait int, ips []
 	}
 	// 开始ping指定次数
 	logs.Debug("pingCount:", times)
+	// startTime := time.Now()
 	for send = 0; send < times; send++ {
 		logs.Debug("ping round:%d start", send)
 		pinger := util.NewPinger(send+1, "")
@@ -151,7 +151,7 @@ func ping(times, size, timeout, sendPackageInterMin, sendPackageWait int, ips []
 		}
 		logs.Debug("ping %s success!", ips)
 		// 本次ping,与之前ping所有结果打包
-		logs.Debug("alllllllll", m)
+		logs.Debug("ping result:", m)
 		for ip, d := range m {
 			r := result[ip]
 			// 已经有结果，则更新
