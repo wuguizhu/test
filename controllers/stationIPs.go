@@ -39,9 +39,9 @@ func (c *StationIPsController) HandleStationIPs() {
 	logs.Debug("get a station ips post:", string(jsonData))
 	logs.Debug("get test station info:ip=%s station=%s", req.IP, req.Station)
 	process.IPs.UpdateStationIPs(&req)
-	if process.IPs.SafeReadStationStatus() && process.IPs.SafeReadRegionStatus() {
-		process.Switcher.UpdateSwitcherStatus(true)
-		logs.Debug("IPs updated successful!,Begin to ping!")
-	}
+	// if process.IPs.SafeReadStationStatus() && process.IPs.SafeReadRegionStatus() {
+	process.Switcher.UpdateSwitcherStatus(true)
+	logs.Debug("IPs updated successful!,Begin to ping!")
+	// }
 	c.Data["json"] = &rsp
 }
