@@ -75,16 +75,6 @@ type IPsUpdater struct {
 }
 
 func NewIPsUpdater() *IPsUpdater {
-	// regionIPs, err := util.GetRegionIPs(conf.IPRegionGetUrl, conf.Station, sip)
-	// if err != nil {
-	// 	logs.Error("GetRegionIPs fails with error:", err)
-	// 	return nil, err
-	// }
-	// stationIPs, err := util.GetStationIPs(conf.IPStationGetUrl, conf.Station, sip)
-	// if err != nil {
-	// 	logs.Error("GetStationIPs fails with error:", err)
-	// 	return nil, err
-	// }
 	return &IPsUpdater{
 		RegionIPs:        new(util.ReqRegion),
 		StationIPs:       new(util.ReqStation),
