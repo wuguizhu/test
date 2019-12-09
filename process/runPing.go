@@ -145,7 +145,7 @@ func (ips *IPsUpdater) pingRun(conf *util.Conf, sip string) {
 			return
 		}
 		if !Switcher.SafeReadSwitcherStatus() {
-			logs.Info("ping is not running,beacuse ping switcher status is false. Check status another time after:", time.Duration(checkStatus)*time.Second)
+			logs.Debug("ping is not running,beacuse ping switcher status is false. Check status another time after:", time.Duration(checkStatus)*time.Second)
 			time.Sleep(time.Duration(checkStatus) * time.Second)
 			continue
 		}
