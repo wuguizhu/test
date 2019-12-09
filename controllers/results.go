@@ -74,16 +74,16 @@ func (c *ResultsController) GetResults() {
 	regionRes := process.Res.SafeReadRegionResults()
 	stationRes := process.Res.SafeReadStationResults()
 	stationTCPRes := process.Res.SafeReadTCPResults()
-	logs.Debug("regionStatus:%s, stationStatus:%s, switchStatus:%s, regionResStatus:%s, stationResStatus:%s, tcpResStatus:%s", regionStatus, stationStatus, switchStatus, regionResStatus, stationResStatus, tcpResStatus)
+	logs.Debug("regionStatus:%v, stationStatus:%v, switchStatus:%v, regionResStatus:%v, stationResStatus:%v, tcpResStatus:%v", regionStatus, stationStatus, switchStatus, regionResStatus, stationResStatus, tcpResStatus)
 	if switchStatus {
-		if regionResStatus || stationResStatus || tcpResStatus {
+		if regionResStatus && stationResStatus && tcpResStatus {
 			rspResult = process.IPs.Res2Rsp(regionRes, stationRes, stationTCPRes)
 			logs.Debug(*rspResult)
 			c.Data["json"] = rspResult
 			logs.Info("Return result successful")
 		} else {
 			rspResult.Status = 2
-			rspResult.Error = "Results have not been updated, please try again later"
+			rspResult.Error = "Results have not been updated totally, please try again later"
 			logs.Warn("User requested unupdated data, request was rejected")
 			c.Data["json"] = rspResult
 		}
