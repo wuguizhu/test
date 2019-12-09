@@ -159,35 +159,40 @@ func (ips *IPsUpdater) pingRun(conf *util.Conf, sip string) {
 		timer := time.NewTimer(time.Duration(interval) * time.Second)
 		pinger := ping.NewPing(conf)
 		// ping regionIPs
-		logs.Debug("begin ping reagionIP")
-		regionips := ips.SafeReadRegionIPs()
-		regionRes, err := pinger.TestNodePing(regionips, sip, regionips.Region)
-		if err != nil {
-			logs.Error("TestNodePing fails with error:", err)
-			continue
+		if ips.SafeReadRegionStatus() {
+			logs.Debug("begin ping reagionIP")
+			regionips := ips.SafeReadRegionIPs()
+			regionRes, err := pinger.TestNodePing(regionips, sip, regionips.Region)
+			if err != nil {
+				logs.Error("TestNodePing fails with error:", err)
+				continue
+			}
+			Res.UpdateRegionResults(regionRes)
+			Res.UpdateRegionResStatus(true)
+			logs.Debug("reagion ping result:", regionRes)
+
 		}
-		Res.UpdateRegionResults(regionRes)
-		// res.updatesRegionResults(regionRes)
-		logs.Debug("reagion ping result:", regionRes)
 
 		// ping stationIPs
-		logs.Debug("begin ping stationIP")
-		stationips := ips.SafeReadStationIPs()
-		stationRes, err := pinger.TestNodePing(stationips, sip, stationips.Region)
-		if err != nil {
-			logs.Error("TestNodePing fails with error:", err)
-			continue
+		if ips.SafeReadStationStatus() {
+			logs.Debug("begin ping stationIP")
+			stationips := ips.SafeReadStationIPs()
+			stationRes, err := pinger.TestNodePing(stationips, sip, stationips.Region)
+			if err != nil {
+				logs.Error("TestNodePing fails with error:", err)
+				continue
+			}
+			Res.UpdateStationResStatus(true)
+			Res.UpdateStationResults(stationRes)
+			logs.Debug("station ping result:", stationRes)
+			// tcpping stationIPs
+			logs.Debug("begin tcpping stationIP")
+			stationTCPRes := ping.TCPPing(stationips, conf)
+			Res.UpdateTCPResults(stationTCPRes)
+			Res.UpdateTCPResStatus(true)
+			logs.Debug("station tcpping result:", stationTCPRes)
 		}
-		Res.UpdateStationResults(stationRes)
-		// res.updatesStationResults(stationRes)
-		logs.Debug("station ping result:", stationRes)
 
-		// tcpping stationIPs
-		logs.Debug("begin tcpping stationIP")
-		stationTCPRes := ping.TCPPing(stationips, conf)
-		// res.updatesTCPResults(stationTCPRes)
-		Res.UpdateTCPResults(stationTCPRes)
-		logs.Debug("station tcpping result:", stationTCPRes)
 		select {
 		case <-timer.C:
 		default:
@@ -206,8 +211,16 @@ func (ips *IPsUpdater) Res2Rsp(regionRes map[string]*ping.PingResult, stationRes
 		Status: 0,
 		Msg:    new(util.Message),
 	}
-	stationIPs := ips.SafeReadStationIPs()
-	regionIPs := ips.SafeReadRegionIPs()
+	regionIPs := new(util.ReqRegion)
+	stationIPs := new(util.ReqStation)
+	if ips.SafeReadRegionStatus() {
+		regionIPs = ips.SafeReadRegionIPs()
+
+	}
+	if ips.SafeReadStationStatus() {
+		stationIPs = ips.SafeReadStationIPs()
+
+	}
 	if data.Msg.IP = stationIPs.IP; data.Msg.IP == "" {
 		data.Msg.IP = regionIPs.IP
 	}
@@ -217,56 +230,71 @@ func (ips *IPsUpdater) Res2Rsp(regionRes map[string]*ping.PingResult, stationRes
 	if data.Msg.Station = stationIPs.Station; data.Msg.Station == "" {
 		data.Msg.Station = regionIPs.Station
 	}
-
 	res := make([]*util.ResMessage, 0)
-	for _, ip := range regionIPs.IPs {
-		re := util.ResMessage{
-			TargetIP:     ip.IP,
-			TargetRegion: ip.Region,
-			Type:         "region",
-			Result: &util.ResultMessage{
-				Ping: util.ResPing{
+
+	if ips.SafeReadRegionStatus() {
+		for _, ip := range regionIPs.IPs {
+			re := util.ResMessage{
+				TargetIP:     ip.IP,
+				TargetRegion: ip.Region,
+				Type:         "region",
+				Result:       new(util.ResultMessage),
+			}
+			if regionRes != nil {
+				re.Result.Ping = util.ResPing{
 					Avgrtt:  regionRes[ip.IP].AverageRtt,
 					Ctime:   regionRes[ip.IP].ProbeTime,
 					Loss:    regionRes[ip.IP].LossCount,
 					Maxrtt:  regionRes[ip.IP].MaxRtt,
 					Minrtt:  regionRes[ip.IP].MinRtt,
 					Package: regionRes[ip.IP].PacketCount,
-				},
-			},
+				}
+			}
+			res = append(res, &re)
 		}
-		res = append(res, &re)
+		// ips.UpdateRegionStatus(false)
 	}
-	for _, ip := range stationIPs.IPs {
-		re := util.ResMessage{
-			TargetIP:      ip.IP,
-			TargetRegion:  ip.Region,
-			TargetStation: ip.TargetStation,
-			IPStatus:      ip.IPStatus,
-			IsPhyIP:       ip.IsPhyIP,
-			Type:          "station",
-			Result: &util.ResultMessage{
-				Ping: util.ResPing{
-					Avgrtt:  stationRes[ip.IP].AverageRtt,
-					Ctime:   stationRes[ip.IP].ProbeTime,
-					Loss:    stationRes[ip.IP].LossCount,
-					Maxrtt:  stationRes[ip.IP].MaxRtt,
-					Minrtt:  stationRes[ip.IP].MinRtt,
-					Package: stationRes[ip.IP].PacketCount,
-				},
-				TCPPing: util.ResTcpping{
-					AvgRttMs:    stationTCPRes[ip.IP].AvgRttMs,
-					LossPackets: stationTCPRes[ip.IP].LossPackets,
-					LossRate:    stationTCPRes[ip.IP].LossRate,
-					MaxRttMs:    stationTCPRes[ip.IP].MaxRttMs,
-					Mdev:        stationTCPRes[ip.IP].Mdev,
-					MinRttMs:    stationTCPRes[ip.IP].MinRttMs,
-					RecvPackets: stationTCPRes[ip.IP].RecvPackets,
-					SentPackets: stationTCPRes[ip.IP].SentPackets,
-				},
-			},
+	if ips.SafeReadStationStatus() {
+		for _, ip := range stationIPs.IPs {
+			re := util.ResMessage{
+				TargetIP:      ip.IP,
+				TargetRegion:  ip.Region,
+				TargetStation: ip.TargetStation,
+				IPStatus:      ip.IPStatus,
+				IsPhyIP:       ip.IsPhyIP,
+				Type:          "station",
+				Result:        new(util.ResultMessage),
+			}
+			if stationRes != nil {
+				if _, ok := stationRes[ip.IP]; ok {
+					re.Result.Ping = util.ResPing{
+						Avgrtt:  stationRes[ip.IP].AverageRtt,
+						Ctime:   stationRes[ip.IP].ProbeTime,
+						Loss:    stationRes[ip.IP].LossCount,
+						Maxrtt:  stationRes[ip.IP].MaxRtt,
+						Minrtt:  stationRes[ip.IP].MinRtt,
+						Package: stationRes[ip.IP].PacketCount,
+					}
+				}
+			}
+			if stationTCPRes != nil {
+				if _, ok := stationTCPRes[ip.IP]; ok {
+					re.Result.TCPPing = util.ResTcpping{
+						AvgRttMs:    stationTCPRes[ip.IP].AvgRttMs,
+						LossPackets: stationTCPRes[ip.IP].LossPackets,
+						LossRate:    stationTCPRes[ip.IP].LossRate,
+						MaxRttMs:    stationTCPRes[ip.IP].MaxRttMs,
+						Mdev:        stationTCPRes[ip.IP].Mdev,
+						MinRttMs:    stationTCPRes[ip.IP].MinRttMs,
+						RecvPackets: stationTCPRes[ip.IP].RecvPackets,
+						SentPackets: stationTCPRes[ip.IP].SentPackets,
+					}
+				}
+
+			}
+			res = append(res, &re)
 		}
-		res = append(res, &re)
+		// ips.UpdateStationStatus(false)
 	}
 	data.Msg.Res = res
 	return &data
