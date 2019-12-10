@@ -1,6 +1,7 @@
 package ping
 
 import (
+	"math"
 	"math/rand"
 	"testnode-pinger/util"
 	"time"
@@ -49,7 +50,6 @@ func NewPing(conf *util.Conf) *Ping {
 		TickerMin:        conf.PingTickerMin,
 		SendPackWait:     conf.PingSendPackWaitMs,
 		SendPackInterMin: conf.PingSendPackInterMinMs,
-		Interval:         conf.PingInterval,
 	}
 	return &p
 }
@@ -57,62 +57,63 @@ func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (resu
 	result = make(map[string]*PingResult)
 
 	pips := ipsGetter.GetIPs()
-	ipmap := make(map[string]*util.PingIP)
-	for _, pip := range pips {
-		ipmap[pip.IP] = pip
+	numIP := len(pips)
+	numGroup := int(math.Ceil(float64(numIP) / float64(p.ThreadCount)))
+
+	ipMap := make(map[int][]*util.PingIP, numGroup)
+	for index, pip := range pips {
+		key := index % numGroup
+		ipMap[key] = append(ipMap[key], pip)
 	}
-	logs.Debug("ip map is", ipmap)
+	for groupIndex, groupIPs := range ipMap {
+		logs.Debug("ips total count:%d,groups:%d,current group:%d", numIP, numGroup, groupIndex)
+		ips := make([]string, 0, len(pips))
+		//保存最新的ping stat
+		stat := make(map[string]*PingStat)
 
-	ips := make([]string, 0, len(pips))
-	//保存最新的ping stat
-	stat := make(map[string]*PingStat)
-
-	for _, pip := range pips {
-		result[pip.IP] = nil
-		ips = append(ips, pip.IP)
-	}
-	logs.Debug(ips)
-
-	if len(ips) > 0 {
-		// pingTime := time.Now().Format("2006-01-02 15:04:05")
-		res, send, err := ping(p.PacketCount, p.PacketSize, p.TimeoutMs, p.SendPackInterMin, p.SendPackWait, ips, sip)
-		if err != nil {
-			logs.Error("pips ping fail with error: ", err)
-			return nil, err
+		for _, pip := range groupIPs {
+			result[pip.IP] = nil
+			ips = append(ips, pip.IP)
 		}
-		logs.Debug(res)
-
-		// 更新有ping结果的IP
-		for k, r := range res {
-			delete(stat, k)
-			stat[k] = r
-		}
-		for ip, r := range stat {
-			if r == nil {
-				logs.Debug("dst ip:%s,region:%s,rtt:%d,loss rate 100%%", ip, ipmap[ip].Region, util.MaxRtt)
-			} else {
-				logs.Debug("dst ip:%s,region:%s,MaxRtt:%v,MinRtt:%v,Durition:%s", ip, ipmap[ip].Region, r.MaxRtt, r.MinRtt, r.Duration.String())
+		if len(ips) > 0 {
+			res, send, err := ping(p.PacketCount, p.PacketSize, p.TimeoutMs, p.SendPackInterMin, p.SendPackWait, ips, sip)
+			if err != nil {
+				logs.Error("pips ping fail gorup：%d,with error:%v ", groupIndex, err)
+				return nil, err
 			}
-		}
-		// 将stat计算出result
-		for _, ip := range ips {
-			pingResult := new(PingResult)
-			pingResult.PacketCount = p.PacketCount
-			r, ok := stat[ip]
-			if !ok {
-				pingResult.LossCount = send
-			} else {
-				pingResult.LossCount = send - r.Times
-				pingResult.AverageRtt = float64(r.Duration) / float64(time.Millisecond) / float64(r.Times)
-				pingResult.MinRtt = float64(r.MinRtt) / float64(time.Millisecond)
-				pingResult.MaxRtt = float64(r.MaxRtt) / float64(time.Millisecond)
-				pingResult.ProbeTime = r.Duration.String()
+			// 更新有ping结果的IP
+			for k, r := range res {
+				delete(stat, k)
+				stat[k] = r
 			}
-			result[ip] = pingResult
-			logs.Debug("packages:%d,avgRtt:%.2f,minRtt:%.2f,maxRtt:%.2f,loss:%d,probeTime:%s", result[ip].PacketCount, result[ip].AverageRtt, result[ip].MinRtt, result[ip].MaxRtt, result[ip].LossCount, result[ip].ProbeTime)
-		}
+			for ip, r := range stat {
+				if r == nil {
+					logs.Debug("dst ip:%s,rtt:%d,loss rate 100%%", ip, util.MaxRtt)
+				} else {
+					logs.Debug("dst ip:%s,MaxRtt:%v,MinRtt:%v,Durition:%s", ip, r.MaxRtt, r.MinRtt, r.Duration.String())
+				}
+			}
+			// 将stat计算出result
+			for _, ip := range ips {
+				pingResult := new(PingResult)
+				pingResult.PacketCount = p.PacketCount
+				r, ok := stat[ip]
+				if !ok {
+					pingResult.LossCount = send
+				} else {
+					pingResult.LossCount = send - r.Times
+					pingResult.AverageRtt = float64(r.Duration) / float64(time.Millisecond) / float64(r.Times)
+					pingResult.MinRtt = float64(r.MinRtt) / float64(time.Millisecond)
+					pingResult.MaxRtt = float64(r.MaxRtt) / float64(time.Millisecond)
+					pingResult.ProbeTime = r.Duration.String()
+				}
+				result[ip] = pingResult
+				logs.Debug("packages:%d,avgRtt:%.2f,minRtt:%.2f,maxRtt:%.2f,loss:%d,probeTime:%s", result[ip].PacketCount, result[ip].AverageRtt, result[ip].MinRtt, result[ip].MaxRtt, result[ip].LossCount, result[ip].ProbeTime)
+			}
 
+		}
 	}
+
 	return result, nil
 }
 

@@ -30,10 +30,9 @@ type BaseConf struct {
 	// ping一轮的时间
 	PingTickerMin int `json:"ping_series_ticker_timeout_min"`
 	// 同一个ip每个ping间隔时间若小于PingSendPackInterMinMs,则等待PingSendPackWaitMs
-	PingSendPackWaitMs     int `json:"ping_send_package_wait_ms"`
+	PingSendPackWaitMs int `json:"ping_send_package_wait_ms"`
+	// 同一个IP每隔ping间隔的最小时间
 	PingSendPackInterMinMs int `json:"ping_send_package_interval_min_ms"`
-	//获取ip的间隔
-	PingInterval int `json:"ping_interval"`
 	// tcpping的参数
 	TCPPingPacketSize     int    `json:"tcpping_packet_size"`
 	TCPPingPacketCount    int    `json:"tcpping_packet_count"`
