@@ -160,7 +160,7 @@ func (ips *IPsUpdater) pingRun(conf *util.Conf, sip string) {
 		pinger := ping.NewPing(conf)
 		// ping regionIPs
 		if ips.SafeReadRegionStatus() {
-			logs.Debug("begin ping reagionIP")
+			logs.Info("begin ping reagionIP")
 			regionips := ips.SafeReadRegionIPs()
 			regionRes, err := pinger.TestNodePing(regionips, sip, regionips.Region)
 			if err != nil {
@@ -169,13 +169,13 @@ func (ips *IPsUpdater) pingRun(conf *util.Conf, sip string) {
 			}
 			Res.UpdateRegionResults(regionRes)
 			Res.UpdateRegionResStatus(true)
-			logs.Debug("finish ping reagionIP")
+			logs.Info("finish ping reagionIP")
 
 		}
 
 		// ping stationIPs
 		if ips.SafeReadStationStatus() {
-			logs.Debug("begin ping stationIP")
+			logs.Info("begin ping stationIP")
 			stationips := ips.SafeReadStationIPs()
 			stationRes, err := pinger.TestNodePing(stationips, sip, stationips.Region)
 			if err != nil {
@@ -184,14 +184,14 @@ func (ips *IPsUpdater) pingRun(conf *util.Conf, sip string) {
 			}
 			Res.UpdateStationResStatus(true)
 			Res.UpdateStationResults(stationRes)
-			logs.Debug("finish ping stationIP")
+			logs.Info("finish ping stationIP")
 
 			// tcpping stationIPs
-			logs.Debug("begin tcpping stationIP")
+			logs.Info("begin tcpping stationIP")
 			stationTCPRes := ping.TCPPing(stationips, conf)
 			Res.UpdateTCPResults(stationTCPRes)
 			Res.UpdateTCPResStatus(true)
-			logs.Debug("finish tcpping stationIP")
+			logs.Info("finish tcpping stationIP")
 
 		}
 
