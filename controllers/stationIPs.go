@@ -36,7 +36,8 @@ func (c *StationIPsController) HandleStationIPs() {
 	if err != nil {
 		logs.Error("json marshal failed with error: ", err)
 	}
-	logs.Info("get a station ips post:", string(jsonData))
+	logs.Info("get a station ips post")
+	logs.Debug("post body:", string(jsonData))
 	logs.Debug("get local station info:ip=%s station=%s", req.IP, req.Station)
 	process.IPs.UpdateStationIPs(&req)
 	process.Switcher.UpdateSwitcherStatus(true)
