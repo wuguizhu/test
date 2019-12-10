@@ -38,7 +38,8 @@ func (c *RegionIPsController) HandleRegionIPs() {
 	if err != nil {
 		logs.Error("json marshal failed with error:", err)
 	}
-	logs.Info("get a region ips post:", string(jsonData))
+	logs.Info("get a region ips post")
+	logs.Debug("post body:", string(jsonData))
 	logs.Debug("get local station info:ip=%s station=%s", req.IP, req.Station)
 	process.IPs.UpdateRegionIPs(&req)
 	process.Switcher.UpdateSwitcherStatus(true)
