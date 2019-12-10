@@ -108,7 +108,7 @@ func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (resu
 					pingResult.ProbeTime = r.Duration.String()
 				}
 				result[ip] = pingResult
-				logs.Debug("packages:%d,avgRtt:%.2f,minRtt:%.2f,maxRtt:%.2f,loss:%d,probeTime:%s", result[ip].PacketCount, result[ip].AverageRtt, result[ip].MinRtt, result[ip].MaxRtt, result[ip].LossCount, result[ip].ProbeTime)
+// 				logs.Debug("packages:%d,avgRtt:%.2f,minRtt:%.2f,maxRtt:%.2f,loss:%d,probeTime:%s", result[ip].PacketCount, result[ip].AverageRtt, result[ip].MinRtt, result[ip].MaxRtt, result[ip].LossCount, result[ip].ProbeTime)
 			}
 
 		}
@@ -150,7 +150,7 @@ func ping(times, size, timeout, sendPackageInterMin, sendPackageWait int, ips []
 			continue
 		}
 		// 本次ping,与之前ping所有结果打包
-		logs.Debug("ping result:", m)
+		// logs.Debug("ping result:", m)
 		for ip, d := range m {
 			r := result[ip]
 			// 已经有结果，则更新
