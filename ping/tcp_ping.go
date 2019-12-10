@@ -34,6 +34,7 @@ func TCPPing(ipsGetter util.IPsGetter, conf *util.Conf) map[string]*util.Statist
 	}
 	sipMap := make(map[string]string)
 	for i := 0; i < times; i++ {
+		logs.Debug("tcp ping round:%d start", i)
 		start := time.Now()
 		tcpp, err := util.NewTcpPinger(tcppingOption)
 		if err != nil {
@@ -73,7 +74,7 @@ func TCPPing(ipsGetter util.IPsGetter, conf *util.Conf) map[string]*util.Statist
 			s.Calculate()
 			logs.Debug("ip %s,srcIP %s,result %s", ip, sip, s.TcpPingResult.String())
 		}
-		logs.Info("tcp ping round:%d finished,ip count %d,use time %s", i, len(ips), time.Now().Sub(start))
+		logs.Debug("tcp ping round:%d finished,ip count %d,use time %s", i, len(ips), time.Now().Sub(start))
 	}
 	return allRes
 }

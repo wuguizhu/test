@@ -57,7 +57,7 @@ type ResultsController struct {
 }
 
 func (c *ResultsController) GetResults() {
-	logs.Debug("a get request for results")
+	logs.Debug("get a request for results")
 	err := errors.New("Failed to get results, the pinger may not be running")
 	rspResult := &util.RspResults{
 		Status: 0,
@@ -78,7 +78,6 @@ func (c *ResultsController) GetResults() {
 	if switchStatus {
 		if regionResStatus || stationResStatus || tcpResStatus {
 			rspResult = process.IPs.Res2Rsp(regionRes, stationRes, stationTCPRes)
-			logs.Debug(*rspResult)
 			c.Data["json"] = rspResult
 			logs.Info("Return result successful")
 		} else {

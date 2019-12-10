@@ -169,7 +169,7 @@ func (ips *IPsUpdater) pingRun(conf *util.Conf, sip string) {
 			}
 			Res.UpdateRegionResults(regionRes)
 			Res.UpdateRegionResStatus(true)
-			logs.Debug("reagion ping result:", regionRes)
+			logs.Debug("finish ping reagionIP")
 
 		}
 
@@ -184,13 +184,15 @@ func (ips *IPsUpdater) pingRun(conf *util.Conf, sip string) {
 			}
 			Res.UpdateStationResStatus(true)
 			Res.UpdateStationResults(stationRes)
-			logs.Debug("station ping result:", stationRes)
+			logs.Debug("finish ping stationIP")
+
 			// tcpping stationIPs
 			logs.Debug("begin tcpping stationIP")
 			stationTCPRes := ping.TCPPing(stationips, conf)
 			Res.UpdateTCPResults(stationTCPRes)
 			Res.UpdateTCPResStatus(true)
-			logs.Debug("station tcpping result:", stationTCPRes)
+			logs.Debug("finish tcpping stationIP")
+
 		}
 
 		select {

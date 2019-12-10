@@ -2,8 +2,6 @@ package util
 
 import (
 	"math/rand"
-
-	"github.com/astaxie/beego/logs"
 )
 
 const (
@@ -89,8 +87,8 @@ type IPsGetter interface {
 
 func (stationIPs *ReqStation) GetIPs() (ips []*PingIP) {
 	ips = make([]*PingIP, 0, len(stationIPs.IPs))
-	for i, stationIP := range stationIPs.IPs {
-		logs.Debug("station ip %d:%v", i, stationIP.IP)
+	for _, stationIP := range stationIPs.IPs {
+		// logs.Debug("station ip %d:%v", i, stationIP.IP)
 		pingIP := &PingIP{
 			IP:     stationIP.IP,
 			Region: stationIP.Region,
@@ -100,10 +98,9 @@ func (stationIPs *ReqStation) GetIPs() (ips []*PingIP) {
 	return ips
 }
 func (regionIPs *ReqRegion) GetIPs() (ips []*PingIP) {
-	logs.Debug(*regionIPs)
 	ips = make([]*PingIP, 0, len(regionIPs.IPs))
-	for i, regionIP := range regionIPs.IPs {
-		logs.Debug("reagion ip %d:%v", i, regionIP.IP)
+	for _, regionIP := range regionIPs.IPs {
+		// logs.Debug("reagion ip %d:%v", i, regionIP.IP)
 		pingIP := &PingIP{
 			IP:     regionIP.IP,
 			Region: regionIP.Region,

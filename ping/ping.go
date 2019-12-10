@@ -127,7 +127,6 @@ func ping(times, size, timeout, sendPackageInterMin, sendPackageWait int, ips []
 		ip2id[ip] = rand.Intn(0xffff)
 	}
 	// 开始ping指定次数
-	logs.Debug("pingCount:", times)
 	// startTime := time.Now()
 	for send = 0; send < times; send++ {
 		logs.Debug("ping round:%d start", send)
@@ -138,8 +137,8 @@ func ping(times, size, timeout, sendPackageInterMin, sendPackageWait int, ips []
 				logs.Error("p.AddIP(ip) for ip %s fails with error %s\n", ip, err)
 				continue
 			}
-			logs.Debug("AddIP success!", ip)
 		}
+
 		pinger.Size = size
 		pinger.MaxRTT = time.Duration(timeout) * time.Millisecond
 		timer := time.NewTimer(time.Duration(sendPackageInterMin) * time.Millisecond)
@@ -150,7 +149,6 @@ func ping(times, size, timeout, sendPackageInterMin, sendPackageWait int, ips []
 			logs.Error("ping run fails:%s", err)
 			continue
 		}
-		logs.Debug("ping %s success!", ips)
 		// 本次ping,与之前ping所有结果打包
 		logs.Debug("ping result:", m)
 		for ip, d := range m {
@@ -178,9 +176,9 @@ func ping(times, size, timeout, sendPackageInterMin, sendPackageWait int, ips []
 		diff := time.Since(now)
 		select {
 		case <-timer.C:
-			logs.Info("ping round:%d finished, %dip ping use time %s", send, len(ips), diff.String())
+			logs.Debug("ping round:%d finished, %dip ping use time %s", send, len(ips), diff.String())
 		default:
-			logs.Info("finish %d ip ping with %s,less than %d ms,so wait %d ms",
+			logs.Debug("finish %d ip ping with %s,less than %d ms,so wait %d ms",
 				len(ips), diff.String(), sendPackageInterMin, sendPackageWait)
 			time.Sleep(time.Duration(sendPackageWait) * time.Millisecond)
 		}

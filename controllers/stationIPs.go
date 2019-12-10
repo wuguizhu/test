@@ -36,12 +36,10 @@ func (c *StationIPsController) HandleStationIPs() {
 	if err != nil {
 		logs.Error("json marshal failed with error: ", err)
 	}
-	logs.Debug("get a station ips post:", string(jsonData))
-	logs.Debug("get test station info:ip=%s station=%s", req.IP, req.Station)
+	logs.Info("get a station ips post:", string(jsonData))
+	logs.Debug("get local station info:ip=%s station=%s", req.IP, req.Station)
 	process.IPs.UpdateStationIPs(&req)
-	// if process.IPs.SafeReadStationStatus() && process.IPs.SafeReadRegionStatus() {
 	process.Switcher.UpdateSwitcherStatus(true)
-	logs.Debug("IPs updated successful!,Begin to ping!")
-	// }
+	logs.Info("station IPs updated successful!,Begin to ping!")
 	c.Data["json"] = &rsp
 }
