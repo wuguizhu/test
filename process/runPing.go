@@ -17,7 +17,7 @@ var (
 	Res      = NewResults()
 )
 
-func init() {
+func Process() {
 	configFile := "./conf/testnodeprober.json"
 	conf, err := util.GetConf(configFile)
 	if err != nil {

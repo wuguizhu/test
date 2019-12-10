@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	_ "testnode-pinger/process"
+	"testnode-pinger/process"
 	_ "testnode-pinger/routers"
 
 	"github.com/astaxie/beego"
@@ -34,6 +34,7 @@ func main() {
 	if console, err := beego.AppConfig.Bool("DisableConsole"); err == nil && console == true {
 		beego.BeeLogger.DelLogger("console")
 	}
+	go process.Process()
 	beego.Info("Beego start to run")
 	beego.Run()
 }
