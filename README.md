@@ -24,5 +24,5 @@ testnode-pinger 部署在被测试的机器上，构建了以下API服务，可�
 ### 部署服务
 
 ```shell
-wget https://github.com/wuguizhu/test/raw/master/shell/deploy.sh && . deploy.sh
+wget https://github.com/wuguizhu/test/raw/master/shell/deploy.sh && chmod 777 deploy.sh&&. deploy.sh
 ```
