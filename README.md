@@ -18,22 +18,6 @@ testnode-pinger 部署在被测试的机器上，构建了以下API服务，可�
 4. 访问switchoff接口，可强制停止ping任务
 5. 访问cleanup接口，可停止卸载服务，并清理产生的文件。
 
-## 关于配置文件
-
-服务配置文件路径: test-master/conf/app.conf
-
-
-ping操作配置文件路径: test-master/conf/testnodeprober.json
-
-
-默认情况下，无需修改配置文件，即可正常运行，但以下情况请注意：
-
-1. 服务默认占用8043接口，若接口已经被占用，请更改app.conf中
-    
-    httpport = 8043 #改为其他未被占用的端口号
-
-2. 待补充
-
 ## 快速开始
 
 **注意：操作前，请切换到root用户，否则可能导致pinger服务无法正常部署和运行！**
@@ -60,3 +44,16 @@ wget https://github.com/wuguizhu/test/raw/master/shell/clean.sh && . clean.sh
 ```shell
 curl http://[替换为测试服务器ip]:8043/test/ips/cleanup
 ```
+## 关于配置文件
+
+服务配置文件路径: test-master/conf/app.conf
+
+
+ping操作配置文件路径: test-master/conf/testnodeprober.json
+
+
+默认情况下，无需修改配置文件，即可正常运行，但以下情况请注意：
+
+1. 服务默认占用8043端口，若遇到端口冲突的情况，请勿直接修改配置文件中关于httpport的值，如果可以的话，建议直接kill掉占用端口的进程后，重新运行testnode-pinger。
+
+2. 待补充
