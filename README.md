@@ -32,7 +32,7 @@ wget https://github.com/wuguizhu/test/raw/master/shell/deploy.sh && chmod 777 de
 
 使用任意浏览器访问以下url即可卸载并清理
 
-    http://*替换为测试服务器ip*/test/ips/cleanup
+    http://[替换为测试服务器ip]:8084/test/ips/cleanup
 
 若您已经登录测试服务器，也可以使用以下命令进行卸载清理
 
@@ -42,5 +42,5 @@ wget https://github.com/wuguizhu/test/raw/master/shell/clean.sh && . clean.sh
 或者
 
 ```shell
-curl http://*替换为测试服务器ip*/test/ips/cleanup
+curl http://[替换为测试服务器ip]:8084/test/ips/cleanup
 ```
