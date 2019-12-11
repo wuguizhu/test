@@ -2,12 +2,14 @@
 
 ## 概述
 
-testnode-pinger 构建了以下API服务，可在配置文件中修改路径：
+testnode-pinger 部署在被测试的机器上，构建了以下API服务，可在配置文件中修改路径：
 
-    "/test/ips/region"
+    "/test/ips/region"    
     "/test/ips/tation"
     "/test/ips/results"
     "/test/ips/switchoff"
+    "/test/ips/cleanup"
+
 ## 注意事项
 
 1. ips初始化为空，此时不执行ping任务
