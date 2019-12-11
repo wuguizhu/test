@@ -21,7 +21,10 @@ testnode-pinger 部署在被测试的机器上，构建了以下API服务，可�
 ## 关于配置文件
 
 服务配置文件路径: test-master/conf/app.conf
+
+
 ping操作配置文件路径: test-master/conf/testnodeprober.json
+
 
 默认情况下，无需修改配置文件，即可正常运行，但以下情况请注意：
 
