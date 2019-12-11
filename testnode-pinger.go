@@ -34,7 +34,7 @@ func main() {
 	if console, err := beego.AppConfig.Bool("DisableConsole"); err == nil && console == true {
 		beego.BeeLogger.DelLogger("console")
 	}
-	go process.Process()
+	go process.PingProcess()
 	beego.Info("Beego start to run")
 	beego.Run()
 }

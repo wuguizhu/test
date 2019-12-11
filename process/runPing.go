@@ -17,7 +17,7 @@ var (
 	Res      = NewResults()
 )
 
-func Process() {
+func PingProcess() {
 	configFile := "./conf/testnodeprober.json"
 	conf, err := util.GetConf(configFile)
 	if err != nil {
