@@ -32,6 +32,7 @@ func TCPPing(ipsGetter util.IPsGetter, conf *util.Conf) map[string]*util.Statist
 	for _, ip := range ips {
 		s := util.NewStatistics(times)
 		allRes[ip] = s
+		s.TcpPingResult.PingAtTime = pingTime
 	}
 	sipMap := make(map[string]string)
 	for i := 0; i < times; i++ {
@@ -68,7 +69,6 @@ func TCPPing(ipsGetter util.IPsGetter, conf *util.Conf) map[string]*util.Statist
 			}
 			s.RecvPackets++
 			s.TotalRtt += rtt
-			s.TcpPingResult.PingAtTime = pingTime
 			s.Rtts = append(s.Rtts, rtt)
 		}
 		for ip, s := range allRes {
