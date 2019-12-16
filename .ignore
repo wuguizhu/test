@@ -1,0 +1,15 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Vs Code
+*.vscode
+
+# log
+*.log
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
