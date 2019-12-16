@@ -37,7 +37,8 @@ type PingResult struct {
 	MinRtt      float64 `json:"minrtt"`
 	MaxRtt      float64 `json:"maxrtt"`
 	LossCount   int     `json:"loss"`
-	ProbeTime   string  `json:"ctime"`
+	ProbeTime   float64 `json:"ctime"`
+	PingAtTime  string
 }
 
 func NewPing(conf *util.Conf) *Ping {
@@ -55,7 +56,7 @@ func NewPing(conf *util.Conf) *Ping {
 }
 func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (result map[string]*PingResult, err error) {
 	result = make(map[string]*PingResult)
-
+	pingTime := time.Now().Format("2006-01-02 15:04:05")
 	pips := ipsGetter.GetIPs()
 	numIP := len(pips)
 	numGroup := int(math.Ceil(float64(numIP) / float64(p.ThreadCount)))
@@ -97,6 +98,7 @@ func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (resu
 			for _, ip := range ips {
 				pingResult := new(PingResult)
 				pingResult.PacketCount = p.PacketCount
+				pingResult.PingAtTime = pingTime
 				r, ok := stat[ip]
 				if !ok {
 					pingResult.LossCount = send
@@ -105,10 +107,10 @@ func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (resu
 					pingResult.AverageRtt = float64(r.Duration) / float64(time.Millisecond) / float64(r.Times)
 					pingResult.MinRtt = float64(r.MinRtt) / float64(time.Millisecond)
 					pingResult.MaxRtt = float64(r.MaxRtt) / float64(time.Millisecond)
-					pingResult.ProbeTime = r.Duration.String()
+					pingResult.ProbeTime = float64(r.Duration)
 				}
 				result[ip] = pingResult
-// 				logs.Debug("packages:%d,avgRtt:%.2f,minRtt:%.2f,maxRtt:%.2f,loss:%d,probeTime:%s", result[ip].PacketCount, result[ip].AverageRtt, result[ip].MinRtt, result[ip].MaxRtt, result[ip].LossCount, result[ip].ProbeTime)
+				// 				logs.Debug("packages:%d,avgRtt:%.2f,minRtt:%.2f,maxRtt:%.2f,loss:%d,probeTime:%s", result[ip].PacketCount, result[ip].AverageRtt, result[ip].MinRtt, result[ip].MaxRtt, result[ip].LossCount, result[ip].ProbeTime)
 			}
 
 		}

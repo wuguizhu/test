@@ -50,6 +50,7 @@ type TcpPingResult struct {
 	MaxRttMs    float64 `json:"maxRttMs"`    // 最大Rtt
 	MinRttMs    float64 `json:"minRttMs"`    // 最小Rtt
 	Mdev        float64 `json:"mdev"`        // Rtt的标准差
+	PingAtTime  string
 }
 
 func (s *TcpPingResult) String() string {

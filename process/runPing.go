@@ -244,12 +244,13 @@ func (ips *IPsUpdater) Res2Rsp(regionRes map[string]*ping.PingResult, stationRes
 			}
 			if regionRes != nil {
 				re.Result.Ping = util.ResPing{
-					Avgrtt:  regionRes[ip.IP].AverageRtt,
-					Ctime:   regionRes[ip.IP].ProbeTime,
-					Loss:    regionRes[ip.IP].LossCount,
-					Maxrtt:  regionRes[ip.IP].MaxRtt,
-					Minrtt:  regionRes[ip.IP].MinRtt,
-					Package: regionRes[ip.IP].PacketCount,
+					Avgrtt:     regionRes[ip.IP].AverageRtt,
+					Ctime:      regionRes[ip.IP].ProbeTime,
+					Loss:       regionRes[ip.IP].LossCount,
+					Maxrtt:     regionRes[ip.IP].MaxRtt,
+					Minrtt:     regionRes[ip.IP].MinRtt,
+					Package:    regionRes[ip.IP].PacketCount,
+					PingAtTime: regionRes[ip.IP].PingAtTime,
 				}
 			}
 			res = append(res, &re)
@@ -270,12 +271,13 @@ func (ips *IPsUpdater) Res2Rsp(regionRes map[string]*ping.PingResult, stationRes
 			if stationRes != nil {
 				if _, ok := stationRes[ip.IP]; ok {
 					re.Result.Ping = util.ResPing{
-						Avgrtt:  stationRes[ip.IP].AverageRtt,
-						Ctime:   stationRes[ip.IP].ProbeTime,
-						Loss:    stationRes[ip.IP].LossCount,
-						Maxrtt:  stationRes[ip.IP].MaxRtt,
-						Minrtt:  stationRes[ip.IP].MinRtt,
-						Package: stationRes[ip.IP].PacketCount,
+						Avgrtt:     stationRes[ip.IP].AverageRtt,
+						Ctime:      stationRes[ip.IP].ProbeTime,
+						Loss:       stationRes[ip.IP].LossCount,
+						Maxrtt:     stationRes[ip.IP].MaxRtt,
+						Minrtt:     stationRes[ip.IP].MinRtt,
+						Package:    stationRes[ip.IP].PacketCount,
+						PingAtTime: stationRes[ip.IP].PingAtTime,
 					}
 				}
 			}
@@ -290,6 +292,7 @@ func (ips *IPsUpdater) Res2Rsp(regionRes map[string]*ping.PingResult, stationRes
 						MinRttMs:    stationTCPRes[ip.IP].MinRttMs,
 						RecvPackets: stationTCPRes[ip.IP].RecvPackets,
 						SentPackets: stationTCPRes[ip.IP].SentPackets,
+						PingAtTime:  stationTCPRes[ip.IP].PingAtTime,
 					}
 				}
 
