@@ -107,7 +107,7 @@ func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (resu
 					pingResult.AverageRtt = float64(r.Duration) / float64(time.Millisecond) / float64(r.Times)
 					pingResult.MinRtt = float64(r.MinRtt) / float64(time.Millisecond)
 					pingResult.MaxRtt = float64(r.MaxRtt) / float64(time.Millisecond)
-					pingResult.ProbeTime = float64(r.Duration)
+					pingResult.ProbeTime = float64(r.Duration) / float64(time.Millisecond)
 				}
 				result[ip] = pingResult
 				// 				logs.Debug("packages:%d,avgRtt:%.2f,minRtt:%.2f,maxRtt:%.2f,loss:%d,probeTime:%s", result[ip].PacketCount, result[ip].AverageRtt, result[ip].MinRtt, result[ip].MaxRtt, result[ip].LossCount, result[ip].ProbeTime)
