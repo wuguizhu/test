@@ -20,6 +20,7 @@ func TcpOptionFromConf(conf *util.Conf) *util.TcpPingOption {
 	}
 }
 func TCPPing(ipsGetter util.IPsGetter, conf *util.Conf) map[string]*util.Statistics {
+	pingTime := time.Now().Format("2006-01-02 15:04:05")
 	pips := ipsGetter.GetIPs()
 	ips := make([]string, 0, len(pips))
 	for _, pip := range pips {
@@ -67,6 +68,7 @@ func TCPPing(ipsGetter util.IPsGetter, conf *util.Conf) map[string]*util.Statist
 			}
 			s.RecvPackets++
 			s.TotalRtt += rtt
+			s.TcpPingResult.PingAtTime = pingTime
 			s.Rtts = append(s.Rtts, rtt)
 		}
 		for ip, s := range allRes {
