@@ -21,6 +21,15 @@ testnode-pinger 部署在被测试的机器上，构建了以下API服务，可�
 ## 快速开始
 
 **注意：操作前，请切换到root用户，否则可能导致pinger服务无法正常部署和运行！**
+### 环境准备
+
+系统：centos
+工具软件：wget,unzip
+部署开始前，请确保以上软件已完成安装，可以使用以下命令：
+```shell
+yum -y install wget
+yum -y install unzip
+```
 
 ### 部署服务
 
