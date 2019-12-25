@@ -2,10 +2,13 @@ package controllers
 
 import (
 	"errors"
-	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/logs"
+	"math/rand"
 	"testnode-pinger/process"
 	"testnode-pinger/util"
+	"time"
+
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
 )
 
 // RspResults is a  response from testnode-pinger: /test/result
@@ -57,7 +60,10 @@ type ResultsController struct {
 }
 
 func (c *ResultsController) GetResults() {
-	logs.Info("get a request for results")
+	rand.Seed(time.Now().UnixNano())
+	reqID := rand.Intn(0xffff)
+	logs.Info("Get a request for results,reqID：", reqID)
+	defer logs.Info("Return result successful,reqID：", reqID)
 	err := errors.New("Failed to get results, the pinger may not be running")
 	rspResult := &util.RspResults{
 		Status: 0,
@@ -74,17 +80,18 @@ func (c *ResultsController) GetResults() {
 	regionRes := process.Res.SafeReadRegionResults()
 	stationRes := process.Res.SafeReadStationResults()
 	stationTCPRes := process.Res.SafeReadTCPResults()
-	logs.Debug("regionStatus:%v, stationStatus:%v, switchStatus:%v, regionResStatus:%v, stationResStatus:%v, tcpResStatus:%v", regionStatus, stationStatus, switchStatus, regionResStatus, stationResStatus, tcpResStatus)
+	logs.Debug("reqID：%v,regionStatus:%v, stationStatus:%v, switchStatus:%v, regionResStatus:%v, stationResStatus:%v, tcpResStatus:%v", reqID, regionStatus, stationStatus, switchStatus, regionResStatus, stationResStatus, tcpResStatus)
 	if switchStatus {
 		if regionResStatus || stationResStatus || tcpResStatus {
 			rspResult = process.IPs.Res2Rsp(regionRes, stationRes, stationTCPRes)
 			c.Data["json"] = rspResult
-			logs.Info("Return result successful")
+			logs.Info("finish prepare successful result,reqID：", reqID)
 		} else {
 			rspResult.Status = 2
 			rspResult.Error = "Results have not been updated, please try again later"
-			logs.Warn("User requested unupdated data, request was rejected")
+			logs.Warn("User requested unupdated data, request was rejected,reqID：", reqID)
 			c.Data["json"] = rspResult
+			logs.Info("finish prepare failed result,reqID：", reqID)
 		}
 
 	} else {
