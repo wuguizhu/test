@@ -56,7 +56,12 @@ func NewPing(conf *util.Conf) *Ping {
 }
 func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (result map[string]*PingResult, err error) {
 	result = make(map[string]*PingResult)
-	pingTime := time.Now().Format("2006-01-02 15:04:05")
+	localCN, err := time.LoadLocation("Asia/Shanghai")
+	if err != nil {
+		logs.Error("time.LoadLocation failed with err:", err)
+		return nil, err
+	}
+	pingTime := time.Now().In(localCN).Format("2006-01-02 15:04:05")
 	pips := ipsGetter.GetIPs()
 	numIP := len(pips)
 	numGroup := int(math.Ceil(float64(numIP) / float64(p.ThreadCount)))
