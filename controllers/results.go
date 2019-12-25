@@ -57,7 +57,7 @@ type ResultsController struct {
 }
 
 func (c *ResultsController) GetResults() {
-	logs.Debug("get a request for results")
+	logs.Info("get a request for results")
 	err := errors.New("Failed to get results, the pinger may not be running")
 	rspResult := &util.RspResults{
 		Status: 0,
