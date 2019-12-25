@@ -18,6 +18,7 @@ type ResSwitcher struct {
 }
 
 func (c *SwitcherController) SwitchOFF() {
+	logs.Info("get a switch off request")
 	defer c.ServeJSON()
 	resMessage := ResSwitcher{
 		Status: 0,
