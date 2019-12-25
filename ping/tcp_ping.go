@@ -20,7 +20,12 @@ func TcpOptionFromConf(conf *util.Conf) *util.TcpPingOption {
 	}
 }
 func TCPPing(ipsGetter util.IPsGetter, conf *util.Conf) map[string]*util.Statistics {
-	pingTime := time.Now().Format("2006-01-02 15:04:05")
+	localCN, err := time.LoadLocation("Asia/Shanghai")
+	if err != nil {
+		logs.Error("time.LoadLocation failed with err:", err)
+		return nil
+	}
+	pingTime := time.Now().In(localCN).Format("2006-01-02 15:04:05")
 	pips := ipsGetter.GetIPs()
 	ips := make([]string, 0, len(pips))
 	for _, pip := range pips {
