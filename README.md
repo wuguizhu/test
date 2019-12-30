@@ -46,7 +46,7 @@ wget https://github.com/wuguizhu/test/raw/master/shell/deploy.sh && chmod 777 de
 若您已经登录测试服务器，也可以使用以下命令进行卸载清理
 
 ```shell
-wget https://github.com/wuguizhu/test/raw/master/shell/clean.sh && . clean.sh
+wget https://github.com/wuguizhu/test/raw/master/shell/clean.sh && . clean.sh &>>./logs/testnode-pinger.log
 ```
 或者
 
