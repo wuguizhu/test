@@ -26,7 +26,7 @@ func (c *CleanerController) CleanUp() {
 	}
 	strSuccess := "Clean up all test files successfully!,pinger will exit after 5 seconds "
 	strFail := "Warning:Pinger will exit after 5 seconds,BUT clean up failed. Please clean up the test files manually"
-	command := `. ./shell/clean.sh`
+	command := `. ./shell/clean.sh>../logs/testnode-pinger.log`
 	cmd := exec.Command("/bin/bash", "-c", command)
 	signal := make(chan int)
 	go Clean(signal)
