@@ -6,12 +6,13 @@ import (
 	_ "testnode-pinger/routers"
 
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs"
 )
 
 func main() {
 	filename := beego.AppConfig.String("ErrorLog")
 	if filename != "" {
-		if err := beego.SetLogger("file", fmt.Sprintf(`{"filename":"%s"}`, filename)); err != nil {
+		if err := logs.SetLogger("file", fmt.Sprintf(`{"filename":"%s"}`, filename)); err != nil {
 			panic(err)
 		}
 	}
@@ -19,22 +20,24 @@ func main() {
 	level := beego.AppConfig.String("ErrorLogLevel")
 	switch level {
 	case "debug":
-		beego.SetLevel(beego.LevelDebug)
+		logs.SetLevel(beego.LevelDebug)
 	case "info":
-		beego.SetLevel(beego.LevelInformational)
+		logs.SetLevel(beego.LevelInformational)
 	case "warn":
-		beego.SetLevel(beego.LevelWarning)
+		logs.SetLevel(beego.LevelWarning)
 	case "error":
-		beego.SetLevel(beego.LevelError)
+		logs.SetLevel(beego.LevelError)
 	case "critical":
-		beego.SetLevel(beego.LevelCritical)
+		logs.SetLevel(beego.LevelCritical)
 	default:
-		beego.SetLevel(beego.LevelInformational)
+		logs.SetLevel(beego.LevelInformational)
 	}
 	if console, err := beego.AppConfig.Bool("DisableConsole"); err == nil && console == true {
-		beego.BeeLogger.DelLogger("console")
+		logs.GetBeeLogger().DelLogger("console")
 	}
+	logs.EnableFuncCallDepth(true)
+	logs.SetLogFuncCallDepth(3)
 	go process.PingProcess()
-	beego.Info("Beego start to run")
+	logs.Info("Beego start to run")
 	beego.Run()
 }
