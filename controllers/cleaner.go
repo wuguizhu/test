@@ -20,6 +20,7 @@ type ResCleaner struct {
 }
 
 func (c *CleanerController) CleanUp() {
+	logs.Info("remote IP address from the request:", c.Ctx.Request.RemoteAddr)
 	defer c.ServeJSON()
 	resMessage := ResSwitcher{
 		Status: 0,
