@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"os"
 	"os/exec"
 	"time"
@@ -18,36 +19,59 @@ type ResCleaner struct {
 	Status  int    `json:"code"`
 	Message string `json:"message"`
 }
+type ReqCleaner = PostReqWithTS
 
 func (c *CleanerController) CleanUp() {
-	logs.Info("remote IP address from the request:", c.Ctx.Request.RemoteAddr)
+	logs.Info("Get a request from %s,request body:\n%s", c.Ctx.Request.RemoteAddr, c.Ctx.Input.RequestBody)
 	defer c.ServeJSON()
-	resMessage := ResSwitcher{
-		Status: 0,
+	rsp := ResCleaner{
+		Status: 200,
+	}
+	req := new(ReqCleaner)
+	err := json.Unmarshal(c.Ctx.Input.RequestBody, req)
+	if err != nil {
+		logs.Error("json.Unmarshal failed with error:", err)
+		rsp.Status = 1
+		rsp.Message = err.Error()
+		c.Data["json"] = &rsp
+		return
+	}
+	timeStamp := time.Now().Unix()
+	logs.Info("req_timestamp:%d,now_timestamp:%d,differ:%d", req.TimeStamp, timeStamp, timeStamp-req.TimeStamp)
+	if req.TimeStamp < timeStamp-60*3 || req.TimeStamp > timeStamp+60*3 {
+		strErr := "Illegal Request! Please check your request data."
+		logs.Error(strErr)
+		rsp.Status = 2
+		rsp.Message = strErr
+		c.Data["json"] = &rsp
+		return
 	}
 	strSuccess := "Clean up all test files successfully!,pinger will exit after 5 seconds "
 	strFail := "Warning:Pinger will exit after 5 seconds,BUT clean up failed. Please clean up the test files manually"
 	command := `. ./shell/clean.sh &>> ../logs/testnode-pinger.log`
 	cmd := exec.Command("/bin/bash", "-c", command)
 	signal := make(chan int)
-	go Clean(signal)
+	// make a goroutine to async exec exit,otherwise response will be broken off
+	go AppExit(signal, 5*time.Second)
 	output, err := cmd.Output()
 	if err != nil {
 		logs.Error("Execute Shell:%s failed with error:%s\n%s", command, err.Error(), strFail)
-		resMessage.Status = 1
-		resMessage.Message = strFail
-		c.Data["json"] = &resMessage
+		rsp.Status = 3
+		rsp.Message = strFail
+		c.Data["json"] = &rsp
 		signal <- 1
 		return
 	}
 	logs.Info("Execute Shell:%s finished with output:\n%s\n%s", command, string(output), strSuccess)
-	resMessage.Message = strSuccess
-	c.Data["json"] = &resMessage
+	rsp.Message = strSuccess
+	c.Data["json"] = &rsp
 	signal <- 0
 	return
 }
-func Clean(signal <-chan int) {
+
+// AppExit woule exit the current app self after 5,when receive a siginal
+func AppExit(signal <-chan int, duration time.Duration) {
 	s := <-signal
-	time.Sleep(5 * time.Second)
+	time.Sleep(duration)
 	os.Exit(s)
 }
