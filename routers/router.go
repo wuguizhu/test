@@ -15,6 +15,6 @@ func init() {
 	beego.Router(regionURL, &controllers.RegionIPsController{}, "post:HandleRegionIPs")
 	beego.Router(stationURL, &controllers.StationIPsController{}, "post:HandleStationIPs")
 	beego.Router(resultsURL, &controllers.ResultsController{}, "get:GetResults")
-	beego.Router(pingStatusURL, &controllers.SwitcherController{}, "get:SwitchOFF")
-	beego.Router(cleanURL, &controllers.CleanerController{}, "get:CleanUp")
+	beego.Router(pingStatusURL, &controllers.SwitcherController{}, "post:SwitchOFF")
+	beego.Router(cleanURL, &controllers.CleanerController{}, "post:CleanUp")
 }
