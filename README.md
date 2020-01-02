@@ -30,6 +30,10 @@ testnode-pinger 部署在被测试的机器上，构建了以下API服务，可�
 yum -y install wget
 yum -y install unzip
 ```
+另外，因海外服务器的时区问题，目前需统一为北京时间。使用以下命令：
+```shell
+ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+```
 
 ### 部署服务
 
