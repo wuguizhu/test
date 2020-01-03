@@ -208,11 +208,16 @@ func (ips *IPsUpdater) pingRun(conf *util.Conf, sip string) {
 }
 
 // Res2Rsp convert all res to RspResults
-func Res2Rsp(regionRes map[*util.PingIP]*ping.PingResult, stationRes map[*util.PingIP]*ping.PingResult, stationTCPRes map[*util.PingIP]*util.Statistics) *util.RspResults {
+func Res2Rsp(regionRes map[*util.PingIP]*ping.PingResult, stationRes map[*util.PingIP]*ping.PingResult, stationTCPRes map[*util.PingIP]*util.Statistics, sip, sRegion, sStation string) *util.RspResults {
 	rsp := util.RspResults{
 		Status: 0,
-		Msg:    new(util.Message),
+		Msg: &util.Message{
+			IP:      sip,
+			Region:  sRegion,
+			Station: sStation,
+		},
 	}
+
 	res := make([]*util.ResMessage, 0)
 	if regionRes != nil {
 		for pip, result := range regionRes {
@@ -274,6 +279,7 @@ func Res2Rsp(regionRes map[*util.PingIP]*ping.PingResult, stationRes map[*util.P
 		}
 	}
 	rsp.Msg.Res = res
+
 	return &rsp
 }
 
