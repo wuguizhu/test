@@ -54,8 +54,8 @@ func NewPing(conf *util.Conf) *Ping {
 	}
 	return &p
 }
-func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (result map[string]*PingResult, err error) {
-	result = make(map[string]*PingResult)
+func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (result map[*util.PingIP]*PingResult, err error) {
+	result = make(map[*util.PingIP]*PingResult)
 	localCN, err := time.LoadLocation("Asia/Shanghai")
 	if err != nil {
 		logs.Error("time.LoadLocation failed with err:", err)
@@ -65,7 +65,7 @@ func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (resu
 	pips := ipsGetter.GetIPs()
 	numIP := len(pips)
 	numGroup := int(math.Ceil(float64(numIP) / float64(p.ThreadCount)))
-
+	// 分组ping
 	ipMap := make(map[int][]*util.PingIP, numGroup)
 	for index, pip := range pips {
 		key := index % numGroup
@@ -78,7 +78,7 @@ func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (resu
 		stat := make(map[string]*PingStat)
 
 		for _, pip := range groupIPs {
-			result[pip.IP] = nil
+			result[pip] = nil
 			ips = append(ips, pip.IP)
 		}
 		if len(ips) > 0 {
@@ -100,11 +100,11 @@ func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (resu
 				}
 			}
 			// 将stat计算出result
-			for _, ip := range ips {
+			for _, pip := range pips {
 				pingResult := new(PingResult)
 				pingResult.PacketCount = p.PacketCount
 				pingResult.PingAtTime = pingTime
-				r, ok := stat[ip]
+				r, ok := stat[pip.IP]
 				if !ok {
 					pingResult.LossCount = send
 				} else {
@@ -114,7 +114,7 @@ func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (resu
 					pingResult.MaxRtt = float64(r.MaxRtt) / float64(time.Millisecond)
 					pingResult.ProbeTime = float64(r.Duration) / float64(time.Millisecond)
 				}
-				result[ip] = pingResult
+				result[pip] = pingResult
 				// 				logs.Debug("packages:%d,avgRtt:%.2f,minRtt:%.2f,maxRtt:%.2f,loss:%d,probeTime:%s", result[ip].PacketCount, result[ip].AverageRtt, result[ip].MinRtt, result[ip].MaxRtt, result[ip].LossCount, result[ip].ProbeTime)
 			}
 

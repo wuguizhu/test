@@ -11,3 +11,657 @@
 2019/12/06 17:11:50.977 [I] [asm_amd64.s:1357]  ping is not running,beacuse ping switcher status is false. Check status another time after: 10s
 2019/12/06 17:12:00.978 [I] [asm_amd64.s:1357]  ping is not running,beacuse ping switcher status is false. Check status another time after: 10s
 2019/12/06 17:12:10.978 [I] [asm_amd64.s:1357]  ping is not running,beacuse ping switcher status is false. Check status another time after: 10s
+2020/01/03 15:32:41.044 [I] [testnode-pinger.go:41]  Beego start to run
+2020/01/03 15:32:41.046 [D] [runPing.go:27]  conf: &util.Conf{BaseConf:util.BaseConf{Station:"test-cn1", PingPacketSize:56, PingPacketCount:10, PingThreadCount:1024, PingTimeoutMs:250, PingTickerMin:2, PingSendPackWaitMs:20, PingSendPackInterMinMs:30, TCPPingPacketSize:56, TCPPingPacketCount:10, TCPPingTimeoutMs:800, TCPPingDestPort:0x50, TCPPingConnBufferSize:409, TCPPingSendGoCount:1, TCPPingRecvGoCount:1, TCPPingProcGoCount:4, TCPPingInterval:0}, OtherConf:util.OtherConf{}}
+2020/01/03 15:32:41.077 [D] [sys_config.go:43]  allLocalIPs: [30.27.68.75]
+2020/01/03 15:32:41.094 [D] [runPing.go:37]  local ip is  30.27.68.75
+2020/01/03 15:32:41.095 [D] [runPing.go:148]  ping is not running,beacuse ping switcher status is false. Check status another time after: 10s
+2020/01/03 15:32:41.116 [I] [app.go:215]  http server Running on http://:8043
+2020/01/03 15:32:51.095 [D] [runPing.go:148]  ping is not running,beacuse ping switcher status is false. Check status another time after: 10s
+2020/01/03 15:33:01.097 [D] [runPing.go:148]  ping is not running,beacuse ping switcher status is false. Check status another time after: 10s
+2020/01/03 15:33:11.098 [D] [runPing.go:148]  ping is not running,beacuse ping switcher status is false. Check status another time after: 10s
+2020/01/03 15:33:21.099 [D] [runPing.go:148]  ping is not running,beacuse ping switcher status is false. Check status another time after: 10s
+2020/01/03 15:33:31.101 [D] [runPing.go:148]  ping is not running,beacuse ping switcher status is false. Check status another time after: 10s
+2020/01/03 15:33:37.905 [I] [regionIPs.go:41]  get a region ips post
+2020/01/03 15:33:37.907 [D] [regionIPs.go:42]  post body: {
+  "Station": "test-cn1",
+  "Ip": "116.8.119.121",
+  "Region": "cn.cn.chinanet.huanan.guangxi.nanning",
+  "IPs": [
+    {
+      "ip": "1.1.1.1",
+      "region": "cn.cn.chinanet.xibei.xinjiang"
+    },
+    {
+      "ip": "1.2.3.4",
+      "region": "cn.cn.chinanet.huadong.jiangsu"
+    }
+  ]
+}
+2020/01/03 15:33:37.915 [D] [regionIPs.go:43]  get local station info:ip=116.8.119.121 station=test-cn1
+2020/01/03 15:33:37.916 [I] [regionIPs.go:46]  region IPs updated successful!,Begin to ping!
+2020/01/03 15:33:37.917 [D] [router.go:925]  |      127.0.0.1|[42m 200 [0m|     11.966ms|   match|[46m POST    [0m /test/ips/region   r:/test/ips/region
+2020/01/03 15:33:41.106 [I] [runPing.go:163]  begin ping reagionIP
+2020/01/03 15:33:41.109 [D] [ping.go:75]  ips total count:2,groups:1,current group:0
+2020/01/03 15:33:41.109 [D] [ping.go:139]  ping round:0 start
+2020/01/03 15:33:41.522 [D] [ping.go:186]  ping round:0 finished, 2ip ping use time 410.5238ms
+2020/01/03 15:33:41.526 [D] [ping.go:139]  ping round:1 start
+2020/01/03 15:33:41.940 [D] [ping.go:186]  ping round:1 finished, 2ip ping use time 409.3799ms
+2020/01/03 15:33:41.940 [D] [ping.go:139]  ping round:2 start
+2020/01/03 15:33:42.355 [D] [ping.go:186]  ping round:2 finished, 2ip ping use time 415.0375ms
+2020/01/03 15:33:42.355 [D] [ping.go:139]  ping round:3 start
+2020/01/03 15:33:42.770 [D] [ping.go:186]  ping round:3 finished, 2ip ping use time 414.8967ms
+2020/01/03 15:33:42.773 [D] [ping.go:139]  ping round:4 start
+2020/01/03 15:33:43.242 [D] [ping.go:186]  ping round:4 finished, 2ip ping use time 464.7889ms
+2020/01/03 15:33:43.243 [D] [ping.go:139]  ping round:5 start
+2020/01/03 15:33:43.654 [D] [ping.go:186]  ping round:5 finished, 2ip ping use time 408.8762ms
+2020/01/03 15:33:43.654 [D] [ping.go:139]  ping round:6 start
+2020/01/03 15:33:44.072 [D] [ping.go:186]  ping round:6 finished, 2ip ping use time 416.8842ms
+2020/01/03 15:33:44.072 [D] [ping.go:139]  ping round:7 start
+2020/01/03 15:33:44.482 [D] [ping.go:186]  ping round:7 finished, 2ip ping use time 408.904ms
+2020/01/03 15:33:44.483 [D] [ping.go:139]  ping round:8 start
+2020/01/03 15:33:44.891 [D] [ping.go:186]  ping round:8 finished, 2ip ping use time 407.9057ms
+2020/01/03 15:33:44.891 [D] [ping.go:139]  ping round:9 start
+2020/01/03 15:33:45.322 [D] [ping.go:186]  ping round:9 finished, 2ip ping use time 430.8474ms
+2020/01/03 15:33:45.322 [D] [ping.go:99]  dst ip:1.1.1.1,MaxRtt:245.6218ms,MinRtt:183.5093ms,Durition:1.8349954s
+2020/01/03 15:33:45.322 [I] [runPing.go:172]  finish ping reagionIP
+2020/01/03 15:33:45.322 [I] [runPing.go:201]  finished a ping task,waitting 10s,will exec next time 
+2020/01/03 15:33:55.324 [I] [runPing.go:163]  begin ping reagionIP
+2020/01/03 15:33:55.325 [D] [ping.go:75]  ips total count:2,groups:1,current group:0
+2020/01/03 15:33:55.326 [D] [ping.go:139]  ping round:0 start
+2020/01/03 15:33:55.735 [D] [ping.go:186]  ping round:0 finished, 2ip ping use time 406.9489ms
+2020/01/03 15:33:55.736 [D] [ping.go:139]  ping round:1 start
+2020/01/03 15:33:56.142 [D] [ping.go:186]  ping round:1 finished, 2ip ping use time 406.3205ms
+2020/01/03 15:33:56.142 [D] [ping.go:139]  ping round:2 start
+2020/01/03 15:33:56.548 [D] [ping.go:186]  ping round:2 finished, 2ip ping use time 405.1427ms
+2020/01/03 15:33:56.549 [D] [ping.go:139]  ping round:3 start
+2020/01/03 15:33:56.957 [D] [ping.go:186]  ping round:3 finished, 2ip ping use time 406.9433ms
+2020/01/03 15:33:56.958 [D] [ping.go:139]  ping round:4 start
+2020/01/03 15:33:57.369 [D] [ping.go:186]  ping round:4 finished, 2ip ping use time 410.9549ms
+2020/01/03 15:33:57.370 [D] [ping.go:139]  ping round:5 start
+2020/01/03 15:33:57.779 [D] [ping.go:186]  ping round:5 finished, 2ip ping use time 408.4074ms
+2020/01/03 15:33:57.780 [D] [ping.go:139]  ping round:6 start
+2020/01/03 15:33:58.207 [D] [ping.go:186]  ping round:6 finished, 2ip ping use time 426.8932ms
+2020/01/03 15:33:58.208 [D] [ping.go:139]  ping round:7 start
+2020/01/03 15:33:58.615 [D] [ping.go:186]  ping round:7 finished, 2ip ping use time 405.6053ms
+2020/01/03 15:33:58.616 [D] [ping.go:139]  ping round:8 start
+2020/01/03 15:33:59.022 [D] [ping.go:186]  ping round:8 finished, 2ip ping use time 405.9926ms
+2020/01/03 15:33:59.023 [D] [ping.go:139]  ping round:9 start
+2020/01/03 15:33:59.430 [D] [ping.go:186]  ping round:9 finished, 2ip ping use time 407.4452ms
+2020/01/03 15:33:59.431 [D] [ping.go:99]  dst ip:1.1.1.1,MaxRtt:185.0187ms,MinRtt:183.6781ms,Durition:1.6603129s
+2020/01/03 15:33:59.432 [I] [runPing.go:172]  finish ping reagionIP
+2020/01/03 15:33:59.433 [I] [runPing.go:201]  finished a ping task,waitting 10s,will exec next time 
+2020/01/03 15:34:09.434 [I] [runPing.go:163]  begin ping reagionIP
+2020/01/03 15:34:09.438 [D] [ping.go:75]  ips total count:2,groups:1,current group:0
+2020/01/03 15:34:09.442 [D] [ping.go:139]  ping round:0 start
+2020/01/03 15:34:09.854 [D] [ping.go:186]  ping round:0 finished, 2ip ping use time 409.9391ms
+2020/01/03 15:34:09.857 [D] [ping.go:139]  ping round:1 start
+2020/01/03 15:34:10.272 [D] [ping.go:186]  ping round:1 finished, 2ip ping use time 408.6999ms
+2020/01/03 15:34:10.276 [D] [ping.go:139]  ping round:2 start
+2020/01/03 15:34:10.691 [D] [ping.go:186]  ping round:2 finished, 2ip ping use time 409.9869ms
+2020/01/03 15:34:10.692 [D] [ping.go:139]  ping round:3 start
+2020/01/03 15:34:11.101 [D] [ping.go:186]  ping round:3 finished, 2ip ping use time 408.2818ms
+2020/01/03 15:34:11.104 [D] [ping.go:139]  ping round:4 start
+2020/01/03 15:34:11.570 [D] [ping.go:186]  ping round:4 finished, 2ip ping use time 461.2412ms
+2020/01/03 15:34:11.574 [D] [ping.go:139]  ping round:5 start
+2020/01/03 15:34:11.990 [D] [ping.go:186]  ping round:5 finished, 2ip ping use time 410.9174ms
+2020/01/03 15:34:11.991 [D] [ping.go:139]  ping round:6 start
+2020/01/03 15:34:12.350 [D] [ping.go:186]  ping round:6 finished, 2ip ping use time 358.0633ms
+2020/01/03 15:34:12.351 [D] [ping.go:139]  ping round:7 start
+2020/01/03 15:34:12.709 [D] [ping.go:186]  ping round:7 finished, 2ip ping use time 358.0699ms
+2020/01/03 15:34:12.710 [D] [ping.go:139]  ping round:8 start
+2020/01/03 15:34:13.119 [D] [ping.go:186]  ping round:8 finished, 2ip ping use time 407.9099ms
+2020/01/03 15:34:13.120 [D] [ping.go:139]  ping round:9 start
+2020/01/03 15:34:13.532 [D] [ping.go:186]  ping round:9 finished, 2ip ping use time 411.3421ms
+2020/01/03 15:34:13.535 [D] [ping.go:99]  dst ip:1.1.1.1,MaxRtt:324.135ms,MinRtt:184.4899ms,Durition:1.5359168s
+2020/01/03 15:34:13.538 [I] [runPing.go:172]  finish ping reagionIP
+2020/01/03 15:34:13.541 [I] [runPing.go:201]  finished a ping task,waitting 10s,will exec next time 
+2020/01/03 15:34:23.543 [I] [runPing.go:163]  begin ping reagionIP
+2020/01/03 15:34:23.544 [D] [ping.go:75]  ips total count:2,groups:1,current group:0
+2020/01/03 15:34:23.545 [D] [ping.go:139]  ping round:0 start
+2020/01/03 15:34:23.955 [D] [ping.go:186]  ping round:0 finished, 2ip ping use time 407.9137ms
+2020/01/03 15:34:23.958 [D] [ping.go:139]  ping round:1 start
+2020/01/03 15:34:24.373 [D] [ping.go:186]  ping round:1 finished, 2ip ping use time 409.1328ms
+2020/01/03 15:34:24.374 [D] [ping.go:139]  ping round:2 start
+2020/01/03 15:34:24.729 [D] [ping.go:186]  ping round:2 finished, 2ip ping use time 354.3252ms
+2020/01/03 15:34:24.730 [D] [ping.go:139]  ping round:3 start
+2020/01/03 15:34:25.136 [D] [ping.go:186]  ping round:3 finished, 2ip ping use time 405.5633ms
+2020/01/03 15:34:25.138 [D] [ping.go:139]  ping round:4 start
+2020/01/03 15:34:25.550 [D] [ping.go:186]  ping round:4 finished, 2ip ping use time 407.6459ms
+2020/01/03 15:34:25.553 [D] [ping.go:139]  ping round:5 start
+2020/01/03 15:34:25.966 [D] [ping.go:186]  ping round:5 finished, 2ip ping use time 406.9632ms
+2020/01/03 15:34:25.967 [D] [ping.go:139]  ping round:6 start
+2020/01/03 15:34:26.373 [D] [ping.go:186]  ping round:6 finished, 2ip ping use time 405.5589ms
+2020/01/03 15:34:26.376 [D] [ping.go:139]  ping round:7 start
+2020/01/03 15:34:26.790 [D] [ping.go:186]  ping round:7 finished, 2ip ping use time 408.3833ms
+2020/01/03 15:34:26.791 [D] [ping.go:139]  ping round:8 start
+2020/01/03 15:34:27.197 [D] [ping.go:186]  ping round:8 finished, 2ip ping use time 405.8366ms
+2020/01/03 15:34:27.198 [D] [ping.go:139]  ping round:9 start
+2020/01/03 15:34:27.484 [I] [results.go:65]  Get a request for results,reqID： 4617
+2020/01/03 15:34:27.485 [D] [results.go:83]  reqID：4617,regionStatus:true, stationStatus:false, switchStatus:true, regionResStatus:true, stationResStatus:false, tcpResStatus:false
+2020/01/03 15:34:27.486 [I] [results.go:88]  finish prepare successful result,reqID： 4617
+2020/01/03 15:34:27.502 [I] [results.go:104]  Return result successful,reqID： 4617
+2020/01/03 15:34:27.502 [D] [router.go:925]  |      127.0.0.1|[42m 200 [0m|    17.9553ms|   match|[44m GET     [0m /test/ips/results   r:/test/ips/results
+2020/01/03 15:34:27.608 [D] [ping.go:186]  ping round:9 finished, 2ip ping use time 410.1552ms
+2020/01/03 15:34:27.609 [D] [ping.go:99]  dst ip:1.1.1.1,MaxRtt:233.5033ms,MinRtt:183.2536ms,Durition:1.5275248s
+2020/01/03 15:34:27.609 [I] [runPing.go:172]  finish ping reagionIP
+2020/01/03 15:34:27.610 [I] [runPing.go:201]  finished a ping task,waitting 10s,will exec next time 
+2020/01/03 15:34:37.619 [I] [runPing.go:163]  begin ping reagionIP
+2020/01/03 15:34:37.621 [D] [ping.go:75]  ips total count:2,groups:1,current group:0
+2020/01/03 15:34:37.624 [D] [ping.go:139]  ping round:0 start
+2020/01/03 15:34:38.032 [D] [ping.go:186]  ping round:0 finished, 2ip ping use time 406.5009ms
+2020/01/03 15:34:38.033 [D] [ping.go:139]  ping round:1 start
+2020/01/03 15:34:38.437 [D] [ping.go:186]  ping round:1 finished, 2ip ping use time 404.3957ms
+2020/01/03 15:34:38.440 [D] [ping.go:139]  ping round:2 start
+2020/01/03 15:34:38.860 [D] [ping.go:186]  ping round:2 finished, 2ip ping use time 414.5117ms
+2020/01/03 15:34:38.863 [D] [ping.go:139]  ping round:3 start
+2020/01/03 15:34:39.276 [D] [ping.go:186]  ping round:3 finished, 2ip ping use time 408.2903ms
+2020/01/03 15:34:39.277 [D] [ping.go:139]  ping round:4 start
+2020/01/03 15:34:39.691 [D] [ping.go:186]  ping round:4 finished, 2ip ping use time 408.9492ms
+2020/01/03 15:34:39.693 [D] [ping.go:139]  ping round:5 start
+2020/01/03 15:34:40.106 [D] [ping.go:186]  ping round:5 finished, 2ip ping use time 406.5451ms
+2020/01/03 15:34:40.108 [D] [ping.go:139]  ping round:6 start
+2020/01/03 15:34:40.523 [D] [ping.go:186]  ping round:6 finished, 2ip ping use time 408.637ms
+2020/01/03 15:34:40.526 [D] [ping.go:139]  ping round:7 start
+2020/01/03 15:34:40.940 [D] [ping.go:186]  ping round:7 finished, 2ip ping use time 408.4807ms
+2020/01/03 15:34:40.941 [D] [ping.go:139]  ping round:8 start
+2020/01/03 15:34:41.347 [D] [ping.go:186]  ping round:8 finished, 2ip ping use time 405.998ms
+2020/01/03 15:34:41.347 [D] [ping.go:139]  ping round:9 start
+2020/01/03 15:34:41.702 [D] [ping.go:186]  ping round:9 finished, 2ip ping use time 353.5155ms
+2020/01/03 15:34:41.706 [D] [ping.go:99]  dst ip:1.1.1.1,MaxRtt:201.0195ms,MinRtt:183.2662ms,Durition:1.4979554s
+2020/01/03 15:34:41.711 [I] [runPing.go:172]  finish ping reagionIP
+2020/01/03 15:34:41.715 [I] [runPing.go:201]  finished a ping task,waitting 10s,will exec next time 
+2020/01/03 15:34:51.718 [I] [runPing.go:163]  begin ping reagionIP
+2020/01/03 15:34:51.721 [D] [ping.go:75]  ips total count:2,groups:1,current group:0
+2020/01/03 15:34:51.724 [D] [ping.go:139]  ping round:0 start
+2020/01/03 15:34:52.138 [D] [ping.go:186]  ping round:0 finished, 2ip ping use time 410.1005ms
+2020/01/03 15:34:52.139 [D] [ping.go:139]  ping round:1 start
+2020/01/03 15:34:52.495 [D] [ping.go:186]  ping round:1 finished, 2ip ping use time 354.9493ms
+2020/01/03 15:34:52.496 [D] [ping.go:139]  ping round:2 start
+2020/01/03 15:34:52.854 [D] [ping.go:186]  ping round:2 finished, 2ip ping use time 356.6307ms
+2020/01/03 15:34:52.855 [D] [ping.go:139]  ping round:3 start
+2020/01/03 15:34:53.263 [D] [ping.go:186]  ping round:3 finished, 2ip ping use time 407.482ms
+2020/01/03 15:34:53.265 [D] [ping.go:139]  ping round:4 start
+2020/01/03 15:34:53.675 [D] [ping.go:186]  ping round:4 finished, 2ip ping use time 405.9699ms
+2020/01/03 15:34:53.676 [D] [ping.go:139]  ping round:5 start
+2020/01/03 15:34:54.084 [D] [ping.go:186]  ping round:5 finished, 2ip ping use time 408.2638ms
+2020/01/03 15:34:54.085 [D] [ping.go:139]  ping round:6 start
+2020/01/03 15:34:54.492 [D] [ping.go:186]  ping round:6 finished, 2ip ping use time 405.8397ms
+2020/01/03 15:34:54.493 [D] [ping.go:139]  ping round:7 start
+2020/01/03 15:34:54.899 [D] [ping.go:186]  ping round:7 finished, 2ip ping use time 405.7547ms
+2020/01/03 15:34:54.902 [D] [ping.go:139]  ping round:8 start
+2020/01/03 15:34:55.317 [D] [ping.go:186]  ping round:8 finished, 2ip ping use time 408.8404ms
+2020/01/03 15:34:55.317 [D] [ping.go:139]  ping round:9 start
+2020/01/03 15:34:55.722 [D] [ping.go:186]  ping round:9 finished, 2ip ping use time 404.3023ms
+2020/01/03 15:34:55.723 [D] [ping.go:99]  dst ip:1.1.1.1,MaxRtt:267.1568ms,MinRtt:182.5613ms,Durition:1.436527s
+2020/01/03 15:34:55.724 [I] [runPing.go:172]  finish ping reagionIP
+2020/01/03 15:34:55.726 [I] [runPing.go:201]  finished a ping task,waitting 10s,will exec next time 
+2020/01/03 15:35:05.727 [I] [runPing.go:163]  begin ping reagionIP
+2020/01/03 15:35:05.727 [D] [ping.go:75]  ips total count:2,groups:1,current group:0
+2020/01/03 15:35:05.730 [D] [ping.go:139]  ping round:0 start
+2020/01/03 15:35:06.138 [D] [ping.go:186]  ping round:0 finished, 2ip ping use time 407.7049ms
+2020/01/03 15:35:06.140 [D] [ping.go:139]  ping round:1 start
+2020/01/03 15:35:06.547 [D] [ping.go:186]  ping round:1 finished, 2ip ping use time 406.9683ms
+2020/01/03 15:35:06.549 [D] [ping.go:139]  ping round:2 start
+2020/01/03 15:35:06.965 [D] [ping.go:186]  ping round:2 finished, 2ip ping use time 409.4596ms
+2020/01/03 15:35:06.967 [D] [ping.go:139]  ping round:3 start
+2020/01/03 15:35:07.374 [D] [ping.go:186]  ping round:3 finished, 2ip ping use time 405.3987ms
+2020/01/03 15:35:07.375 [D] [ping.go:139]  ping round:4 start
+2020/01/03 15:35:07.781 [D] [ping.go:186]  ping round:4 finished, 2ip ping use time 405.0646ms
+2020/01/03 15:35:07.784 [D] [ping.go:139]  ping round:5 start
+2020/01/03 15:35:08.202 [D] [ping.go:186]  ping round:5 finished, 2ip ping use time 413.0443ms
+2020/01/03 15:35:08.203 [D] [ping.go:139]  ping round:6 start
+2020/01/03 15:35:08.611 [D] [ping.go:186]  ping round:6 finished, 2ip ping use time 406.4226ms
+2020/01/03 15:35:08.611 [D] [ping.go:139]  ping round:7 start
+2020/01/03 15:35:09.018 [D] [ping.go:186]  ping round:7 finished, 2ip ping use time 405.5807ms
+2020/01/03 15:35:09.018 [D] [ping.go:139]  ping round:8 start
+2020/01/03 15:35:09.423 [D] [ping.go:186]  ping round:8 finished, 2ip ping use time 403.5975ms
+2020/01/03 15:35:09.423 [D] [ping.go:139]  ping round:9 start
+2020/01/03 15:35:09.830 [D] [ping.go:186]  ping round:9 finished, 2ip ping use time 405.6859ms
+2020/01/03 15:35:09.833 [D] [ping.go:99]  dst ip:1.1.1.1,MaxRtt:187.0458ms,MinRtt:183.4951ms,Durition:1.6639191s
+2020/01/03 15:35:09.843 [I] [runPing.go:172]  finish ping reagionIP
+2020/01/03 15:35:09.845 [I] [runPing.go:201]  finished a ping task,waitting 10s,will exec next time 
+2020/01/03 15:35:19.847 [I] [runPing.go:163]  begin ping reagionIP
+2020/01/03 15:35:19.849 [D] [ping.go:75]  ips total count:2,groups:1,current group:0
+2020/01/03 15:35:19.851 [D] [ping.go:139]  ping round:0 start
+2020/01/03 15:35:20.206 [D] [ping.go:186]  ping round:0 finished, 2ip ping use time 354.2102ms
+2020/01/03 15:35:20.207 [D] [ping.go:139]  ping round:1 start
+2020/01/03 15:35:20.613 [D] [ping.go:186]  ping round:1 finished, 2ip ping use time 405.7777ms
+2020/01/03 15:35:20.614 [D] [ping.go:139]  ping round:2 start
+2020/01/03 15:35:20.707 [I] [regionIPs.go:41]  get a region ips post
+2020/01/03 15:35:20.708 [D] [regionIPs.go:42]  post body: {
+  "Station": "test-cn1",
+  "Ip": "116.8.119.121",
+  "Region": "cn.cn.chinanet.huanan.guangxi.nanning",
+  "IPs": [
+    {
+      "ip": "114.114.114.114",
+      "region": "cn.cn.chinanet.xibei.xinjiang"
+    },
+    {
+      "ip": "8.8.8.8",
+      "region": "cn.cn.chinanet.huadong.jiangsu"
+    }
+  ]
+}
+2020/01/03 15:35:20.729 [D] [regionIPs.go:43]  get local station info:ip=116.8.119.121 station=test-cn1
+2020/01/03 15:35:20.730 [I] [regionIPs.go:46]  region IPs updated successful!,Begin to ping!
+2020/01/03 15:35:20.731 [D] [router.go:925]  |      127.0.0.1|[42m 200 [0m|    23.9347ms|   match|[46m POST    [0m /test/ips/region   r:/test/ips/region
+2020/01/03 15:35:21.021 [D] [ping.go:186]  ping round:2 finished, 2ip ping use time 406.6247ms
+2020/01/03 15:35:21.024 [D] [ping.go:139]  ping round:3 start
+2020/01/03 15:35:21.386 [D] [ping.go:186]  ping round:3 finished, 2ip ping use time 356.748ms
+2020/01/03 15:35:21.388 [D] [ping.go:139]  ping round:4 start
+2020/01/03 15:35:21.795 [D] [ping.go:186]  ping round:4 finished, 2ip ping use time 405.7559ms
+2020/01/03 15:35:21.795 [D] [ping.go:139]  ping round:5 start
+2020/01/03 15:35:22.202 [D] [ping.go:186]  ping round:5 finished, 2ip ping use time 406.1322ms
+2020/01/03 15:35:22.204 [D] [ping.go:139]  ping round:6 start
+2020/01/03 15:35:22.563 [D] [ping.go:186]  ping round:6 finished, 2ip ping use time 356.6353ms
+2020/01/03 15:35:22.564 [D] [ping.go:139]  ping round:7 start
+2020/01/03 15:35:22.970 [D] [ping.go:186]  ping round:7 finished, 2ip ping use time 404.563ms
+2020/01/03 15:35:22.971 [D] [ping.go:139]  ping round:8 start
+2020/01/03 15:35:23.378 [D] [ping.go:186]  ping round:8 finished, 2ip ping use time 406.1151ms
+2020/01/03 15:35:23.380 [D] [ping.go:139]  ping round:9 start
+2020/01/03 15:35:23.794 [D] [ping.go:186]  ping round:9 finished, 2ip ping use time 409.8657ms
+2020/01/03 15:35:23.795 [D] [ping.go:99]  dst ip:1.1.1.1,MaxRtt:227.6365ms,MinRtt:182.8737ms,Durition:1.3332272s
+2020/01/03 15:35:23.798 [I] [runPing.go:172]  finish ping reagionIP
+2020/01/03 15:35:23.798 [I] [runPing.go:201]  finished a ping task,waitting 10s,will exec next time 
+2020/01/03 15:35:33.799 [I] [runPing.go:163]  begin ping reagionIP
+2020/01/03 15:35:33.803 [D] [ping.go:75]  ips total count:2,groups:1,current group:0
+2020/01/03 15:35:33.806 [D] [ping.go:139]  ping round:0 start
+2020/01/03 15:35:34.017 [D] [ping.go:186]  ping round:0 finished, 2ip ping use time 206.6484ms
+2020/01/03 15:35:34.018 [D] [ping.go:139]  ping round:1 start
+2020/01/03 15:35:34.273 [D] [ping.go:186]  ping round:1 finished, 2ip ping use time 253.9315ms
+2020/01/03 15:35:34.274 [D] [ping.go:139]  ping round:2 start
+2020/01/03 15:35:34.528 [D] [ping.go:186]  ping round:2 finished, 2ip ping use time 254.2693ms
+2020/01/03 15:35:34.531 [D] [ping.go:139]  ping round:3 start
+2020/01/03 15:35:34.795 [D] [ping.go:186]  ping round:3 finished, 2ip ping use time 257.9293ms
+2020/01/03 15:35:34.796 [D] [ping.go:139]  ping round:4 start
+2020/01/03 15:35:35.051 [D] [ping.go:186]  ping round:4 finished, 2ip ping use time 253.2072ms
+2020/01/03 15:35:35.053 [D] [ping.go:139]  ping round:5 start
+2020/01/03 15:35:35.311 [D] [ping.go:186]  ping round:5 finished, 2ip ping use time 255.3855ms
+2020/01/03 15:35:35.311 [D] [ping.go:139]  ping round:6 start
+2020/01/03 15:35:35.568 [D] [ping.go:186]  ping round:6 finished, 2ip ping use time 255.9653ms
+2020/01/03 15:35:35.569 [D] [ping.go:139]  ping round:7 start
+2020/01/03 15:35:35.825 [D] [ping.go:186]  ping round:7 finished, 2ip ping use time 254.8762ms
+2020/01/03 15:35:35.827 [D] [ping.go:139]  ping round:8 start
+2020/01/03 15:35:36.084 [D] [ping.go:186]  ping round:8 finished, 2ip ping use time 254.568ms
+2020/01/03 15:35:36.085 [D] [ping.go:139]  ping round:9 start
+2020/01/03 15:35:36.339 [D] [ping.go:186]  ping round:9 finished, 2ip ping use time 254.188ms
+2020/01/03 15:35:36.340 [D] [ping.go:99]  dst ip:114.114.114.114,MaxRtt:32.913ms,MinRtt:31.0851ms,Durition:320.6229ms
+2020/01/03 15:35:36.341 [D] [ping.go:99]  dst ip:8.8.8.8,MaxRtt:59.8526ms,MinRtt:57.8423ms,Durition:586.9706ms
+2020/01/03 15:35:36.348 [I] [runPing.go:172]  finish ping reagionIP
+2020/01/03 15:35:36.349 [I] [runPing.go:201]  finished a ping task,waitting 10s,will exec next time 
+2020/01/03 15:35:46.350 [I] [runPing.go:163]  begin ping reagionIP
+2020/01/03 15:35:46.351 [D] [ping.go:75]  ips total count:2,groups:1,current group:0
+2020/01/03 15:35:46.351 [D] [ping.go:139]  ping round:0 start
+2020/01/03 15:35:46.610 [D] [ping.go:186]  ping round:0 finished, 2ip ping use time 257.3649ms
+2020/01/03 15:35:46.610 [D] [ping.go:139]  ping round:1 start
+2020/01/03 15:35:46.863 [D] [ping.go:186]  ping round:1 finished, 2ip ping use time 252.9181ms
+2020/01/03 15:35:46.865 [D] [ping.go:139]  ping round:2 start
+2020/01/03 15:35:47.128 [D] [ping.go:186]  ping round:2 finished, 2ip ping use time 257.5833ms
+2020/01/03 15:35:47.128 [D] [ping.go:139]  ping round:3 start
+2020/01/03 15:35:47.383 [D] [ping.go:186]  ping round:3 finished, 2ip ping use time 253.9709ms
+2020/01/03 15:35:47.385 [D] [ping.go:139]  ping round:4 start
+2020/01/03 15:35:47.642 [D] [ping.go:186]  ping round:4 finished, 2ip ping use time 254.967ms
+2020/01/03 15:35:47.643 [D] [ping.go:139]  ping round:5 start
+2020/01/03 15:35:47.846 [D] [ping.go:186]  ping round:5 finished, 2ip ping use time 202.6387ms
+2020/01/03 15:35:47.847 [D] [ping.go:139]  ping round:6 start
+2020/01/03 15:35:48.054 [D] [ping.go:186]  ping round:6 finished, 2ip ping use time 205.448ms
+2020/01/03 15:35:48.055 [D] [ping.go:139]  ping round:7 start
+2020/01/03 15:35:48.311 [D] [ping.go:186]  ping round:7 finished, 2ip ping use time 254.8724ms
+2020/01/03 15:35:48.312 [D] [ping.go:139]  ping round:8 start
+2020/01/03 15:35:48.568 [D] [ping.go:186]  ping round:8 finished, 2ip ping use time 256.0528ms
+2020/01/03 15:35:48.569 [D] [ping.go:139]  ping round:9 start
+2020/01/03 15:35:48.826 [D] [ping.go:186]  ping round:9 finished, 2ip ping use time 256.0856ms
+2020/01/03 15:35:48.827 [D] [ping.go:99]  dst ip:8.8.8.8,MaxRtt:59.85ms,MinRtt:57.2099ms,Durition:580.0595ms
+2020/01/03 15:35:48.830 [D] [ping.go:99]  dst ip:114.114.114.114,MaxRtt:34.9118ms,MinRtt:30.9112ms,Durition:323.5659ms
+2020/01/03 15:35:48.830 [I] [runPing.go:172]  finish ping reagionIP
+2020/01/03 15:35:48.831 [I] [runPing.go:201]  finished a ping task,waitting 10s,will exec next time 
+2020/01/03 15:35:52.918 [I] [results.go:65]  Get a request for results,reqID： 13047
+2020/01/03 15:35:52.919 [D] [results.go:83]  reqID：13047,regionStatus:true, stationStatus:false, switchStatus:true, regionResStatus:true, stationResStatus:false, tcpResStatus:false
+2020/01/03 15:35:52.920 [I] [results.go:88]  finish prepare successful result,reqID： 13047
+2020/01/03 15:35:52.934 [I] [results.go:104]  Return result successful,reqID： 13047
+2020/01/03 15:35:52.935 [D] [router.go:925]  |      127.0.0.1|[42m 200 [0m|     16.962ms|   match|[44m GET     [0m /test/ips/results   r:/test/ips/results
+2020/01/03 15:35:58.833 [I] [runPing.go:163]  begin ping reagionIP
+2020/01/03 15:35:58.837 [D] [ping.go:75]  ips total count:2,groups:1,current group:0
+2020/01/03 15:35:58.841 [D] [ping.go:139]  ping round:0 start
+2020/01/03 15:35:59.102 [D] [ping.go:186]  ping round:0 finished, 2ip ping use time 257.6487ms
+2020/01/03 15:35:59.103 [D] [ping.go:139]  ping round:1 start
+2020/01/03 15:35:59.360 [D] [ping.go:186]  ping round:1 finished, 2ip ping use time 254.5593ms
+2020/01/03 15:35:59.361 [D] [ping.go:139]  ping round:2 start
+2020/01/03 15:35:59.616 [D] [ping.go:186]  ping round:2 finished, 2ip ping use time 253.5033ms
+2020/01/03 15:35:59.618 [D] [ping.go:139]  ping round:3 start
+2020/01/03 15:35:59.873 [D] [ping.go:186]  ping round:3 finished, 2ip ping use time 254.7231ms
+2020/01/03 15:35:59.874 [D] [ping.go:139]  ping round:4 start
+2020/01/03 15:36:00.128 [D] [ping.go:186]  ping round:4 finished, 2ip ping use time 253.475ms
+2020/01/03 15:36:00.128 [D] [ping.go:139]  ping round:5 start
+2020/01/03 15:36:00.386 [D] [ping.go:186]  ping round:5 finished, 2ip ping use time 256.3148ms
+2020/01/03 15:36:00.387 [D] [ping.go:139]  ping round:6 start
+2020/01/03 15:36:00.642 [D] [ping.go:186]  ping round:6 finished, 2ip ping use time 254.5011ms
+2020/01/03 15:36:00.643 [D] [ping.go:139]  ping round:7 start
+2020/01/03 15:36:00.898 [D] [ping.go:186]  ping round:7 finished, 2ip ping use time 254.4916ms
+2020/01/03 15:36:00.898 [D] [ping.go:139]  ping round:8 start
+2020/01/03 15:36:01.154 [D] [ping.go:186]  ping round:8 finished, 2ip ping use time 254.5117ms
+2020/01/03 15:36:01.155 [D] [ping.go:139]  ping round:9 start
+2020/01/03 15:36:01.512 [D] [ping.go:186]  ping round:9 finished, 2ip ping use time 356.0961ms
+2020/01/03 15:36:01.513 [D] [ping.go:99]  dst ip:114.114.114.114,MaxRtt:145.6106ms,MinRtt:31.8901ms,Durition:439.0704ms
+2020/01/03 15:36:01.514 [D] [ping.go:99]  dst ip:8.8.8.8,MaxRtt:152.7197ms,MinRtt:57.8501ms,Durition:682.9419ms
+2020/01/03 15:36:01.522 [I] [runPing.go:172]  finish ping reagionIP
+2020/01/03 15:36:01.523 [I] [runPing.go:201]  finished a ping task,waitting 10s,will exec next time 
+2020/01/03 15:36:11.525 [I] [runPing.go:163]  begin ping reagionIP
+2020/01/03 15:36:11.529 [D] [ping.go:75]  ips total count:2,groups:1,current group:0
+2020/01/03 15:36:11.532 [D] [ping.go:139]  ping round:0 start
+2020/01/03 15:36:11.844 [D] [ping.go:186]  ping round:0 finished, 2ip ping use time 308.7232ms
+2020/01/03 15:36:11.845 [D] [ping.go:139]  ping round:1 start
+2020/01/03 15:36:12.100 [D] [ping.go:186]  ping round:1 finished, 2ip ping use time 254.4852ms
+2020/01/03 15:36:12.101 [D] [ping.go:139]  ping round:2 start
+2020/01/03 15:36:12.355 [D] [ping.go:186]  ping round:2 finished, 2ip ping use time 252.729ms
+2020/01/03 15:36:12.356 [D] [ping.go:139]  ping round:3 start
+2020/01/03 15:36:12.663 [D] [ping.go:186]  ping round:3 finished, 2ip ping use time 305.0984ms
+2020/01/03 15:36:12.666 [D] [ping.go:139]  ping round:4 start
+2020/01/03 15:36:12.931 [D] [ping.go:186]  ping round:4 finished, 2ip ping use time 258.6916ms
+2020/01/03 15:36:12.932 [D] [ping.go:139]  ping round:5 start
+2020/01/03 15:36:13.187 [D] [ping.go:186]  ping round:5 finished, 2ip ping use time 253.2963ms
+2020/01/03 15:36:13.189 [D] [ping.go:139]  ping round:6 start
+2020/01/03 15:36:13.443 [D] [ping.go:186]  ping round:6 finished, 2ip ping use time 252.9887ms
+2020/01/03 15:36:13.446 [D] [ping.go:139]  ping round:7 start
+2020/01/03 15:36:13.709 [D] [ping.go:186]  ping round:7 finished, 2ip ping use time 258.0989ms
+2020/01/03 15:36:13.710 [D] [ping.go:139]  ping round:8 start
+2020/01/03 15:36:13.964 [D] [ping.go:186]  ping round:8 finished, 2ip ping use time 254.524ms
+2020/01/03 15:36:13.965 [D] [ping.go:139]  ping round:9 start
+2020/01/03 15:36:14.220 [D] [ping.go:186]  ping round:9 finished, 2ip ping use time 254.4375ms
+2020/01/03 15:36:14.222 [D] [ping.go:99]  dst ip:114.114.114.114,MaxRtt:139.7575ms,MinRtt:31.916ms,Durition:538.5226ms
+2020/01/03 15:36:14.224 [D] [ping.go:99]  dst ip:8.8.8.8,MaxRtt:139.594ms,MinRtt:56.848ms,Durition:745.3205ms
+2020/01/03 15:36:14.224 [I] [runPing.go:172]  finish ping reagionIP
+2020/01/03 15:36:14.225 [I] [runPing.go:201]  finished a ping task,waitting 10s,will exec next time 
+2020/01/03 15:36:24.226 [I] [runPing.go:163]  begin ping reagionIP
+2020/01/03 15:36:24.227 [D] [ping.go:75]  ips total count:2,groups:1,current group:0
+2020/01/03 15:36:24.228 [D] [ping.go:139]  ping round:0 start
+2020/01/03 15:36:24.485 [D] [ping.go:186]  ping round:0 finished, 2ip ping use time 255.5647ms
+2020/01/03 15:36:24.486 [D] [ping.go:139]  ping round:1 start
+2020/01/03 15:36:24.742 [D] [ping.go:186]  ping round:1 finished, 2ip ping use time 256.3181ms
+2020/01/03 15:36:24.743 [D] [ping.go:139]  ping round:2 start
+2020/01/03 15:36:24.997 [D] [ping.go:186]  ping round:2 finished, 2ip ping use time 252.9283ms
+2020/01/03 15:36:24.998 [D] [ping.go:139]  ping round:3 start
+2020/01/03 15:36:25.254 [D] [ping.go:186]  ping round:3 finished, 2ip ping use time 254.7384ms
+2020/01/03 15:36:25.254 [D] [ping.go:139]  ping round:4 start
+2020/01/03 15:36:25.507 [D] [ping.go:186]  ping round:4 finished, 2ip ping use time 252.7763ms
+2020/01/03 15:36:25.508 [D] [ping.go:139]  ping round:5 start
+2020/01/03 15:36:25.762 [D] [ping.go:186]  ping round:5 finished, 2ip ping use time 253.7965ms
+2020/01/03 15:36:25.765 [D] [ping.go:139]  ping round:6 start
+2020/01/03 15:36:26.028 [D] [ping.go:186]  ping round:6 finished, 2ip ping use time 256.9905ms
+2020/01/03 15:36:26.029 [D] [ping.go:139]  ping round:7 start
+2020/01/03 15:36:26.050 [I] [regionIPs.go:41]  get a region ips post
+2020/01/03 15:36:26.054 [D] [regionIPs.go:42]  post body: {
+  "Station": "test-cn1",
+  "Ip": "116.8.119.121",
+  "Region": "cn.cn.chinanet.huanan.guangxi.nanning",
+  "IPs": [
+    {
+      "ip": "123.123.123.123",
+      "region": "cn.cn.chinanet.xibei.xinjiang"
+    },
+    {
+      "ip": "8.8.4.4",
+      "region": "cn.cn.chinanet.huadong.jiangsu"
+    }
+  ]
+}
+2020/01/03 15:36:26.069 [D] [regionIPs.go:43]  get local station info:ip=116.8.119.121 station=test-cn1
+2020/01/03 15:36:26.070 [I] [regionIPs.go:46]  region IPs updated successful!,Begin to ping!
+2020/01/03 15:36:26.070 [D] [router.go:925]  |      127.0.0.1|[42m 200 [0m|    20.9427ms|   match|[46m POST    [0m /test/ips/region   r:/test/ips/region
+2020/01/03 15:36:26.287 [D] [ping.go:186]  ping round:7 finished, 2ip ping use time 256.3145ms
+2020/01/03 15:36:26.288 [D] [ping.go:139]  ping round:8 start
+2020/01/03 15:36:26.544 [D] [ping.go:186]  ping round:8 finished, 2ip ping use time 255.9917ms
+2020/01/03 15:36:26.547 [D] [ping.go:139]  ping round:9 start
+2020/01/03 15:36:26.809 [D] [ping.go:186]  ping round:9 finished, 2ip ping use time 256.5722ms
+2020/01/03 15:36:26.810 [D] [ping.go:99]  dst ip:8.8.8.8,MaxRtt:59.874ms,MinRtt:56.8539ms,Durition:582.585ms
+2020/01/03 15:36:26.811 [D] [ping.go:99]  dst ip:114.114.114.114,MaxRtt:33.8874ms,MinRtt:31.9152ms,Durition:324.6359ms
+2020/01/03 15:36:26.813 [I] [runPing.go:172]  finish ping reagionIP
+2020/01/03 15:36:26.813 [I] [runPing.go:201]  finished a ping task,waitting 10s,will exec next time 
+2020/01/03 15:36:30.447 [I] [results.go:65]  Get a request for results,reqID： 58552
+2020/01/03 15:36:30.448 [D] [results.go:83]  reqID：58552,regionStatus:true, stationStatus:false, switchStatus:true, regionResStatus:true, stationResStatus:false, tcpResStatus:false
+2020/01/03 15:36:30.449 [I] [results.go:88]  finish prepare successful result,reqID： 58552
+2020/01/03 15:36:30.458 [I] [results.go:104]  Return result successful,reqID： 58552
+2020/01/03 15:36:30.460 [D] [router.go:925]  |      127.0.0.1|[42m 200 [0m|    11.9727ms|   match|[44m GET     [0m /test/ips/results   r:/test/ips/results
+2020/01/03 15:36:36.814 [I] [runPing.go:163]  begin ping reagionIP
+2020/01/03 15:36:36.815 [D] [ping.go:75]  ips total count:2,groups:1,current group:0
+2020/01/03 15:36:36.816 [D] [ping.go:139]  ping round:0 start
+2020/01/03 15:36:37.078 [D] [ping.go:186]  ping round:0 finished, 2ip ping use time 258.5174ms
+2020/01/03 15:36:37.078 [D] [ping.go:139]  ping round:1 start
+2020/01/03 15:36:37.333 [D] [ping.go:186]  ping round:1 finished, 2ip ping use time 253.7526ms
+2020/01/03 15:36:37.334 [D] [ping.go:139]  ping round:2 start
+2020/01/03 15:36:37.587 [D] [ping.go:186]  ping round:2 finished, 2ip ping use time 252.8258ms
+2020/01/03 15:36:37.590 [D] [ping.go:139]  ping round:3 start
+2020/01/03 15:36:37.853 [D] [ping.go:186]  ping round:3 finished, 2ip ping use time 257.2171ms
+2020/01/03 15:36:37.854 [D] [ping.go:139]  ping round:4 start
+2020/01/03 15:36:38.107 [D] [ping.go:186]  ping round:4 finished, 2ip ping use time 252.6888ms
+2020/01/03 15:36:38.109 [D] [ping.go:139]  ping round:5 start
+2020/01/03 15:36:38.368 [D] [ping.go:186]  ping round:5 finished, 2ip ping use time 257.5447ms
+2020/01/03 15:36:38.370 [D] [ping.go:139]  ping round:6 start
+2020/01/03 15:36:38.624 [D] [ping.go:186]  ping round:6 finished, 2ip ping use time 253.3477ms
+2020/01/03 15:36:38.625 [D] [ping.go:139]  ping round:7 start
+2020/01/03 15:36:38.879 [D] [ping.go:186]  ping round:7 finished, 2ip ping use time 253.0837ms
+2020/01/03 15:36:38.880 [D] [ping.go:139]  ping round:8 start
+2020/01/03 15:36:39.139 [D] [ping.go:186]  ping round:8 finished, 2ip ping use time 257.8391ms
+2020/01/03 15:36:39.139 [D] [ping.go:139]  ping round:9 start
+2020/01/03 15:36:39.397 [D] [ping.go:186]  ping round:9 finished, 2ip ping use time 256.1154ms
+2020/01/03 15:36:39.398 [D] [ping.go:99]  dst ip:8.8.4.4,MaxRtt:79.951ms,MinRtt:59.2257ms,Durition:630.6192ms
+2020/01/03 15:36:39.398 [D] [ping.go:99]  dst ip:123.123.123.123,MaxRtt:18.9497ms,MinRtt:5.1685ms,Durition:79.0342ms
+2020/01/03 15:36:39.400 [I] [runPing.go:172]  finish ping reagionIP
+2020/01/03 15:36:39.400 [I] [runPing.go:201]  finished a ping task,waitting 10s,will exec next time 
+2020/01/03 15:36:49.402 [I] [runPing.go:163]  begin ping reagionIP
+2020/01/03 15:36:49.406 [D] [ping.go:75]  ips total count:2,groups:1,current group:0
+2020/01/03 15:36:49.410 [D] [ping.go:139]  ping round:0 start
+2020/01/03 15:36:49.673 [D] [ping.go:186]  ping round:0 finished, 2ip ping use time 259.1163ms
+2020/01/03 15:36:49.673 [D] [ping.go:139]  ping round:1 start
+2020/01/03 15:36:49.926 [D] [ping.go:186]  ping round:1 finished, 2ip ping use time 251.4725ms
+2020/01/03 15:36:49.927 [D] [ping.go:139]  ping round:2 start
+2020/01/03 15:36:50.181 [D] [ping.go:186]  ping round:2 finished, 2ip ping use time 254.0011ms
+2020/01/03 15:36:50.181 [D] [ping.go:139]  ping round:3 start
+2020/01/03 15:36:50.438 [D] [ping.go:186]  ping round:3 finished, 2ip ping use time 256.4242ms
+2020/01/03 15:36:50.439 [D] [ping.go:139]  ping round:4 start
+2020/01/03 15:36:50.695 [D] [ping.go:186]  ping round:4 finished, 2ip ping use time 255.0754ms
+2020/01/03 15:36:50.697 [D] [ping.go:139]  ping round:5 start
+2020/01/03 15:36:50.952 [D] [ping.go:186]  ping round:5 finished, 2ip ping use time 254.6528ms
+2020/01/03 15:36:50.952 [D] [ping.go:139]  ping round:6 start
+2020/01/03 15:36:51.210 [D] [ping.go:186]  ping round:6 finished, 2ip ping use time 256.6069ms
+2020/01/03 15:36:51.211 [D] [ping.go:139]  ping round:7 start
+2020/01/03 15:36:51.518 [D] [ping.go:186]  ping round:7 finished, 2ip ping use time 305.5712ms
+2020/01/03 15:36:51.519 [D] [ping.go:139]  ping round:8 start
+2020/01/03 15:36:51.832 [D] [ping.go:186]  ping round:8 finished, 2ip ping use time 307.3965ms
+2020/01/03 15:36:51.832 [D] [ping.go:139]  ping round:9 start
+2020/01/03 15:36:52.087 [D] [ping.go:186]  ping round:9 finished, 2ip ping use time 253.7457ms
+2020/01/03 15:36:52.088 [D] [ping.go:99]  dst ip:123.123.123.123,MaxRtt:51.8647ms,MinRtt:4.9861ms,Durition:104.1449ms
+2020/01/03 15:36:52.089 [D] [ping.go:99]  dst ip:8.8.4.4,MaxRtt:137.7191ms,MinRtt:59.8392ms,Durition:763.2511ms
+2020/01/03 15:36:52.090 [I] [runPing.go:172]  finish ping reagionIP
+2020/01/03 15:36:52.091 [I] [runPing.go:201]  finished a ping task,waitting 10s,will exec next time 
+2020/01/03 15:36:52.307 [I] [results.go:65]  Get a request for results,reqID： 53266
+2020/01/03 15:36:52.308 [D] [results.go:83]  reqID：53266,regionStatus:true, stationStatus:false, switchStatus:true, regionResStatus:true, stationResStatus:false, tcpResStatus:false
+2020/01/03 15:36:52.309 [I] [results.go:88]  finish prepare successful result,reqID： 53266
+2020/01/03 15:36:52.313 [I] [results.go:104]  Return result successful,reqID： 53266
+2020/01/03 15:36:52.327 [D] [router.go:925]  |      127.0.0.1|[42m 200 [0m|    19.9488ms|   match|[44m GET     [0m /test/ips/results   r:/test/ips/results
+2020/01/03 15:37:02.092 [I] [runPing.go:163]  begin ping reagionIP
+2020/01/03 15:37:02.093 [D] [ping.go:75]  ips total count:2,groups:1,current group:0
+2020/01/03 15:37:02.094 [D] [ping.go:139]  ping round:0 start
+2020/01/03 15:37:02.452 [D] [ping.go:186]  ping round:0 finished, 2ip ping use time 356.7498ms
+2020/01/03 15:37:02.462 [D] [ping.go:139]  ping round:1 start
+2020/01/03 15:37:02.719 [D] [ping.go:186]  ping round:1 finished, 2ip ping use time 256.2135ms
+2020/01/03 15:37:02.720 [D] [ping.go:139]  ping round:2 start
+2020/01/03 15:37:03.026 [D] [ping.go:186]  ping round:2 finished, 2ip ping use time 305.739ms
+2020/01/03 15:37:03.026 [D] [ping.go:139]  ping round:3 start
+2020/01/03 15:37:03.331 [D] [ping.go:186]  ping round:3 finished, 2ip ping use time 303.9721ms
+2020/01/03 15:37:03.334 [D] [ping.go:139]  ping round:4 start
+2020/01/03 15:37:03.650 [D] [ping.go:186]  ping round:4 finished, 2ip ping use time 311.1076ms
+2020/01/03 15:37:03.652 [D] [ping.go:139]  ping round:5 start
+2020/01/03 15:37:03.915 [D] [ping.go:186]  ping round:5 finished, 2ip ping use time 257.9631ms
+2020/01/03 15:37:03.917 [D] [ping.go:139]  ping round:6 start
+2020/01/03 15:37:04.172 [D] [ping.go:186]  ping round:6 finished, 2ip ping use time 254.0222ms
+2020/01/03 15:37:04.173 [D] [ping.go:139]  ping round:7 start
+2020/01/03 15:37:04.428 [D] [ping.go:186]  ping round:7 finished, 2ip ping use time 253.6594ms
+2020/01/03 15:37:04.428 [D] [ping.go:139]  ping round:8 start
+2020/01/03 15:37:04.685 [D] [ping.go:186]  ping round:8 finished, 2ip ping use time 255.2135ms
+2020/01/03 15:37:04.685 [D] [ping.go:139]  ping round:9 start
+2020/01/03 15:37:04.942 [D] [ping.go:186]  ping round:9 finished, 2ip ping use time 256.1259ms
+2020/01/03 15:37:04.943 [D] [ping.go:99]  dst ip:8.8.4.4,MaxRtt:157.6306ms,MinRtt:59.8386ms,Durition:915.122ms
+2020/01/03 15:37:04.943 [D] [ping.go:99]  dst ip:123.123.123.123,MaxRtt:50.8617ms,MinRtt:4.9875ms,Durition:104.6991ms
+2020/01/03 15:37:04.945 [I] [runPing.go:172]  finish ping reagionIP
+2020/01/03 15:37:04.945 [I] [runPing.go:201]  finished a ping task,waitting 10s,will exec next time 
+2020/01/03 15:37:14.947 [I] [runPing.go:163]  begin ping reagionIP
+2020/01/03 15:37:14.948 [D] [ping.go:75]  ips total count:2,groups:1,current group:0
+2020/01/03 15:37:14.950 [D] [ping.go:139]  ping round:0 start
+2020/01/03 15:37:15.205 [D] [ping.go:186]  ping round:0 finished, 2ip ping use time 254.5097ms
+2020/01/03 15:37:15.205 [D] [ping.go:139]  ping round:1 start
+2020/01/03 15:37:15.460 [D] [ping.go:186]  ping round:1 finished, 2ip ping use time 254.1117ms
+2020/01/03 15:37:15.461 [D] [ping.go:139]  ping round:2 start
+2020/01/03 15:37:15.714 [D] [ping.go:186]  ping round:2 finished, 2ip ping use time 252.9706ms
+2020/01/03 15:37:15.715 [D] [ping.go:139]  ping round:3 start
+2020/01/03 15:37:15.969 [D] [ping.go:186]  ping round:3 finished, 2ip ping use time 254.2306ms
+2020/01/03 15:37:15.969 [D] [ping.go:139]  ping round:4 start
+2020/01/03 15:37:16.227 [D] [ping.go:186]  ping round:4 finished, 2ip ping use time 256.4783ms
+2020/01/03 15:37:16.228 [D] [ping.go:139]  ping round:5 start
+2020/01/03 15:37:16.481 [D] [ping.go:186]  ping round:5 finished, 2ip ping use time 251.888ms
+2020/01/03 15:37:16.482 [D] [ping.go:139]  ping round:6 start
+2020/01/03 15:37:16.737 [D] [ping.go:186]  ping round:6 finished, 2ip ping use time 253.3813ms
+2020/01/03 15:37:16.738 [D] [ping.go:139]  ping round:7 start
+2020/01/03 15:37:16.991 [D] [ping.go:186]  ping round:7 finished, 2ip ping use time 253.4682ms
+2020/01/03 15:37:16.992 [D] [ping.go:139]  ping round:8 start
+2020/01/03 15:37:17.247 [D] [ping.go:186]  ping round:8 finished, 2ip ping use time 253.6403ms
+2020/01/03 15:37:17.248 [D] [ping.go:139]  ping round:9 start
+2020/01/03 15:37:17.504 [D] [ping.go:186]  ping round:9 finished, 2ip ping use time 255.9047ms
+2020/01/03 15:37:17.505 [D] [ping.go:99]  dst ip:123.123.123.123,MaxRtt:6.9832ms,MinRtt:4.9863ms,Durition:56.8572ms
+2020/01/03 15:37:17.506 [D] [ping.go:99]  dst ip:8.8.4.4,MaxRtt:62.07ms,MinRtt:59.6976ms,Durition:603.3697ms
+2020/01/03 15:37:17.508 [I] [runPing.go:172]  finish ping reagionIP
+2020/01/03 15:37:17.509 [I] [runPing.go:201]  finished a ping task,waitting 10s,will exec next time 
+2020/01/03 15:37:27.511 [I] [runPing.go:163]  begin ping reagionIP
+2020/01/03 15:37:27.513 [D] [ping.go:75]  ips total count:2,groups:1,current group:0
+2020/01/03 15:37:27.514 [D] [ping.go:139]  ping round:0 start
+2020/01/03 15:37:27.775 [D] [ping.go:186]  ping round:0 finished, 2ip ping use time 256.864ms
+2020/01/03 15:37:27.776 [D] [ping.go:139]  ping round:1 start
+2020/01/03 15:37:28.030 [D] [ping.go:186]  ping round:1 finished, 2ip ping use time 254.3641ms
+2020/01/03 15:37:28.031 [D] [ping.go:139]  ping round:2 start
+2020/01/03 15:37:28.285 [D] [ping.go:186]  ping round:2 finished, 2ip ping use time 252.8936ms
+2020/01/03 15:37:28.287 [D] [ping.go:139]  ping round:3 start
+2020/01/03 15:37:28.543 [D] [ping.go:186]  ping round:3 finished, 2ip ping use time 256.9245ms
+2020/01/03 15:37:28.546 [D] [ping.go:139]  ping round:4 start
+2020/01/03 15:37:28.806 [D] [ping.go:186]  ping round:4 finished, 2ip ping use time 255.7355ms
+2020/01/03 15:37:28.807 [D] [ping.go:139]  ping round:5 start
+2020/01/03 15:37:29.061 [D] [ping.go:186]  ping round:5 finished, 2ip ping use time 253.0197ms
+2020/01/03 15:37:29.063 [D] [ping.go:139]  ping round:6 start
+2020/01/03 15:37:29.320 [D] [ping.go:186]  ping round:6 finished, 2ip ping use time 254.6682ms
+2020/01/03 15:37:29.321 [D] [ping.go:139]  ping round:7 start
+2020/01/03 15:37:29.575 [D] [ping.go:186]  ping round:7 finished, 2ip ping use time 253.459ms
+2020/01/03 15:37:29.576 [D] [ping.go:139]  ping round:8 start
+2020/01/03 15:37:29.834 [D] [ping.go:186]  ping round:8 finished, 2ip ping use time 258.1598ms
+2020/01/03 15:37:29.835 [D] [ping.go:139]  ping round:9 start
+2020/01/03 15:37:30.089 [D] [ping.go:186]  ping round:9 finished, 2ip ping use time 253.5303ms
+2020/01/03 15:37:30.090 [D] [ping.go:99]  dst ip:123.123.123.123,MaxRtt:7.1611ms,MinRtt:5.9847ms,Durition:66.0791ms
+2020/01/03 15:37:30.091 [D] [ping.go:99]  dst ip:8.8.4.4,MaxRtt:63.3624ms,MinRtt:59.8392ms,Durition:611.0002ms
+2020/01/03 15:37:30.092 [I] [runPing.go:172]  finish ping reagionIP
+2020/01/03 15:37:30.093 [I] [runPing.go:201]  finished a ping task,waitting 10s,will exec next time 
+2020/01/03 15:37:32.913 [I] [stationIPs.go:39]  get a station ips post
+2020/01/03 15:37:32.915 [D] [stationIPs.go:40]  post body: {
+  "Station": "test-cn1",
+  "Ip": "116.8.119.121",
+  "Region": "cn.cn.chinanet.huanan.guangxi.nanning",
+  "IPs": [
+    {
+      "ip": "183.136.179.253",
+      "region": "cn.cn.chinanet.huadong.zhejiang.hangzhou",
+      "station": "l2cm10-2",
+      "ipStatus": 1,
+      "isPhyIp": 0
+    },
+    {
+      "ip": "183.131.234.142",
+      "region": "cn.cn.chinanet.huadong.zhejiang.hangzhou",
+      "station": "l2eu95-2",
+      "ipStatus": 1,
+      "isPhyIp": 0
+    },
+    {
+      "ip": "1.2.3.1",
+      "region": "cn.cn.chinanet.huadong.zhejiang.hangzhou",
+      "station": "l2eu95-2",
+      "ipStatus": 1,
+      "isPhyIp": 0
+    }
+  ]
+}
+2020/01/03 15:37:32.940 [D] [stationIPs.go:41]  get local station info:ip=116.8.119.121 station=test-cn1
+2020/01/03 15:37:32.941 [I] [stationIPs.go:44]  station IPs updated successful!,Begin to ping!
+2020/01/03 15:37:32.942 [D] [router.go:925]  |      127.0.0.1|[42m 200 [0m|     28.923ms|   match|[46m POST    [0m /test/ips/station   r:/test/ips/station
+2020/01/03 15:37:39.554 [I] [results.go:65]  Get a request for results,reqID： 24005
+2020/01/03 15:37:39.555 [D] [results.go:83]  reqID：24005,regionStatus:true, stationStatus:true, switchStatus:true, regionResStatus:true, stationResStatus:false, tcpResStatus:false
+2020/01/03 15:37:39.557 [I] [results.go:88]  finish prepare successful result,reqID： 24005
+2020/01/03 15:37:39.560 [I] [results.go:104]  Return result successful,reqID： 24005
+2020/01/03 15:37:39.563 [D] [router.go:925]  |      127.0.0.1|[42m 200 [0m|     8.9749ms|   match|[44m GET     [0m /test/ips/results   r:/test/ips/results
+2020/01/03 15:37:40.094 [I] [runPing.go:163]  begin ping reagionIP
+2020/01/03 15:37:40.097 [D] [ping.go:75]  ips total count:2,groups:1,current group:0
+2020/01/03 15:37:40.099 [D] [ping.go:139]  ping round:0 start
+2020/01/03 15:37:40.355 [D] [ping.go:186]  ping round:0 finished, 2ip ping use time 255.3719ms
+2020/01/03 15:37:40.356 [D] [ping.go:139]  ping round:1 start
+2020/01/03 15:37:40.561 [D] [ping.go:186]  ping round:1 finished, 2ip ping use time 204.2207ms
+2020/01/03 15:37:40.564 [D] [ping.go:139]  ping round:2 start
+2020/01/03 15:37:40.829 [D] [ping.go:186]  ping round:2 finished, 2ip ping use time 258.4447ms
+2020/01/03 15:37:40.832 [D] [ping.go:139]  ping round:3 start
+2020/01/03 15:37:41.094 [D] [ping.go:186]  ping round:3 finished, 2ip ping use time 256.6415ms
+2020/01/03 15:37:41.094 [D] [ping.go:139]  ping round:4 start
+2020/01/03 15:37:41.399 [D] [ping.go:186]  ping round:4 finished, 2ip ping use time 304.2264ms
+2020/01/03 15:37:41.400 [D] [ping.go:139]  ping round:5 start
+2020/01/03 15:37:41.708 [D] [ping.go:186]  ping round:5 finished, 2ip ping use time 307.4677ms
+2020/01/03 15:37:41.710 [D] [ping.go:139]  ping round:6 start
+2020/01/03 15:37:42.021 [D] [ping.go:186]  ping round:6 finished, 2ip ping use time 306.8276ms
+2020/01/03 15:37:42.024 [D] [ping.go:139]  ping round:7 start
+2020/01/03 15:37:42.338 [D] [ping.go:186]  ping round:7 finished, 2ip ping use time 309.3313ms
+2020/01/03 15:37:42.340 [D] [ping.go:139]  ping round:8 start
+2020/01/03 15:37:42.647 [D] [ping.go:186]  ping round:8 finished, 2ip ping use time 305.2765ms
+2020/01/03 15:37:42.648 [D] [ping.go:139]  ping round:9 start
+2020/01/03 15:37:43.003 [D] [ping.go:186]  ping round:9 finished, 2ip ping use time 354.7394ms
+2020/01/03 15:37:43.004 [D] [ping.go:99]  dst ip:8.8.4.4,MaxRtt:158.8648ms,MinRtt:60.3241ms,Durition:1.0674121s
+2020/01/03 15:37:43.005 [D] [ping.go:99]  dst ip:123.123.123.123,MaxRtt:82.7419ms,MinRtt:5.9662ms,Durition:273.5978ms
+2020/01/03 15:37:43.006 [I] [runPing.go:172]  finish ping reagionIP
+2020/01/03 15:37:43.013 [I] [runPing.go:178]  begin ping stationIP
+2020/01/03 15:37:43.015 [D] [ping.go:75]  ips total count:3,groups:1,current group:0
+2020/01/03 15:37:43.016 [D] [ping.go:139]  ping round:0 start
+2020/01/03 15:37:43.424 [D] [ping.go:186]  ping round:0 finished, 3ip ping use time 406.3742ms
+2020/01/03 15:37:43.425 [D] [ping.go:139]  ping round:1 start
+2020/01/03 15:37:43.830 [D] [ping.go:186]  ping round:1 finished, 3ip ping use time 404.5165ms
+2020/01/03 15:37:43.832 [D] [ping.go:139]  ping round:2 start
+2020/01/03 15:37:44.240 [D] [ping.go:186]  ping round:2 finished, 3ip ping use time 405.7995ms
+2020/01/03 15:37:44.243 [D] [ping.go:139]  ping round:3 start
+2020/01/03 15:37:44.657 [D] [ping.go:186]  ping round:3 finished, 3ip ping use time 409.033ms
+2020/01/03 15:37:44.660 [D] [ping.go:139]  ping round:4 start
+2020/01/03 15:37:45.074 [D] [ping.go:186]  ping round:4 finished, 3ip ping use time 408.7839ms
+2020/01/03 15:37:45.075 [D] [ping.go:139]  ping round:5 start
+2020/01/03 15:37:45.491 [D] [ping.go:186]  ping round:5 finished, 3ip ping use time 413.0568ms
+2020/01/03 15:37:45.492 [D] [ping.go:139]  ping round:6 start
+2020/01/03 15:37:45.898 [D] [ping.go:186]  ping round:6 finished, 3ip ping use time 406.0049ms
+2020/01/03 15:37:45.901 [D] [ping.go:139]  ping round:7 start
+2020/01/03 15:37:46.314 [D] [ping.go:186]  ping round:7 finished, 3ip ping use time 408.6323ms
+2020/01/03 15:37:46.317 [D] [ping.go:139]  ping round:8 start
+2020/01/03 15:37:46.734 [D] [ping.go:186]  ping round:8 finished, 3ip ping use time 411.5546ms
+2020/01/03 15:37:46.736 [D] [ping.go:139]  ping round:9 start
+2020/01/03 15:37:47.146 [D] [ping.go:186]  ping round:9 finished, 3ip ping use time 406.475ms
+2020/01/03 15:37:47.147 [D] [ping.go:99]  dst ip:183.136.179.253,MaxRtt:34.9069ms,MinRtt:31.945ms,Durition:334.193ms
+2020/01/03 15:37:47.147 [D] [ping.go:99]  dst ip:183.131.234.142,MaxRtt:38.8962ms,MinRtt:36.8995ms,Durition:377.4927ms
+2020/01/03 15:37:47.156 [I] [runPing.go:187]  finish ping stationIP
+2020/01/03 15:37:47.157 [I] [runPing.go:190]  begin tcpping stationIP
+2020/01/03 15:37:47.159 [D] [tcp_ping.go:44]  tcp ping round:0 start
+2020/01/03 15:37:47.161 [D] [tcp_ping.go:208]  pingOpt.LocalIp is nil,get a localIP: 30.27.68.75
+2020/01/03 15:37:47.169 [E] [tcp_ping.go:350]  listening Tcp packets failed: listen ip4:tcp 30.27.68.75: socket: An attempt was made to access a socket in a way forbidden by its access permissions.
+2020/01/03 15:37:47.171 [E] [tcp_ping.go:62]  TCPPing Run fails with error: listen ip4:tcp 30.27.68.75: socket: An attempt was made to access a socket in a way forbidden by its access permissions.
+2020/01/03 15:37:47.502 [I] [results.go:65]  Get a request for results,reqID： 5990
+2020/01/03 15:37:47.502 [D] [results.go:83]  reqID：5990,regionStatus:true, stationStatus:true, switchStatus:true, regionResStatus:true, stationResStatus:true, tcpResStatus:false
+2020/01/03 15:37:47.503 [I] [results.go:88]  finish prepare successful result,reqID： 5990
+2020/01/03 15:37:47.504 [I] [results.go:104]  Return result successful,reqID： 5990
+2020/01/03 15:37:47.514 [D] [router.go:925]  |      127.0.0.1|[42m 200 [0m|    10.9728ms|   match|[44m GET     [0m /test/ips/results   r:/test/ips/results
+2020/01/03 15:37:57.175 [D] [tcp_ping.go:44]  tcp ping round:1 start
+2020/01/03 15:37:57.181 [E] [tcp_ping.go:350]  listening Tcp packets failed: listen ip4:tcp 30.27.68.75: socket: An attempt was made to access a socket in a way forbidden by its access permissions.
+2020/01/03 15:37:57.182 [E] [tcp_ping.go:62]  TCPPing Run fails with error: listen ip4:tcp 30.27.68.75: socket: An attempt was made to access a socket in a way forbidden by its access permissions.
+2020/01/03 15:38:07.183 [D] [tcp_ping.go:44]  tcp ping round:2 start
+2020/01/03 15:38:07.196 [E] [tcp_ping.go:350]  listening Tcp packets failed: listen ip4:tcp 30.27.68.75: socket: An attempt was made to access a socket in a way forbidden by its access permissions.
+2020/01/03 15:38:07.199 [E] [tcp_ping.go:62]  TCPPing Run fails with error: listen ip4:tcp 30.27.68.75: socket: An attempt was made to access a socket in a way forbidden by its access permissions.
+2020/01/03 15:38:17.202 [D] [tcp_ping.go:44]  tcp ping round:3 start
+2020/01/03 15:38:17.210 [E] [tcp_ping.go:350]  listening Tcp packets failed: listen ip4:tcp 30.27.68.75: socket: An attempt was made to access a socket in a way forbidden by its access permissions.
+2020/01/03 15:38:17.210 [E] [tcp_ping.go:62]  TCPPing Run fails with error: listen ip4:tcp 30.27.68.75: socket: An attempt was made to access a socket in a way forbidden by its access permissions.
