@@ -83,7 +83,7 @@ func (c *ResultsController) GetResults() {
 	logs.Debug("reqID：%v,regionStatus:%v, stationStatus:%v, switchStatus:%v, regionResStatus:%v, stationResStatus:%v, tcpResStatus:%v", reqID, regionStatus, stationStatus, switchStatus, regionResStatus, stationResStatus, tcpResStatus)
 	if switchStatus {
 		if regionResStatus || stationResStatus || tcpResStatus {
-			rspResult = process.IPs.Res2Rsp(regionRes, stationRes, stationTCPRes)
+			rspResult = process.Res2Rsp(regionRes, stationRes, stationTCPRes)
 			c.Data["json"] = rspResult
 			logs.Info("finish prepare successful result,reqID：", reqID)
 		} else {
