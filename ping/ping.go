@@ -100,11 +100,11 @@ func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (resu
 				}
 			}
 			// 将stat计算出result
-			for _, pip := range pips {
+			for _, gpip := range groupIPs {
 				pingResult := new(PingResult)
 				pingResult.PacketCount = p.PacketCount
 				pingResult.PingAtTime = pingTime
-				r, ok := stat[pip.IP]
+				r, ok := stat[gpip.IP]
 				if !ok {
 					pingResult.LossCount = send
 				} else {
@@ -114,7 +114,7 @@ func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (resu
 					pingResult.MaxRtt = float64(r.MaxRtt) / float64(time.Millisecond)
 					pingResult.ProbeTime = float64(r.Duration) / float64(time.Millisecond)
 				}
-				result[pip] = pingResult
+				result[gpip] = pingResult
 				// 				logs.Debug("packages:%d,avgRtt:%.2f,minRtt:%.2f,maxRtt:%.2f,loss:%d,probeTime:%s", result[ip].PacketCount, result[ip].AverageRtt, result[ip].MinRtt, result[ip].MaxRtt, result[ip].LossCount, result[ip].ProbeTime)
 			}
 
