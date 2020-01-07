@@ -214,7 +214,7 @@ func Res2Rsp(regionRes map[*util.PingIP]*ping.PingResult, stationRes map[*util.P
 			Station: sStation,
 		},
 	}
-
+	logs.Debug("regionRes:%v\n,stationRes:%v\n,stationTCPRes:%v\n", regionRes, stationRes, stationTCPRes)
 	res := make([]*util.ResMessage, 0)
 	if regionRes != nil {
 		for pip, result := range regionRes {
@@ -236,7 +236,7 @@ func Res2Rsp(regionRes map[*util.PingIP]*ping.PingResult, stationRes map[*util.P
 			res = append(res, &re)
 		}
 	}
-	if stationRes != nil {
+	if stationRes != nil && stationTCPRes != nil {
 		for pip, result := range stationRes {
 			re := util.ResMessage{
 				TargetIP:      pip.IP,
@@ -256,21 +256,18 @@ func Res2Rsp(regionRes map[*util.PingIP]*ping.PingResult, stationRes map[*util.P
 				Package:    result.PacketCount,
 				PingAtTime: result.PingAtTime,
 			}
-			if stationTCPRes != nil {
-				if result, ok := stationTCPRes[pip]; ok {
-					re.Result.TCPPing = util.ResTcpping{
-						AvgRttMs:    result.AvgRttMs,
-						LossPackets: result.LossPackets,
-						LossRate:    result.LossRate,
-						MaxRttMs:    result.MaxRttMs,
-						Mdev:        result.Mdev,
-						MinRttMs:    result.MinRttMs,
-						RecvPackets: result.RecvPackets,
-						SentPackets: result.SentPackets,
-						PingAtTime:  result.PingAtTime,
-					}
+			if result, ok := stationTCPRes[pip]; ok {
+				re.Result.TCPPing = util.ResTcpping{
+					AvgRttMs:    result.AvgRttMs,
+					LossPackets: result.LossPackets,
+					LossRate:    result.LossRate,
+					MaxRttMs:    result.MaxRttMs,
+					Mdev:        result.Mdev,
+					MinRttMs:    result.MinRttMs,
+					RecvPackets: result.RecvPackets,
+					SentPackets: result.SentPackets,
+					PingAtTime:  result.PingAtTime,
 				}
-
 			}
 			res = append(res, &re)
 		}
