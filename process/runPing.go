@@ -1,7 +1,6 @@
 package process
 
 import (
-	"strconv"
 	"sync"
 	"testnode-pinger/ping"
 	"testnode-pinger/util"
@@ -139,7 +138,7 @@ func (ips *IPsUpdater) pingRun(conf *util.Conf, sip string) {
 
 	for {
 		// 每隔一定时间检查一次开关状态
-		checkStatus, err := strconv.Atoi(beego.AppConfig.String("check_status_interval_s"))
+		checkStatus, err := beego.AppConfig.Int("check_status_interval_s")
 		if err != nil {
 			logs.Error("checkStatus err:", err)
 			return
@@ -149,11 +148,9 @@ func (ips *IPsUpdater) pingRun(conf *util.Conf, sip string) {
 			time.Sleep(time.Duration(checkStatus) * time.Second)
 			continue
 		}
-
-		intervalStr := beego.AppConfig.String("ping_interval_s")
-		interval, err := strconv.Atoi(intervalStr)
+		interval, err := beego.AppConfig.Int("ping_interval_s")
 		if err != nil {
-			logs.Error("strconv.Atoi failed with error:", err)
+			logs.Error("beego.AppConfig.Int failed with error:", err)
 			continue
 		}
 		timer := time.NewTimer(time.Duration(interval) * time.Second)

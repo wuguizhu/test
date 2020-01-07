@@ -82,7 +82,7 @@ func (c *ResultsController) GetResults() {
 	stationTCPRes := process.Res.SafeReadTCPResults()
 	logs.Debug("reqID：%v,regionStatus:%v, stationStatus:%v, switchStatus:%v, regionResStatus:%v, stationResStatus:%v, tcpResStatus:%v", reqID, regionStatus, stationStatus, switchStatus, regionResStatus, stationResStatus, tcpResStatus)
 	if switchStatus {
-		if regionResStatus || stationResStatus || tcpResStatus {
+		if regionResStatus || (stationResStatus && tcpResStatus) {
 			regionIPs := new(util.ReqRegion)
 			stationIPs := new(util.ReqStation)
 			if regionStatus {
