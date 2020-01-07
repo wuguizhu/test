@@ -19,7 +19,7 @@ func TcpOptionFromConf(conf *util.Conf) *util.TcpPingOption {
 		IntervalMs:     conf.TCPPingInterval,
 	}
 }
-func TCPPing(ipsGetter util.IPsGetter, conf *util.Conf) map[*util.PingIP]*util.Statistics {
+func TCPPing(ipsGetter util.IPsGetter, conf *util.Conf) map[util.PingIP]*util.Statistics {
 	localCN, err := time.LoadLocation("Asia/Shanghai")
 	if err != nil {
 		logs.Error("time.LoadLocation failed with err:", err)
@@ -33,10 +33,10 @@ func TCPPing(ipsGetter util.IPsGetter, conf *util.Conf) map[*util.PingIP]*util.S
 	// }
 	tcppingOption := TcpOptionFromConf(conf)
 	times := tcppingOption.Count
-	allRes := make(map[*util.PingIP]*util.Statistics)
+	allRes := make(map[util.PingIP]*util.Statistics)
 	for _, ip := range pips {
 		s := util.NewStatistics(times)
-		allRes[ip] = s
+		allRes[*ip] = s
 		s.TcpPingResult.PingAtTime = pingTime
 	}
 	sipMap := make(map[string]string)

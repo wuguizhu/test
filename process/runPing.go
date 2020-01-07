@@ -205,7 +205,7 @@ func (ips *IPsUpdater) pingRun(conf *util.Conf, sip string) {
 }
 
 // Res2Rsp convert all res to RspResults
-func Res2Rsp(regionRes map[*util.PingIP]*ping.PingResult, stationRes map[*util.PingIP]*ping.PingResult, stationTCPRes map[*util.PingIP]*util.Statistics, sip, sRegion, sStation string) *util.RspResults {
+func Res2Rsp(regionRes map[util.PingIP]*ping.PingResult, stationRes map[util.PingIP]*ping.PingResult, stationTCPRes map[util.PingIP]*util.Statistics, sip, sRegion, sStation string) *util.RspResults {
 	rsp := util.RspResults{
 		Status: 0,
 		Msg: &util.Message{
@@ -278,9 +278,9 @@ func Res2Rsp(regionRes map[*util.PingIP]*ping.PingResult, stationRes map[*util.P
 }
 
 type Results struct {
-	RegionRes              map[*util.PingIP]*ping.PingResult
-	StationRes             map[*util.PingIP]*ping.PingResult
-	StationTCPRes          map[*util.PingIP]*util.Statistics
+	RegionRes              map[util.PingIP]*ping.PingResult
+	StationRes             map[util.PingIP]*ping.PingResult
+	StationTCPRes          map[util.PingIP]*util.Statistics
 	RegionResUpdated       bool
 	StationResUpdated      bool
 	StationTCPResUpdated   bool
@@ -294,9 +294,9 @@ type Results struct {
 
 func NewResults() *Results {
 	return &Results{
-		make(map[*util.PingIP]*ping.PingResult),
-		make(map[*util.PingIP]*ping.PingResult),
-		make(map[*util.PingIP]*util.Statistics),
+		make(map[util.PingIP]*ping.PingResult),
+		make(map[util.PingIP]*ping.PingResult),
+		make(map[util.PingIP]*util.Statistics),
 		false,
 		false,
 		false,
@@ -310,7 +310,7 @@ func NewResults() *Results {
 }
 
 // updateResults update PingResults from the ping results
-func (res *Results) UpdateTCPResults(stationTCPRes map[*util.PingIP]*util.Statistics) {
+func (res *Results) UpdateTCPResults(stationTCPRes map[util.PingIP]*util.Statistics) {
 	res.stationTCPResMu.Lock()
 	res.StationTCPRes = stationTCPRes
 	res.stationTCPResMu.Unlock()
@@ -321,7 +321,7 @@ func (res *Results) UpdateTCPResStatus(status bool) {
 	res.StationTCPResUpdated = status
 	res.StationTCPResUpdatedMu.Unlock()
 }
-func (res *Results) UpdateRegionResults(regionRes map[*util.PingIP]*ping.PingResult) {
+func (res *Results) UpdateRegionResults(regionRes map[util.PingIP]*ping.PingResult) {
 	res.regionResMu.Lock()
 	res.RegionRes = regionRes
 	res.regionResMu.Unlock()
@@ -332,7 +332,7 @@ func (res *Results) UpdateRegionResStatus(status bool) {
 	res.RegionResUpdated = status
 	res.RegionResUpdatedMu.Unlock()
 }
-func (res *Results) UpdateStationResults(stationRes map[*util.PingIP]*ping.PingResult) {
+func (res *Results) UpdateStationResults(stationRes map[util.PingIP]*ping.PingResult) {
 	res.stationResMu.Lock()
 	res.StationRes = stationRes
 	res.stationResMu.Unlock()
@@ -346,7 +346,7 @@ func (res *Results) UpdateStationResStatus(status bool) {
 }
 
 // updateResults update PingResults from the ping results
-func (res *Results) SafeReadTCPResults() (stationTCPRes map[*util.PingIP]*util.Statistics) {
+func (res *Results) SafeReadTCPResults() (stationTCPRes map[util.PingIP]*util.Statistics) {
 	res.stationTCPResMu.RLock()
 	stationTCPRes = res.StationTCPRes
 	res.stationTCPResMu.RUnlock()
@@ -358,7 +358,7 @@ func (res *Results) SafeReadTCPResStatus() (status bool) {
 	res.StationTCPResUpdatedMu.RUnlock()
 	return
 }
-func (res *Results) SafeReadRegionResults() (regionRes map[*util.PingIP]*ping.PingResult) {
+func (res *Results) SafeReadRegionResults() (regionRes map[util.PingIP]*ping.PingResult) {
 	res.regionResMu.RLock()
 	regionRes = res.RegionRes
 	res.regionResMu.RUnlock()
@@ -370,7 +370,7 @@ func (res *Results) SafeReadRegionResStatus() (status bool) {
 	res.RegionResUpdatedMu.RUnlock()
 	return
 }
-func (res *Results) SafeReadStationResults() (stationRes map[*util.PingIP]*ping.PingResult) {
+func (res *Results) SafeReadStationResults() (stationRes map[util.PingIP]*ping.PingResult) {
 	res.stationResMu.RLock()
 	stationRes = res.StationRes
 	res.stationResMu.RUnlock()
