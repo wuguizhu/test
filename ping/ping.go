@@ -54,8 +54,8 @@ func NewPing(conf *util.Conf) *Ping {
 	}
 	return &p
 }
-func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (result map[*util.PingIP]*PingResult, err error) {
-	result = make(map[*util.PingIP]*PingResult)
+func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (result map[util.PingIP]*PingResult, err error) {
+	result = make(map[util.PingIP]*PingResult)
 	localCN, err := time.LoadLocation("Asia/Shanghai")
 	if err != nil {
 		logs.Error("time.LoadLocation failed with err:", err)
@@ -66,10 +66,10 @@ func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (resu
 	numIP := len(pips)
 	numGroup := int(math.Ceil(float64(numIP) / float64(p.ThreadCount)))
 	// 分组ping
-	ipMap := make(map[int][]*util.PingIP, numGroup)
+	ipMap := make(map[int][]util.PingIP, numGroup)
 	for index, pip := range pips {
 		key := index % numGroup
-		ipMap[key] = append(ipMap[key], pip)
+		ipMap[key] = append(ipMap[key], *pip)
 	}
 	for groupIndex, groupIPs := range ipMap {
 		logs.Debug("ips total count:%d,groups:%d,current group:%d", numIP, numGroup, groupIndex)
