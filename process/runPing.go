@@ -205,82 +205,107 @@ func (ips *IPsUpdater) pingRun(conf *util.Conf, sip string) {
 }
 
 // Res2Rsp convert all res to RspResults
-func Res2Rsp(regionRes map[util.PingIP]*ping.PingResult, stationRes map[util.PingIP]*ping.PingResult, stationTCPRes map[util.PingIP]*util.Statistics, sip, sRegion, sStation string) *util.RspResults {
-	rsp := util.RspResults{
+func (ips *IPsUpdater) Res2Rsp(regionRes map[string]*ping.PingResult, stationRes map[string]*ping.PingResult, stationTCPRes map[string]*util.Statistics) *util.RspResults {
+	data := util.RspResults{
 		Status: 0,
-		Msg: &util.Message{
-			IP:      sip,
-			Region:  sRegion,
-			Station: sStation,
-		},
+		Msg:    new(util.Message),
 	}
-	logs.Debug("regionRes:%v\n,stationRes:%v\n,stationTCPRes:%v\n", regionRes, stationRes, stationTCPRes)
+	regionIPs := new(util.ReqRegion)
+	stationIPs := new(util.ReqStation)
+	if ips.SafeReadRegionStatus() {
+		regionIPs = ips.SafeReadRegionIPs()
+
+	}
+	if ips.SafeReadStationStatus() {
+		stationIPs = ips.SafeReadStationIPs()
+
+	}
+	if data.Msg.IP = stationIPs.IP; data.Msg.IP == "" {
+		data.Msg.IP = regionIPs.IP
+	}
+	if data.Msg.Region = stationIPs.Region; data.Msg.Region == "" {
+		data.Msg.Region = regionIPs.Region
+	}
+	if data.Msg.Station = stationIPs.Station; data.Msg.Station == "" {
+		data.Msg.Station = regionIPs.Station
+	}
 	res := make([]*util.ResMessage, 0)
-	if regionRes != nil {
-		for pip, result := range regionRes {
+
+	if ips.SafeReadRegionStatus() {
+		for _, ip := range regionIPs.IPs {
 			re := util.ResMessage{
-				TargetIP:     pip.IP,
-				TargetRegion: pip.Region,
+				TargetIP:     ip.IP,
+				TargetRegion: ip.Region,
 				Type:         "region",
 				Result:       new(util.ResultMessage),
 			}
-			re.Result.Ping = util.ResPing{
-				Avgrtt:     result.AverageRtt,
-				Ctime:      result.ProbeTime,
-				Loss:       result.LossCount,
-				Maxrtt:     result.MaxRtt,
-				Minrtt:     result.MinRtt,
-				Package:    result.PacketCount,
-				PingAtTime: result.PingAtTime,
-			}
-			res = append(res, &re)
-		}
-	}
-	if stationRes != nil && stationTCPRes != nil {
-		for pip, result := range stationRes {
-			re := util.ResMessage{
-				TargetIP:      pip.IP,
-				TargetRegion:  pip.Region,
-				TargetStation: pip.TargetStation,
-				IPStatus:      pip.IPStatus,
-				IsPhyIP:       pip.IsPhyIP,
-				Type:          "station",
-				Result:        new(util.ResultMessage),
-			}
-			re.Result.Ping = util.ResPing{
-				Avgrtt:     result.AverageRtt,
-				Ctime:      result.ProbeTime,
-				Loss:       result.LossCount,
-				Maxrtt:     result.MaxRtt,
-				Minrtt:     result.MinRtt,
-				Package:    result.PacketCount,
-				PingAtTime: result.PingAtTime,
-			}
-			if result, ok := stationTCPRes[pip]; ok {
-				re.Result.TCPPing = util.ResTcpping{
-					AvgRttMs:    result.AvgRttMs,
-					LossPackets: result.LossPackets,
-					LossRate:    result.LossRate,
-					MaxRttMs:    result.MaxRttMs,
-					Mdev:        result.Mdev,
-					MinRttMs:    result.MinRttMs,
-					RecvPackets: result.RecvPackets,
-					SentPackets: result.SentPackets,
-					PingAtTime:  result.PingAtTime,
+			if regionRes != nil {
+				re.Result.Ping = util.ResPing{
+					Avgrtt:     regionRes[ip.IP].AverageRtt,
+					Ctime:      regionRes[ip.IP].ProbeTime,
+					Loss:       regionRes[ip.IP].LossCount,
+					Maxrtt:     regionRes[ip.IP].MaxRtt,
+					Minrtt:     regionRes[ip.IP].MinRtt,
+					Package:    regionRes[ip.IP].PacketCount,
+					PingAtTime: regionRes[ip.IP].PingAtTime,
 				}
 			}
 			res = append(res, &re)
 		}
+		// ips.UpdateRegionStatus(false)
 	}
-	rsp.Msg.Res = res
+	if ips.SafeReadStationStatus() {
+		for _, ip := range stationIPs.IPs {
+			re := util.ResMessage{
+				TargetIP:      ip.IP,
+				TargetRegion:  ip.Region,
+				TargetStation: ip.TargetStation,
+				IPStatus:      ip.IPStatus,
+				IsPhyIP:       ip.IsPhyIP,
+				Type:          "station",
+				Result:        new(util.ResultMessage),
+			}
+			if stationRes != nil {
+				if _, ok := stationRes[ip.IP]; ok {
+					re.Result.Ping = util.ResPing{
+						Avgrtt:     stationRes[ip.IP].AverageRtt,
+						Ctime:      stationRes[ip.IP].ProbeTime,
+						Loss:       stationRes[ip.IP].LossCount,
+						Maxrtt:     stationRes[ip.IP].MaxRtt,
+						Minrtt:     stationRes[ip.IP].MinRtt,
+						Package:    stationRes[ip.IP].PacketCount,
+						PingAtTime: stationRes[ip.IP].PingAtTime,
+					}
+				}
+			}
+			if stationTCPRes != nil {
+				if _, ok := stationTCPRes[ip.IP]; ok {
+					re.Result.TCPPing = util.ResTcpping{
+						AvgRttMs:    stationTCPRes[ip.IP].AvgRttMs,
+						LossPackets: stationTCPRes[ip.IP].LossPackets,
+						LossRate:    stationTCPRes[ip.IP].LossRate,
+						MaxRttMs:    stationTCPRes[ip.IP].MaxRttMs,
+						Mdev:        stationTCPRes[ip.IP].Mdev,
+						MinRttMs:    stationTCPRes[ip.IP].MinRttMs,
+						RecvPackets: stationTCPRes[ip.IP].RecvPackets,
+						SentPackets: stationTCPRes[ip.IP].SentPackets,
+						PingAtTime:  stationTCPRes[ip.IP].PingAtTime,
+					}
+				}
 
-	return &rsp
+			}
+			res = append(res, &re)
+		}
+		// ips.UpdateStationStatus(false)
+	}
+	data.Msg.Res = res
+	return &data
 }
 
 type Results struct {
-	RegionRes              map[util.PingIP]*ping.PingResult
-	StationRes             map[util.PingIP]*ping.PingResult
-	StationTCPRes          map[util.PingIP]*util.Statistics
+	RegionRes              map[string]*ping.PingResult
+	StationRes             map[string]*ping.PingResult
+	StationTCPRes          map[string]*util.Statistics
 	RegionResUpdated       bool
 	StationResUpdated      bool
 	StationTCPResUpdated   bool
@@ -294,9 +319,9 @@ type Results struct {
 
 func NewResults() *Results {
 	return &Results{
-		make(map[util.PingIP]*ping.PingResult),
-		make(map[util.PingIP]*ping.PingResult),
-		make(map[util.PingIP]*util.Statistics),
+		make(map[string]*ping.PingResult),
+		make(map[string]*ping.PingResult),
+		make(map[string]*util.Statistics),
 		false,
 		false,
 		false,
@@ -310,7 +335,7 @@ func NewResults() *Results {
 }
 
 // updateResults update PingResults from the ping results
-func (res *Results) UpdateTCPResults(stationTCPRes map[util.PingIP]*util.Statistics) {
+func (res *Results) UpdateTCPResults(stationTCPRes map[string]*util.Statistics) {
 	res.stationTCPResMu.Lock()
 	res.StationTCPRes = stationTCPRes
 	res.stationTCPResMu.Unlock()
@@ -321,7 +346,7 @@ func (res *Results) UpdateTCPResStatus(status bool) {
 	res.StationTCPResUpdated = status
 	res.StationTCPResUpdatedMu.Unlock()
 }
-func (res *Results) UpdateRegionResults(regionRes map[util.PingIP]*ping.PingResult) {
+func (res *Results) UpdateRegionResults(regionRes map[string]*ping.PingResult) {
 	res.regionResMu.Lock()
 	res.RegionRes = regionRes
 	res.regionResMu.Unlock()
@@ -332,7 +357,7 @@ func (res *Results) UpdateRegionResStatus(status bool) {
 	res.RegionResUpdated = status
 	res.RegionResUpdatedMu.Unlock()
 }
-func (res *Results) UpdateStationResults(stationRes map[util.PingIP]*ping.PingResult) {
+func (res *Results) UpdateStationResults(stationRes map[string]*ping.PingResult) {
 	res.stationResMu.Lock()
 	res.StationRes = stationRes
 	res.stationResMu.Unlock()
@@ -346,7 +371,7 @@ func (res *Results) UpdateStationResStatus(status bool) {
 }
 
 // updateResults update PingResults from the ping results
-func (res *Results) SafeReadTCPResults() (stationTCPRes map[util.PingIP]*util.Statistics) {
+func (res *Results) SafeReadTCPResults() (stationTCPRes map[string]*util.Statistics) {
 	res.stationTCPResMu.RLock()
 	stationTCPRes = res.StationTCPRes
 	res.stationTCPResMu.RUnlock()
@@ -358,7 +383,7 @@ func (res *Results) SafeReadTCPResStatus() (status bool) {
 	res.StationTCPResUpdatedMu.RUnlock()
 	return
 }
-func (res *Results) SafeReadRegionResults() (regionRes map[util.PingIP]*ping.PingResult) {
+func (res *Results) SafeReadRegionResults() (regionRes map[string]*ping.PingResult) {
 	res.regionResMu.RLock()
 	regionRes = res.RegionRes
 	res.regionResMu.RUnlock()
@@ -370,7 +395,7 @@ func (res *Results) SafeReadRegionResStatus() (status bool) {
 	res.RegionResUpdatedMu.RUnlock()
 	return
 }
-func (res *Results) SafeReadStationResults() (stationRes map[util.PingIP]*ping.PingResult) {
+func (res *Results) SafeReadStationResults() (stationRes map[string]*ping.PingResult) {
 	res.stationResMu.RLock()
 	stationRes = res.StationRes
 	res.stationResMu.RUnlock()
