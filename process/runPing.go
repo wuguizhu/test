@@ -231,7 +231,7 @@ func (ips *IPsUpdater) Res2Rsp(regionRes map[string]*ping.PingResult, stationRes
 	}
 	res := make([]*util.ResMessage, 0)
 
-	if ips.SafeReadRegionStatus() {
+	if regionRes != nil {
 		for _, ip := range regionIPs.IPs {
 			re := util.ResMessage{
 				TargetIP:     ip.IP,
@@ -239,22 +239,20 @@ func (ips *IPsUpdater) Res2Rsp(regionRes map[string]*ping.PingResult, stationRes
 				Type:         "region",
 				Result:       new(util.ResultMessage),
 			}
-			if regionRes != nil {
-				re.Result.Ping = util.ResPing{
-					Avgrtt:     regionRes[ip.IP].AverageRtt,
-					Ctime:      regionRes[ip.IP].ProbeTime,
-					Loss:       regionRes[ip.IP].LossCount,
-					Maxrtt:     regionRes[ip.IP].MaxRtt,
-					Minrtt:     regionRes[ip.IP].MinRtt,
-					Package:    regionRes[ip.IP].PacketCount,
-					PingAtTime: regionRes[ip.IP].PingAtTime,
-				}
+
+			re.Result.Ping = util.ResPing{
+				Avgrtt:     regionRes[ip.IP].AverageRtt,
+				Ctime:      regionRes[ip.IP].ProbeTime,
+				Loss:       regionRes[ip.IP].LossCount,
+				Maxrtt:     regionRes[ip.IP].MaxRtt,
+				Minrtt:     regionRes[ip.IP].MinRtt,
+				Package:    regionRes[ip.IP].PacketCount,
+				PingAtTime: regionRes[ip.IP].PingAtTime,
 			}
 			res = append(res, &re)
 		}
-		// ips.UpdateRegionStatus(false)
 	}
-	if ips.SafeReadStationStatus() {
+	if stationRes != nil && stationTCPRes != nil {
 		for _, ip := range stationIPs.IPs {
 			re := util.ResMessage{
 				TargetIP:      ip.IP,
@@ -265,35 +263,32 @@ func (ips *IPsUpdater) Res2Rsp(regionRes map[string]*ping.PingResult, stationRes
 				Type:          "station",
 				Result:        new(util.ResultMessage),
 			}
-			if stationRes != nil {
-				if _, ok := stationRes[ip.IP]; ok {
-					re.Result.Ping = util.ResPing{
-						Avgrtt:     stationRes[ip.IP].AverageRtt,
-						Ctime:      stationRes[ip.IP].ProbeTime,
-						Loss:       stationRes[ip.IP].LossCount,
-						Maxrtt:     stationRes[ip.IP].MaxRtt,
-						Minrtt:     stationRes[ip.IP].MinRtt,
-						Package:    stationRes[ip.IP].PacketCount,
-						PingAtTime: stationRes[ip.IP].PingAtTime,
-					}
+			if _, ok := stationRes[ip.IP]; ok {
+				re.Result.Ping = util.ResPing{
+					Avgrtt:     stationRes[ip.IP].AverageRtt,
+					Ctime:      stationRes[ip.IP].ProbeTime,
+					Loss:       stationRes[ip.IP].LossCount,
+					Maxrtt:     stationRes[ip.IP].MaxRtt,
+					Minrtt:     stationRes[ip.IP].MinRtt,
+					Package:    stationRes[ip.IP].PacketCount,
+					PingAtTime: stationRes[ip.IP].PingAtTime,
 				}
 			}
-			if stationTCPRes != nil {
-				if _, ok := stationTCPRes[ip.IP]; ok {
-					re.Result.TCPPing = util.ResTcpping{
-						AvgRttMs:    stationTCPRes[ip.IP].AvgRttMs,
-						LossPackets: stationTCPRes[ip.IP].LossPackets,
-						LossRate:    stationTCPRes[ip.IP].LossRate,
-						MaxRttMs:    stationTCPRes[ip.IP].MaxRttMs,
-						Mdev:        stationTCPRes[ip.IP].Mdev,
-						MinRttMs:    stationTCPRes[ip.IP].MinRttMs,
-						RecvPackets: stationTCPRes[ip.IP].RecvPackets,
-						SentPackets: stationTCPRes[ip.IP].SentPackets,
-						PingAtTime:  stationTCPRes[ip.IP].PingAtTime,
-					}
-				}
 
+			if _, ok := stationTCPRes[ip.IP]; ok {
+				re.Result.TCPPing = util.ResTcpping{
+					AvgRttMs:    stationTCPRes[ip.IP].AvgRttMs,
+					LossPackets: stationTCPRes[ip.IP].LossPackets,
+					LossRate:    stationTCPRes[ip.IP].LossRate,
+					MaxRttMs:    stationTCPRes[ip.IP].MaxRttMs,
+					Mdev:        stationTCPRes[ip.IP].Mdev,
+					MinRttMs:    stationTCPRes[ip.IP].MinRttMs,
+					RecvPackets: stationTCPRes[ip.IP].RecvPackets,
+					SentPackets: stationTCPRes[ip.IP].SentPackets,
+					PingAtTime:  stationTCPRes[ip.IP].PingAtTime,
+				}
 			}
+
 			res = append(res, &re)
 		}
 		// ips.UpdateStationStatus(false)
