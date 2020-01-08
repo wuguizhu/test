@@ -72,7 +72,7 @@ func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (resu
 		ipMap[key] = append(ipMap[key], *pip)
 	}
 	for groupIndex, groupIPs := range ipMap {
-		logs.Debug("ips total count:%d,groups:%d,current group:%d", numIP, numGroup, groupIndex)
+		logs.Info("ips total count:%d,groups:%d,current group:%d", numIP, numGroup, groupIndex)
 		ips := make([]string, 0, len(pips))
 		//保存最新的ping stat
 		stat := make(map[string]*PingStat)
