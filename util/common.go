@@ -80,8 +80,11 @@ type ResTcpping struct {
 }
 
 type PingIP struct {
-	IP     string
-	Region string
+	IP            string
+	Region        string
+	TargetStation string
+	IPStatus      int
+	IsPhyIP       int
 }
 type IPsGetter interface {
 	GetIPs() []*PingIP

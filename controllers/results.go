@@ -82,8 +82,26 @@ func (c *ResultsController) GetResults() {
 	stationTCPRes := process.Res.SafeReadTCPResults()
 	logs.Debug("reqID：%v,regionStatus:%v, stationStatus:%v, switchStatus:%v, regionResStatus:%v, stationResStatus:%v, tcpResStatus:%v", reqID, regionStatus, stationStatus, switchStatus, regionResStatus, stationResStatus, tcpResStatus)
 	if switchStatus {
-		if regionResStatus || stationResStatus || tcpResStatus {
-			rspResult = process.IPs.Res2Rsp(regionRes, stationRes, stationTCPRes)
+		regionIPs := new(util.ReqRegion)
+		stationIPs := new(util.ReqStation)
+		if regionStatus {
+			regionIPs = process.IPs.SafeReadRegionIPs()
+		}
+		if stationStatus {
+			stationIPs = process.IPs.SafeReadStationIPs()
+		}
+		var sip, sRegion, sStation string
+		if sip = stationIPs.IP; sip == "" {
+			sip = regionIPs.IP
+		}
+		if sRegion = stationIPs.Region; sRegion == "" {
+			sRegion = regionIPs.Region
+		}
+		if sStation = stationIPs.Station; sStation == "" {
+			sStation = regionIPs.Station
+		}
+		if regionResStatus || (stationResStatus && tcpResStatus) {
+			rspResult = process.Res2Rsp(regionRes, stationRes, stationTCPRes, sip, sRegion, sStation)
 			c.Data["json"] = rspResult
 			logs.Info("finish prepare successful result,reqID：", reqID)
 		} else {
