@@ -1,9 +1,9 @@
 {	
     "station":"test-cn1",
 	"ping_packet_size":56,
-	"ping_packet_count":20,
-	"ping_thread_count":500,
-	"ping_timeout_ms":800,
+	"ping_packet_count":10,
+	"ping_thread_count":1024,
+	"ping_timeout_ms":250,
 	"ping_series_ticker_timeout_min":2,
 	"ping_send_package_wait_ms":20,
 	"ping_send_package_interval_min_ms":30,
