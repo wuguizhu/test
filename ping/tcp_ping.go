@@ -39,9 +39,10 @@ func TCPPing(ipsGetter util.IPsGetter, conf *util.Conf) map[util.PingIP]*util.St
 		allRes[*ip] = s
 		s.TcpPingResult.PingAtTime = pingTime
 	}
+	logs.Info("begin tcpping!total %d ips", len(pips))
 	sipMap := make(map[string]string)
 	for i := 0; i < times; i++ {
-		logs.Debug("tcp ping round:%d start", i)
+		logs.Info("tcp ping round:%d start", i)
 		start := time.Now()
 		tcpp, err := util.NewTcpPinger(tcppingOption)
 		if err != nil {

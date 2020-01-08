@@ -155,6 +155,21 @@ func (ips *IPsUpdater) pingRun(conf *util.Conf, sip string) {
 		}
 		timer := time.NewTimer(time.Duration(interval) * time.Second)
 		pinger := ping.NewPing(conf)
+		// if ips.SafeReadRegionStatus() {
+		// 	errChan := make(chan error)
+		// 	go func(errChan chan error) {
+		// 		logs.Info("begin ping reagionIP")
+		// 		regionips := ips.SafeReadRegionIPs()
+		// 		regionRes, err := pinger.TestNodePing(regionips, sip, regionips.Region)
+		// 		if err != nil {
+		// 			logs.Error("TestNodePing fails with error:", err)
+		// 			errChan <- err
+		// 		}
+		// 		Res.UpdateRegionResults(regionRes)
+		// 		Res.UpdateRegionResStatus(true)
+		// 		logs.Info("finish ping reagionIP")
+		// 	}(errChan)
+		// }
 		// ping regionIPs
 		if ips.SafeReadRegionStatus() {
 			logs.Info("begin ping reagionIP")
