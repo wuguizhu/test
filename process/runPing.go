@@ -35,7 +35,7 @@ func PingProcess() {
 	sip := srcIPs[0]
 	logs.Debug("local ip is ", sip)
 
-	go IPs.pingRun(conf, sip)
+	IPs.pingRun(conf, sip)
 }
 
 type SwitcherUpdater struct {
@@ -209,6 +209,7 @@ func (ips *IPsUpdater) pingRun(conf *util.Conf, sip string) {
 
 		select {
 		case <-timer.C:
+			logs.Info("pingrun timeout!", time.Duration(interval)*time.Second)
 		default:
 			logs.Info("finished a ping task,waitting %s,will exec next time ", time.Duration(interval)*time.Second)
 			time.Sleep(time.Duration(interval) * time.Second)
