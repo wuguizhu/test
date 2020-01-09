@@ -2,6 +2,7 @@ package process
 
 import (
 	"sync"
+	"testnode-pinger/controllers"
 	"testnode-pinger/ping"
 	"testnode-pinger/util"
 	"time"
@@ -221,26 +222,26 @@ func (ips *IPsUpdater) pingRun(conf *util.Conf, sip string) {
 }
 
 // Res2Rsp convert all res to RspResults
-func Res2Rsp(regionRes map[util.PingIP]*ping.PingResult, stationRes map[util.PingIP]*ping.PingResult, stationTCPRes map[util.PingIP]*util.Statistics, sip, sRegion, sStation string) *util.RspResults {
-	rsp := util.RspResults{
+func Res2Rsp(regionRes map[util.PingIP]*ping.PingResult, stationRes map[util.PingIP]*ping.PingResult, stationTCPRes map[util.PingIP]*util.Statistics, sip, sRegion, sStation string) *controllers.RspResults {
+	rsp := controllers.RspResults{
 		Status: 0,
-		Msg: &util.Message{
+		Msg: &controllers.Message{
 			IP:      sip,
 			Region:  sRegion,
 			Station: sStation,
 		},
 	}
 	logs.Debug("regionRes:%v\n,stationRes:%v\n,stationTCPRes:%v\n", regionRes, stationRes, stationTCPRes)
-	res := make([]*util.ResMessage, 0)
+	res := make([]*controllers.ResMessage, 0)
 	if regionRes != nil {
 		for pip, result := range regionRes {
-			re := util.ResMessage{
+			re := controllers.ResMessage{
 				TargetIP:     pip.IP,
 				TargetRegion: pip.Region,
 				Type:         "region",
-				Result:       new(util.ResultMessage),
+				Result:       new(controllers.ResultMessage),
 			}
-			re.Result.Ping = util.ResPing{
+			re.Result.Ping = &controllers.ResPing{
 				Avgrtt:     result.AverageRtt,
 				Ctime:      result.ProbeTime,
 				Loss:       result.LossCount,
@@ -254,16 +255,16 @@ func Res2Rsp(regionRes map[util.PingIP]*ping.PingResult, stationRes map[util.Pin
 	}
 	if stationRes != nil && stationTCPRes != nil {
 		for pip, result := range stationRes {
-			re := util.ResMessage{
+			re := controllers.ResMessage{
 				TargetIP:      pip.IP,
 				TargetRegion:  pip.Region,
 				TargetStation: pip.TargetStation,
 				IPStatus:      pip.IPStatus,
 				IsPhyIP:       pip.IsPhyIP,
 				Type:          "station",
-				Result:        new(util.ResultMessage),
+				Result:        new(controllers.ResultMessage),
 			}
-			re.Result.Ping = util.ResPing{
+			re.Result.Ping = &controllers.ResPing{
 				Avgrtt:     result.AverageRtt,
 				Ctime:      result.ProbeTime,
 				Loss:       result.LossCount,
@@ -273,7 +274,7 @@ func Res2Rsp(regionRes map[util.PingIP]*ping.PingResult, stationRes map[util.Pin
 				PingAtTime: result.PingAtTime,
 			}
 			if result, ok := stationTCPRes[pip]; ok {
-				re.Result.TCPPing = util.ResTcpping{
+				re.Result.TCPPing = &controllers.ResTcpping{
 					AvgRttMs:    result.AvgRttMs,
 					LossPackets: result.LossPackets,
 					LossRate:    result.LossRate,

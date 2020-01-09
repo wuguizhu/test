@@ -37,12 +37,13 @@ type ResultMessage struct {
 	TCPPing *ResTcpping `json:"tcpping,omitempty"`
 }
 type ResPing struct {
-	Avgrtt  float64 `json:"avgrtt"`
-	Ctime   string  `json:"ctime"`
-	Loss    int     `json:"loss"`
-	Maxrtt  float64 `json:"maxrtt"`
-	Minrtt  float64 `json:"minrtt"`
-	Package int     `json:"package"`
+	Avgrtt     float64 `json:"avgrtt"`
+	Ctime      float64 `json:"ctime"`
+	Loss       int     `json:"loss"`
+	Maxrtt     float64 `json:"maxrtt"`
+	Minrtt     float64 `json:"minrtt"`
+	Package    int     `json:"package"`
+	PingAtTime string  `json:"pingAtTime"`
 }
 type ResTcpping struct {
 	AvgRttMs    float64 `json:"avgRttMs"`
@@ -53,6 +54,7 @@ type ResTcpping struct {
 	MinRttMs    float64 `json:"minRttMs"`
 	RecvPackets int     `json:"recvPackets"`
 	SentPackets int     `json:"sentPackets"`
+	PingAtTime  string  `json:"pingAtTime"`
 }
 
 type ResultsController struct {
@@ -65,7 +67,7 @@ func (c *ResultsController) GetResults() {
 	logs.Info("REQUEST:%d,Get a request for results", reqID)
 	defer logs.Info("REQUEST:%d,Finished return the results", reqID)
 	err := errors.New("Failed to get results, the pinger may not be running")
-	rspResult := &util.RspResults{
+	rspResult := &RspResults{
 		Status: 0,
 		Msg:    nil,
 	}
