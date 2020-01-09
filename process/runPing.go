@@ -2,7 +2,6 @@ package process
 
 import (
 	"sync"
-	"testnode-pinger/controllers"
 	"testnode-pinger/ping"
 	"testnode-pinger/util"
 	"time"
@@ -222,7 +221,7 @@ func (ips *IPsUpdater) pingRun(conf *util.Conf, sip string) {
 }
 
 // Res2Rsp convert all res to RspResults
-func Res2Rsp(regionRes map[util.PingIP]*ping.PingResult, stationRes map[util.PingIP]*ping.PingResult, stationTCPRes map[util.PingIP]*util.Statistics, sip, sRegion, sStation string) *controllers.RspResults {
+func Res2Rsp(regionRes map[util.PingIP]*ping.PingResult, stationRes map[util.PingIP]*ping.PingResult, stationTCPRes map[util.PingIP]*util.Statistics, sip, sRegion, sStation string) *util.RspResults {
 	rsp := util.RspResults{
 		Status: 0,
 		Msg: &util.Message{
