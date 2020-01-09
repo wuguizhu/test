@@ -36,7 +36,7 @@ type StationIP struct {
 
 type RspResults struct {
 	Status int      `json:"status"`
-	Msg    *Message `json:"message,omitempty"`
+	Msg    *Message `json:"message"`
 	Error  string   `json:"error"`
 }
 type Message struct {
@@ -48,15 +48,15 @@ type Message struct {
 type ResMessage struct {
 	IPStatus      int            `json:"ipStatus"`
 	IsPhyIP       int            `json:"isPhyIp"`
-	Result        *ResultMessage `json:"result,omitempty"`
+	Result        *ResultMessage `json:"result"`
 	TargetIP      string         `json:"targetIP"`
 	TargetRegion  string         `json:"targetRegion"`
 	TargetStation string         `json:"targetStation"`
 	Type          string         `json:"type"`
 }
 type ResultMessage struct {
-	Ping    *ResPing    `json:"ping,omitempty"`
-	TCPPing *ResTcpping `json:"tcpping,omitempty"`
+	Ping    *ResPing    `json:"ping"`
+	TCPPing *ResTcpping `json:"tcpping"`
 }
 type ResPing struct {
 	Avgrtt     float64 `json:"avgrtt"`
