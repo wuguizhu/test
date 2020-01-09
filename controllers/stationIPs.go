@@ -41,6 +41,6 @@ func (c *StationIPsController) HandleStationIPs() {
 	logs.Debug("get local station info:ip=%s station=%s", req.IP, req.Station)
 	process.IPs.UpdateStationIPs(&req)
 	process.Switcher.UpdateSwitcherStatus(true)
-	logs.Info("station IPs updated successful!,Begin to ping!")
+	logs.Info("station IPs updated successful!,Get ready to ping and tcpping!")
 	c.Data["json"] = &rsp
 }

@@ -62,8 +62,8 @@ type ResultsController struct {
 func (c *ResultsController) GetResults() {
 	rand.Seed(time.Now().UnixNano())
 	reqID := rand.Intn(0xffff)
-	logs.Info("Get a request for results,reqID：", reqID)
-	defer logs.Info("Return result successful,reqID：", reqID)
+	logs.Info("REQUEST:%d,Get a request for results", reqID)
+	defer logs.Info("REQUEST:%d,Finished return the results", reqID)
 	err := errors.New("Failed to get results, the pinger may not be running")
 	rspResult := &util.RspResults{
 		Status: 0,
@@ -103,13 +103,13 @@ func (c *ResultsController) GetResults() {
 		if regionResStatus || (stationResStatus && tcpResStatus) {
 			rspResult = process.Res2Rsp(regionRes, stationRes, stationTCPRes, sip, sRegion, sStation)
 			c.Data["json"] = rspResult
-			logs.Info("finish prepare successful result,reqID：", reqID)
+			logs.Info("REQUEST:%d,finish prepare successful result", reqID)
 		} else {
 			rspResult.Status = 2
 			rspResult.Error = "Results have not been updated, please try again later"
-			logs.Warn("User requested unupdated data, request was rejected,reqID：", reqID)
+			logs.Warn("REQUEST:%d,User requested unupdated data, request was rejected", reqID)
 			c.Data["json"] = rspResult
-			logs.Info("finish prepare failed result,reqID：", reqID)
+			logs.Info("REQUEST:%d,finish prepare failed result", reqID)
 		}
 
 	} else {

@@ -43,6 +43,6 @@ func (c *RegionIPsController) HandleRegionIPs() {
 	logs.Debug("get local station info:ip=%s station=%s", req.IP, req.Station)
 	process.IPs.UpdateRegionIPs(&req)
 	process.Switcher.UpdateSwitcherStatus(true)
-	logs.Info("region IPs updated successful!,Begin to ping!")
+	logs.Info("region IPs updated successful!,get ready to ping!")
 	c.Data["json"] = &rsp
 }
