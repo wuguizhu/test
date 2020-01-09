@@ -54,9 +54,11 @@ type ResMessage struct {
 	TargetStation string         `json:"targetStation"`
 	Type          string         `json:"type"`
 }
+
+// 此处不使用指针，是为了初始化零值
 type ResultMessage struct {
-	Ping    *ResPing    `json:"ping"`
-	TCPPing *ResTcpping `json:"tcpping"`
+	Ping    ResPing    `json:"ping"`
+	TCPPing ResTcpping `json:"tcpping"`
 }
 type ResPing struct {
 	Avgrtt     float64 `json:"avgrtt"`

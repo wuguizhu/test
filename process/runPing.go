@@ -240,7 +240,7 @@ func Res2Rsp(regionRes map[util.PingIP]*ping.PingResult, stationRes map[util.Pin
 				Type:         "region",
 				Result:       new(util.ResultMessage),
 			}
-			re.Result.Ping = &util.ResPing{
+			re.Result.Ping = util.ResPing{
 				Avgrtt:     result.AverageRtt,
 				Ctime:      result.ProbeTime,
 				Loss:       result.LossCount,
@@ -263,7 +263,7 @@ func Res2Rsp(regionRes map[util.PingIP]*ping.PingResult, stationRes map[util.Pin
 				Type:          "station",
 				Result:        new(util.ResultMessage),
 			}
-			re.Result.Ping = &util.ResPing{
+			re.Result.Ping = util.ResPing{
 				Avgrtt:     result.AverageRtt,
 				Ctime:      result.ProbeTime,
 				Loss:       result.LossCount,
@@ -273,7 +273,7 @@ func Res2Rsp(regionRes map[util.PingIP]*ping.PingResult, stationRes map[util.Pin
 				PingAtTime: result.PingAtTime,
 			}
 			if result, ok := stationTCPRes[pip]; ok {
-				re.Result.TCPPing = &util.ResTcpping{
+				re.Result.TCPPing = util.ResTcpping{
 					AvgRttMs:    result.AvgRttMs,
 					LossPackets: result.LossPackets,
 					LossRate:    result.LossRate,
