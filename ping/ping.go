@@ -63,6 +63,12 @@ func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (resu
 	}
 	pingTime := time.Now().In(localCN).Format("2006-01-02 15:04:05")
 	pips := ipsGetter.GetIPs()
+	var ipType string
+	if _, ok := ipsGetter.(*util.ReqRegion); ok {
+		ipType = "region"
+	} else {
+		ipType = "station"
+	}
 	numIP := len(pips)
 	numGroup := int(math.Ceil(float64(numIP) / float64(p.ThreadCount)))
 	// 分组ping
@@ -72,7 +78,7 @@ func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (resu
 		ipMap[key] = append(ipMap[key], *pip)
 	}
 	for groupIndex, groupIPs := range ipMap {
-		logs.Info("ips total count:%d,groups:%d,current group:%d", numIP, numGroup, groupIndex)
+		logs.Info("type:%s,ips total count:%d,groups:%d,current group:%d", ipType, numIP, numGroup, groupIndex)
 		ips := make([]string, 0, len(pips))
 		//保存最新的ping stat
 		stat := make(map[string]*PingStat)
