@@ -11,52 +11,6 @@ import (
 	"github.com/astaxie/beego/logs"
 )
 
-// RspResults is a  response from testnode-pinger: /test/result
-type RspResults struct {
-	Status int      `json:"status"`
-	Msg    *Message `json:"message,omitempty"`
-	Error  string   `json:"error"`
-}
-type Message struct {
-	IP      string        `json:"ip"`
-	Region  string        `json:"region"`
-	Res     []*ResMessage `json:"res"`
-	Station string        `json:"station"`
-}
-type ResMessage struct {
-	IPStatus      int            `json:"ipStatus"`
-	IsPhyIP       int            `json:"isPhyIp"`
-	Result        *ResultMessage `json:"result,omitempty"`
-	TargetIP      string         `json:"targetIP"`
-	TargetRegion  string         `json:"targetRegion"`
-	TargetStation string         `json:"targetStation"`
-	Type          string         `json:"type"`
-}
-type ResultMessage struct {
-	Ping    *ResPing    `json:"ping,omitempty"`
-	TCPPing *ResTcpping `json:"tcpping,omitempty"`
-}
-type ResPing struct {
-	Avgrtt     float64 `json:"avgrtt"`
-	Ctime      float64 `json:"ctime"`
-	Loss       int     `json:"loss"`
-	Maxrtt     float64 `json:"maxrtt"`
-	Minrtt     float64 `json:"minrtt"`
-	Package    int     `json:"package"`
-	PingAtTime string  `json:"pingAtTime"`
-}
-type ResTcpping struct {
-	AvgRttMs    float64 `json:"avgRttMs"`
-	LossPackets int     `json:"lossPackets"`
-	LossRate    float64 `json:"lossRate"`
-	MaxRttMs    float64 `json:"maxRttMs"`
-	Mdev        float64 `json:"mdev"`
-	MinRttMs    float64 `json:"minRttMs"`
-	RecvPackets int     `json:"recvPackets"`
-	SentPackets int     `json:"sentPackets"`
-	PingAtTime  string  `json:"pingAtTime"`
-}
-
 type ResultsController struct {
 	beego.Controller
 }
@@ -67,7 +21,7 @@ func (c *ResultsController) GetResults() {
 	logs.Info("REQUEST:%d,Get a request for results", reqID)
 	defer logs.Info("REQUEST:%d,Finished return the results", reqID)
 	err := errors.New("Failed to get results, the pinger may not be running")
-	rspResult := &RspResults{
+	rspResult := &util.RspResults{
 		Status: 0,
 		Msg:    nil,
 	}
