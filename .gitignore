@@ -7,9 +7,10 @@
 
 # Vs Code
 *.vscode
-
+.vscode/
 # log
 *.log
+logs/
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
