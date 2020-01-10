@@ -21,6 +21,7 @@ type RspSwitcher struct {
 type ReqSwitcher = PostReqWithTS
 
 func (c *SwitcherController) SwitchOFF() {
+	c.Ctx.Output.Header("Access-Control-Allow-Origin", "*")
 	logs.Info("Get a request from %s,request body:\n%s", c.Ctx.Request.RemoteAddr, c.Ctx.Input.RequestBody)
 	defer c.ServeJSON()
 	rsp := RspSwitcher{
