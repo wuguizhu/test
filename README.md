@@ -43,19 +43,12 @@ wget https://github.com/wuguizhu/test/raw/master/shell/deploy.sh && chmod 777 de
 
 ### 卸载服务并执行清理
 
-使用任意浏览器访问以下url即可卸载并清理
-
-    http://[替换为测试服务器ip]:8043/test/ips/cleanup
-
-若您已经登录测试服务器，也可以使用以下命令进行卸载清理
+登录测试服务器，然后使用以下命令进行卸载清理
 
 ```shell
-wget https://github.com/wuguizhu/test/raw/master/shell/clean.sh && . clean.sh &>>./logs/testnode-pinger.log
-```
-或者
 
-```shell
-curl http://[替换为测试服务器ip]:8043/test/ips/cleanup
+timeStamp=`date +%s` && curl localhost:8043/test/ips/cleanup -H "Content-Type: application/json" -X POST -d "{\"time_stamp\":$timeStamp}"
+
 ```
 ## 关于配置文件
 
