@@ -97,8 +97,11 @@ func (stationIPs *ReqStation) GetIPs() (ips []*PingIP) {
 	for _, stationIP := range stationIPs.IPs {
 		// logs.Debug("station ip %d:%v", i, stationIP.IP)
 		pingIP := &PingIP{
-			IP:     stationIP.IP,
-			Region: stationIP.Region,
+			IP:            stationIP.IP,
+			Region:        stationIP.Region,
+			TargetStation: stationIP.TargetStation,
+			IPStatus:      stationIP.IPStatus,
+			IsPhyIP:       stationIP.IsPhyIP,
 		}
 		ips = append(ips, pingIP)
 	}
