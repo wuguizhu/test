@@ -221,7 +221,7 @@ func (ips *IPsUpdater) pingRun(conf *util.Conf, sip string) {
 }
 
 // Res2Rsp convert all res to RspResults
-func Res2Rsp(regionRes map[util.PingIP]*ping.PingResult, stationRes map[util.PingIP]*ping.PingResult, stationTCPRes map[util.PingIP]*util.Statistics, sip, sRegion, sStation string) *util.RspResults {
+func Res2Rsp(regionResStatus, stationResStatus, tcpResStatus bool, regionRes map[util.PingIP]*ping.PingResult, stationRes map[util.PingIP]*ping.PingResult, stationTCPRes map[util.PingIP]*util.Statistics, sip, sRegion, sStation string) *util.RspResults {
 	rsp := util.RspResults{
 		Status: 0,
 		Msg: &util.Message{
@@ -232,7 +232,7 @@ func Res2Rsp(regionRes map[util.PingIP]*ping.PingResult, stationRes map[util.Pin
 	}
 	logs.Debug("regionRes:%v\n,stationRes:%v\n,stationTCPRes:%v\n", regionRes, stationRes, stationTCPRes)
 	res := make([]*util.ResMessage, 0)
-	if regionRes != nil {
+	if regionResStatus {
 		for pip, result := range regionRes {
 			re := util.ResMessage{
 				TargetIP:     pip.IP,
@@ -252,7 +252,7 @@ func Res2Rsp(regionRes map[util.PingIP]*ping.PingResult, stationRes map[util.Pin
 			res = append(res, &re)
 		}
 	}
-	if stationRes != nil && stationTCPRes != nil {
+	if stationResStatus && tcpResStatus {
 		for pip, result := range stationRes {
 			re := util.ResMessage{
 				TargetIP:      pip.IP,
@@ -284,6 +284,8 @@ func Res2Rsp(regionRes map[util.PingIP]*ping.PingResult, stationRes map[util.Pin
 					SentPackets: result.SentPackets,
 					PingAtTime:  result.PingAtTime,
 				}
+			} else {
+				logs.Error("cant find tcp ping res in stationTCPRes", pip.IP, pip.Region)
 			}
 			res = append(res, &re)
 		}

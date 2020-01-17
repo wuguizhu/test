@@ -57,7 +57,7 @@ func (c *ResultsController) GetResults() {
 			sStation = regionIPs.Station
 		}
 		if regionResStatus || (stationResStatus && tcpResStatus) {
-			rspResult = process.Res2Rsp(regionRes, stationRes, stationTCPRes, sip, sRegion, sStation)
+			rspResult = process.Res2Rsp(regionResStatus, stationResStatus, tcpResStatus, regionRes, stationRes, stationTCPRes, sip, sRegion, sStation)
 			c.Data["json"] = rspResult
 			logs.Info("REQUEST:%d,finish prepare successful result", reqID)
 		} else {
