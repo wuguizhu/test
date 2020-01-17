@@ -42,5 +42,9 @@ func (c *StationIPsController) HandleStationIPs() {
 	process.IPs.UpdateStationIPs(&req)
 	process.Switcher.UpdateSwitcherStatus(true)
 	logs.Info("station IPs updated successful!,Get ready to ping and tcpping!")
+	//need to change all res status to false
+	process.Res.UpdateStationResStatus(false)
+	process.Res.UpdateTCPResStatus(false)
+	logs.Info("Change all stationRes、TCPRes status  to false successfully,Because of station ips updating")
 	c.Data["json"] = &rsp
 }

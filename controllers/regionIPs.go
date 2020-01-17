@@ -44,5 +44,6 @@ func (c *RegionIPsController) HandleRegionIPs() {
 	process.IPs.UpdateRegionIPs(&req)
 	process.Switcher.UpdateSwitcherStatus(true)
 	logs.Info("region IPs updated successful!,get ready to ping!")
+	//no needing to change all res_status to false
 	c.Data["json"] = &rsp
 }
