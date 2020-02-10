@@ -137,7 +137,7 @@ func (ips *IPsUpdater) SafeReadStationStatus() (stationUpdated bool) {
 // StationIPsAreChanged return the result that Compare the station ips from request and the exsited station ips
 func (ips *IPsUpdater) StationIPsAreChanged(req *util.ReqStation) (stationChanged bool) {
 	stationIPs := ips.SafeReadStationIPs()
-	if len(req.IPs) != len(stationIPs.IPs) && reflect.DeepEqual(stationIPs, req) {
+	if len(req.IPs) != len(stationIPs.IPs) && !reflect.DeepEqual(stationIPs, req) {
 		stationChanged = true
 	} else {
 		stationChanged = false
@@ -148,7 +148,7 @@ func (ips *IPsUpdater) regionIPsAreChanged(req *util.ReqRegion) (regionChanged b
 	ips.RegionMu.RLock()
 	regionIPs := ips.SafeReadRegionIPs()
 	// 使用短路与提升性能
-	if len(req.IPs) != len(regionIPs.IPs) && reflect.DeepEqual(regionIPs, req) {
+	if len(req.IPs) != len(regionIPs.IPs) && !reflect.DeepEqual(regionIPs, req) {
 		regionChanged = true
 	} else {
 		regionChanged = false
