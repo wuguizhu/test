@@ -39,6 +39,12 @@ func (c *StationIPsController) HandleStationIPs() {
 	logs.Info("get a station ips post")
 	logs.Debug("post body:", string(jsonData))
 	logs.Debug("get local station info:ip=%s station=%s", req.IP, req.Station)
+	// when get same ips,return with nothing todo
+	if !process.IPs.StationIPsAreChanged(&req) {
+		logs.Info("Station ips from request is same with the exsited station ips, Ping and tcpping directly!")
+		c.Data["json"] = &rsp
+		return
+	}
 	process.IPs.UpdateStationIPs(&req)
 	process.Switcher.UpdateSwitcherStatus(true)
 	logs.Info("station IPs updated successful!,Get ready to ping and tcpping!")

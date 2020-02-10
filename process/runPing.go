@@ -1,6 +1,7 @@
 package process
 
 import (
+	"reflect"
 	"sync"
 	"testnode-pinger/ping"
 	"testnode-pinger/util"
@@ -130,6 +131,28 @@ func (ips *IPsUpdater) SafeReadStationStatus() (stationUpdated bool) {
 	ips.StationUpdatedMu.RLock()
 	stationUpdated = ips.StationUpdated
 	ips.StationUpdatedMu.RUnlock()
+	return
+}
+
+// StationIPsAreChanged return the result that Compare the station ips from request and the exsited station ips
+func (ips *IPsUpdater) StationIPsAreChanged(req *util.ReqStation) (stationChanged bool) {
+	stationIPs := ips.SafeReadStationIPs()
+	if len(req.IPs) != len(stationIPs.IPs) && reflect.DeepEqual(stationIPs, req) {
+		stationChanged = true
+	} else {
+		stationChanged = false
+	}
+	return
+}
+func (ips *IPsUpdater) regionIPsAreChanged(req *util.ReqRegion) (regionChanged bool) {
+	ips.RegionMu.RLock()
+	regionIPs := ips.SafeReadRegionIPs()
+	// 使用短路与提升性能
+	if len(req.IPs) != len(regionIPs.IPs) && reflect.DeepEqual(regionIPs, req) {
+		regionChanged = true
+	} else {
+		regionChanged = false
+	}
 	return
 }
 
