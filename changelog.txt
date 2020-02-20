@@ -1,3 +1,5 @@
+version 1.0.0-202002201100
+    1.get results接口Header添加API版本信息
 version 1.0.0-202002191700
     1.返回结果全部保留两位小数
     2.pingTime提出，使用同一个

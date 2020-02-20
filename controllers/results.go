@@ -16,6 +16,8 @@ type ResultsController struct {
 }
 
 func (c *ResultsController) GetResults() {
+	// set api version
+	c.Ctx.Output.Header("Api-Version", "v2")
 	rand.Seed(time.Now().UnixNano())
 	reqID := rand.Intn(0xffff)
 	logs.Info("REQUEST:%d,Get a request for results", reqID)
