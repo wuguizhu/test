@@ -1,6 +1,7 @@
 package process
 
 import (
+	"math"
 	"reflect"
 	"sync"
 	"testnode-pinger/ping"
@@ -178,21 +179,7 @@ func (ips *IPsUpdater) pingRun(conf *util.Conf, sip string) {
 		}
 		timer := time.NewTimer(time.Duration(interval) * time.Second)
 		pinger := ping.NewPing(conf)
-		// if ips.SafeReadRegionStatus() {
-		// 	errChan := make(chan error)
-		// 	go func(errChan chan error) {
-		// 		logs.Info("begin ping reagionIP")
-		// 		regionips := ips.SafeReadRegionIPs()
-		// 		regionRes, err := pinger.TestNodePing(regionips, sip, regionips.Region)
-		// 		if err != nil {
-		// 			logs.Error("TestNodePing fails with error:", err)
-		// 			errChan <- err
-		// 		}
-		// 		Res.UpdateRegionResults(regionRes)
-		// 		Res.UpdateRegionResStatus(true)
-		// 		logs.Info("finish ping reagionIP")
-		// 	}(errChan)
-		// }
+
 		// ping regionIPs
 		if ips.SafeReadRegionStatus() {
 			logs.Info("begin ping reagionIP")
@@ -245,12 +232,18 @@ func (ips *IPsUpdater) pingRun(conf *util.Conf, sip string) {
 
 // Res2Rsp convert all res to RspResults
 func Res2Rsp(regionResStatus, stationResStatus, tcpResStatus bool, regionRes map[util.PingIP]*ping.PingResult, stationRes map[util.PingIP]*ping.PingResult, stationTCPRes map[util.PingIP]*util.Statistics, sip, sRegion, sStation string) *util.RspResults {
+	pingRTime := ""
+	pingSTime := ""
+	tcppingSTime := ""
 	rsp := util.RspResults{
 		Status: 0,
 		Msg: &util.Message{
-			IP:      sip,
-			Region:  sRegion,
-			Station: sStation,
+			IP:           sip,
+			Region:       sRegion,
+			Station:      sStation,
+			PingRTime:    pingRTime,
+			PingSTime:    pingSTime,
+			TCPPingSTime: tcppingSTime,
 		},
 	}
 	logs.Debug("regionRes:%v\n,stationRes:%v\n,stationTCPRes:%v\n", regionRes, stationRes, stationTCPRes)
@@ -263,16 +256,18 @@ func Res2Rsp(regionResStatus, stationResStatus, tcpResStatus bool, regionRes map
 				Type:         "region",
 				Result:       new(util.ResultMessage),
 			}
-			re.Result.Ping = util.ResPing{
-				Avgrtt:     result.AverageRtt,
-				Ctime:      result.ProbeTime,
-				Loss:       result.LossCount,
-				Maxrtt:     result.MaxRtt,
-				Minrtt:     result.MinRtt,
-				Package:    result.PacketCount,
-				PingAtTime: result.PingAtTime,
+			re.Result.Ping = &util.ResPing{
+				Avgrtt:  math.Round(result.AverageRtt*100) / 100,
+				Ctime:   math.Round(result.ProbeTime*100) / 100,
+				Loss:    result.LossCount,
+				Maxrtt:  math.Round(result.MaxRtt*100) / 100,
+				Minrtt:  math.Round(result.MinRtt*100) / 100,
+				Package: result.PacketCount,
 			}
 			res = append(res, &re)
+			if pingRTime == "" {
+				pingRTime = result.PingAtTime
+			}
 		}
 	}
 	if stationResStatus && tcpResStatus {
@@ -286,35 +281,42 @@ func Res2Rsp(regionResStatus, stationResStatus, tcpResStatus bool, regionRes map
 				Type:          "station",
 				Result:        new(util.ResultMessage),
 			}
-			re.Result.Ping = util.ResPing{
-				Avgrtt:     result.AverageRtt,
-				Ctime:      result.ProbeTime,
-				Loss:       result.LossCount,
-				Maxrtt:     result.MaxRtt,
-				Minrtt:     result.MinRtt,
-				Package:    result.PacketCount,
-				PingAtTime: result.PingAtTime,
+			re.Result.Ping = &util.ResPing{
+				Avgrtt:  math.Round(result.AverageRtt*100) / 100,
+				Ctime:   math.Round(result.ProbeTime*100) / 100,
+				Loss:    result.LossCount,
+				Maxrtt:  math.Round(result.MaxRtt*100) / 100,
+				Minrtt:  math.Round(result.MinRtt*100) / 100,
+				Package: result.PacketCount,
+			}
+			if pingSTime == "" {
+				pingSTime = result.PingAtTime
 			}
 			if result, ok := stationTCPRes[pip]; ok {
-				re.Result.TCPPing = util.ResTcpping{
-					AvgRttMs:    result.AvgRttMs,
+				re.Result.TCPPing = &util.ResTcpping{
+					AvgRttMs:    math.Round(result.AvgRttMs*100) / 100,
 					LossPackets: result.LossPackets,
-					LossRate:    result.LossRate,
-					MaxRttMs:    result.MaxRttMs,
-					Mdev:        result.Mdev,
-					MinRttMs:    result.MinRttMs,
+					LossRate:    math.Round(result.LossRate*100) / 100,
+					MaxRttMs:    math.Round(result.MaxRttMs*100) / 100,
+					Mdev:        math.Round(result.Mdev*100) / 100,
+					MinRttMs:    math.Round(result.MinRttMs*100) / 100,
 					RecvPackets: result.RecvPackets,
 					SentPackets: result.SentPackets,
-					PingAtTime:  result.PingAtTime,
+				}
+				if tcppingSTime == "" {
+					tcppingSTime = result.PingAtTime
 				}
 			} else {
 				logs.Error("cant find tcp ping res in stationTCPRes", pip.IP, pip.Region)
+				re.Result.TCPPing = nil
 			}
 			res = append(res, &re)
 		}
 	}
 	rsp.Msg.Res = res
-
+	rsp.Msg.PingRTime = pingRTime
+	rsp.Msg.PingSTime = pingSTime
+	rsp.Msg.TCPPingSTime = tcppingSTime
 	return &rsp
 }
 

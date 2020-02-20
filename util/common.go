@@ -36,38 +36,40 @@ type StationIP struct {
 
 type RspResults struct {
 	Status int      `json:"status"`
-	Msg    *Message `json:"message"`
+	Msg    *Message `json:"message,omitempty"`
 	Error  string   `json:"error"`
 }
 type Message struct {
-	IP      string        `json:"ip"`
-	Region  string        `json:"region"`
-	Res     []*ResMessage `json:"res"`
-	Station string        `json:"station"`
+	IP           string        `json:"ip"`
+	Region       string        `json:"region"`
+	Res          []*ResMessage `json:"res"`
+	Station      string        `json:"station"`
+	PingRTime    string        `json:"pingRTime,omitempty"`
+	PingSTime    string        `json:"pingSTime,omitempty"`
+	TCPPingSTime string        `json:"tcppingSTime,omitempty"`
 }
 type ResMessage struct {
-	IPStatus      int            `json:"ipStatus"`
-	IsPhyIP       int            `json:"isPhyIp"`
+	IPStatus      int            `json:"ipStatus,omitempty"`
+	IsPhyIP       int            `json:"isPhyIp,omitempty"`
 	Result        *ResultMessage `json:"result"`
 	TargetIP      string         `json:"targetIP"`
 	TargetRegion  string         `json:"targetRegion"`
-	TargetStation string         `json:"targetStation"`
+	TargetStation string         `json:"targetStation,omitempty"`
 	Type          string         `json:"type"`
 }
 
-// 此处不使用指针，是为了初始化零值
+// 此处使用指针，故注意要初始化零值
 type ResultMessage struct {
-	Ping    ResPing    `json:"ping"`
-	TCPPing ResTcpping `json:"tcpping"`
+	Ping    *ResPing    `json:"ping,omitempty"`
+	TCPPing *ResTcpping `json:"tcpping,omitempty"`
 }
 type ResPing struct {
-	Avgrtt     float64 `json:"avgrtt"`
-	Ctime      float64 `json:"ctime"`
-	Loss       int     `json:"loss"`
-	Maxrtt     float64 `json:"maxrtt"`
-	Minrtt     float64 `json:"minrtt"`
-	Package    int     `json:"package"`
-	PingAtTime string  `json:"pingAtTime"`
+	Avgrtt  float64 `json:"avgrtt"`
+	Ctime   float64 `json:"ctime"`
+	Loss    int     `json:"loss"`
+	Maxrtt  float64 `json:"maxrtt"`
+	Minrtt  float64 `json:"minrtt"`
+	Package int     `json:"package"`
 }
 type ResTcpping struct {
 	AvgRttMs    float64 `json:"avgRttMs"`
@@ -78,7 +80,6 @@ type ResTcpping struct {
 	MinRttMs    float64 `json:"minRttMs"`
 	RecvPackets int     `json:"recvPackets"`
 	SentPackets int     `json:"sentPackets"`
-	PingAtTime  string  `json:"pingAtTime"`
 }
 
 type PingIP struct {
