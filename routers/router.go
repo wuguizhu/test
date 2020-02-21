@@ -34,4 +34,5 @@ func init() {
 	beego.Router(pingStatusURL, &controllers.SwitcherController{}, "post:SwitchOFF")
 	beego.Router(cleanURL, &controllers.CleanerController{}, "post:CleanUp")
 	beego.Router("/test/ips/version", &controllers.VersionController{}, "get:GetVersion")
+	beego.Router("test/ips/heathcheck", &controllers.HealthController{}, "get:HealthCheck")
 }
