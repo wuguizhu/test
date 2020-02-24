@@ -18,7 +18,7 @@ func (c *VersionController) GetVersion() {
 	c.Ctx.Output.Header("Access-Control-Allow-Origin", "*")
 	logs.Info("Get a request from %s", c.Ctx.Request.RemoteAddr)
 	defer c.ServeJSON()
-	rsp := ResCleaner{
+	rsp := ResVersion{
 		Status: 200,
 	}
 	versionStr := beego.AppConfig.String("version")
