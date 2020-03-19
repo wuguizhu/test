@@ -1,9 +1,12 @@
-version 1.0.0-202002201100
+version 1.0.1-202002261600
+    1.增加pinger的健康检测被动端模块
+version 1.0.1-202002201100
     1.get results接口Header添加API版本信息
-version 1.0.0-202002191700
+version 1.0.1-202002191700
     1.返回结果全部保留两位小数
     2.pingTime提出，使用同一个
     3.region不返回冗余的tcpRes字段
+    4.此次更新后，不兼容旧版master。
 version 1.0.0-202002101500
     1.修复stationIP每次请求都被认为是更新，导致stationRes频繁被清理的问题 
     2.add version API
