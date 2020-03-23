@@ -302,6 +302,7 @@ func SpeedtestRes2Rsp(speedtestResStatus bool, speedtestRes map[util.PingIP]*pin
 				City:      pip.City,
 				Host:      pip.Host,
 				Port:      pip.Port,
+				IP:        pip.IP,
 				Latitude:  pip.Latitude,
 				Longitude: pip.Longitude,
 				Type:      "speedtest",

@@ -70,6 +70,7 @@ type SpeedtestResMessage struct {
 	City      string         `json:"city,omitempty"`
 	Host      string         `json:"host,omitempty"`
 	Port      string         `json:"port,omitempty"`
+	IP        string         `json:"ip,omitempty"`
 	Latitude  string         `json:"latitude,omitempty"`
 	Longitude string         `json:"longitude,omitempty"`
 	Type      string         `json:"type,omitempty"`
