@@ -2,6 +2,9 @@ package util
 
 import (
 	"math/rand"
+	"net"
+
+	"github.com/astaxie/beego/logs"
 )
 
 const (
@@ -33,7 +36,44 @@ type StationIP struct {
 	IPStatus      int    `json:"ipStatus"`
 	IsPhyIP       int    `json:"isPhyIp"`
 }
-
+type ReqSpeedtest struct {
+	Station string         `json:"Station,omitempty"`
+	IP      string         `json:"Ip,omitempty"`
+	Region  string         `json:"Region,omitempty"`
+	IPs     []*SpeedtestIP `json:"IPs,omitempty"`
+}
+type SpeedtestIP struct {
+	Country   string `json:"country,omitempty"`
+	Provider  string `json:"provider,omitempty"`
+	City      string `json:"city,omitempty"`
+	Host      string `json:"host,omitempty"`
+	Port      string `json:"port,omitempty"`
+	Latitude  string `json:"latitude,omitempty"`
+	Longitude string `json:"longitude,omitempty"`
+}
+type RspSpeedtestResults struct {
+	Status int               `json:"status,omitempty"`
+	Msg    *SpeedtestMessage `json:"message,omitempty"`
+	Error  string            `json:"error,omitempty"`
+}
+type SpeedtestMessage struct {
+	IP         string                 `json:"ip,omitempty"`
+	Region     string                 `json:"region,omitempty"`
+	Res        []*SpeedtestResMessage `json:"res,omitempty"`
+	Station    string                 `json:"station,omitempty"`
+	PingSpTime string                 `json:"pingSpTime,omitempty"`
+}
+type SpeedtestResMessage struct {
+	Result    *ResultMessage `json:"result,omitempty"`
+	Country   string         `json:"country,omitempty"`
+	Provider  string         `json:"provider,omitempty"`
+	City      string         `json:"city,omitempty"`
+	Host      string         `json:"host,omitempty"`
+	Port      string         `json:"port,omitempty"`
+	Latitude  string         `json:"latitude,omitempty"`
+	Longitude string         `json:"longitude,omitempty"`
+	Type      string         `json:"type,omitempty"`
+}
 type RspResults struct {
 	Status int      `json:"status"`
 	Msg    *Message `json:"message,omitempty"`
@@ -88,6 +128,13 @@ type PingIP struct {
 	TargetStation string
 	IPStatus      int
 	IsPhyIP       int
+	Country       string
+	Provider      string
+	City          string
+	Host          string
+	Port          string
+	Latitude      string
+	Longitude     string
 }
 type IPsGetter interface {
 	GetIPs() []*PingIP
@@ -103,6 +150,28 @@ func (stationIPs *ReqStation) GetIPs() (ips []*PingIP) {
 			TargetStation: stationIP.TargetStation,
 			IPStatus:      stationIP.IPStatus,
 			IsPhyIP:       stationIP.IsPhyIP,
+		}
+		ips = append(ips, pingIP)
+	}
+	return ips
+}
+func (speedtestIPs *ReqSpeedtest) GetIPs() (ips []*PingIP) {
+	ips = make([]*PingIP, 0, len(speedtestIPs.IPs))
+	for _, speedtestIP := range speedtestIPs.IPs {
+		// logs.Debug("speedtest ip %d:%v", i, speedtestIP.IP)
+		IPAddr, err := net.ResolveIPAddr("ip", speedtestIP.Host)
+		if err != nil {
+			logs.Error("Resolution host:%s to ip error %s", speedtestIP.Host, err)
+		}
+		pingIP := &PingIP{
+			IP:        IPAddr.String(),
+			Host:      speedtestIP.Host,
+			Provider:  speedtestIP.Provider,
+			Country:   speedtestIP.Country,
+			City:      speedtestIP.City,
+			Port:      speedtestIP.Port,
+			Longitude: speedtestIP.Longitude,
+			Latitude:  speedtestIP.Latitude,
 		}
 		ips = append(ips, pingIP)
 	}

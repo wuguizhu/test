@@ -64,27 +64,34 @@ func (switcher *SwitcherUpdater) SafeReadSwitcherStatus() (status bool) {
 }
 
 type IPsUpdater struct {
-	RegionIPs      *util.ReqRegion
-	StationIPs     *util.ReqStation
-	RegionUpdated  bool
-	StationUpdated bool
-	RegionMu       *sync.RWMutex
-	StationMu      *sync.RWMutex
-	// InitedMu *sync.RWMutex
-	RegionUpdatedMu  *sync.RWMutex
-	StationUpdatedMu *sync.RWMutex
+	RegionIPs          *util.ReqRegion
+	StationIPs         *util.ReqStation
+	SpeedtestIPs       *util.ReqSpeedtest
+	RegionUpdated      bool
+	StationUpdated     bool
+	SpeedtestUpdated   bool
+	RegionMu           *sync.RWMutex
+	StationMu          *sync.RWMutex
+	SpeedtestMu        *sync.RWMutex
+	RegionUpdatedMu    *sync.RWMutex
+	StationUpdatedMu   *sync.RWMutex
+	SpeedtestUpdatedMu *sync.RWMutex
 }
 
 func NewIPsUpdater() *IPsUpdater {
 	return &IPsUpdater{
-		RegionIPs:        new(util.ReqRegion),
-		StationIPs:       new(util.ReqStation),
-		RegionUpdated:    false,
-		StationUpdated:   false,
-		RegionMu:         new(sync.RWMutex),
-		StationMu:        new(sync.RWMutex),
-		RegionUpdatedMu:  new(sync.RWMutex),
-		StationUpdatedMu: new(sync.RWMutex),
+		RegionIPs:          new(util.ReqRegion),
+		StationIPs:         new(util.ReqStation),
+		SpeedtestIPs:       new(util.ReqSpeedtest),
+		RegionUpdated:      false,
+		StationUpdated:     false,
+		SpeedtestUpdated:   false,
+		RegionMu:           new(sync.RWMutex),
+		StationMu:          new(sync.RWMutex),
+		SpeedtestMu:        new(sync.RWMutex),
+		RegionUpdatedMu:    new(sync.RWMutex),
+		StationUpdatedMu:   new(sync.RWMutex),
+		SpeedtestUpdatedMu: new(sync.RWMutex),
 	}
 
 }
@@ -110,6 +117,17 @@ func (ips *IPsUpdater) UpdateStationStatus(status bool) {
 	ips.StationUpdated = status
 	ips.StationUpdatedMu.Unlock()
 }
+func (ips *IPsUpdater) UpdateSpeedtestIPs(req *util.ReqSpeedtest) {
+	ips.SpeedtestMu.Lock()
+	ips.SpeedtestIPs = req
+	ips.SpeedtestMu.Unlock()
+	ips.UpdateSpeedtestStatus(true)
+}
+func (ips *IPsUpdater) UpdateSpeedtestStatus(status bool) {
+	ips.SpeedtestUpdatedMu.Lock()
+	ips.SpeedtestUpdated = status
+	ips.SpeedtestUpdatedMu.Unlock()
+}
 func (ips *IPsUpdater) SafeReadRegionIPs() (regionIPs *util.ReqRegion) {
 	ips.RegionMu.RLock()
 	regionIPs = ips.RegionIPs
@@ -120,6 +138,12 @@ func (ips *IPsUpdater) SafeReadStationIPs() (stationIPs *util.ReqStation) {
 	ips.StationMu.RLock()
 	stationIPs = ips.StationIPs
 	ips.StationMu.RUnlock()
+	return
+}
+func (ips *IPsUpdater) SafeReadSpeedtestIPs() (speedtestIPs *util.ReqSpeedtest) {
+	ips.SpeedtestMu.RLock()
+	speedtestIPs = ips.SpeedtestIPs
+	ips.SpeedtestMu.RUnlock()
 	return
 }
 func (ips *IPsUpdater) SafeReadRegionStatus() (regionUpdated bool) {
@@ -134,6 +158,12 @@ func (ips *IPsUpdater) SafeReadStationStatus() (stationUpdated bool) {
 	ips.StationUpdatedMu.RUnlock()
 	return
 }
+func (ips *IPsUpdater) SafeReadSpeedtestStatus() (speedtestUpdated bool) {
+	ips.SpeedtestUpdatedMu.RLock()
+	speedtestUpdated = ips.SpeedtestUpdated
+	ips.SpeedtestUpdatedMu.RUnlock()
+	return
+}
 
 // StationIPsAreChanged return the result that Compare the station ips from request and the exsited station ips
 func (ips *IPsUpdater) StationIPsAreChanged(req *util.ReqStation) (stationChanged bool) {
@@ -142,6 +172,15 @@ func (ips *IPsUpdater) StationIPsAreChanged(req *util.ReqStation) (stationChange
 		stationChanged = true
 	} else {
 		stationChanged = false
+	}
+	return
+}
+func (ips *IPsUpdater) SpeedtestIPsAreChanged(req *util.ReqSpeedtest) (speedtestChanged bool) {
+	speedtestIPs := ips.SafeReadSpeedtestIPs()
+	if len(req.IPs) != len(speedtestIPs.IPs) && !reflect.DeepEqual(speedtestIPs, req) {
+		speedtestChanged = true
+	} else {
+		speedtestChanged = false
 	}
 	return
 }
@@ -184,7 +223,7 @@ func (ips *IPsUpdater) pingRun(conf *util.Conf, sip string) {
 		if ips.SafeReadRegionStatus() {
 			logs.Info("begin ping reagionIP")
 			regionips := ips.SafeReadRegionIPs()
-			regionRes, err := pinger.TestNodePing(regionips, sip, regionips.Region)
+			regionRes, err := pinger.TestNodePing(regionips, sip)
 			if err != nil {
 				logs.Error("TestNodePing fails with error:", err)
 				continue
@@ -199,7 +238,7 @@ func (ips *IPsUpdater) pingRun(conf *util.Conf, sip string) {
 		if ips.SafeReadStationStatus() {
 			logs.Info("begin ping stationIP")
 			stationips := ips.SafeReadStationIPs()
-			stationRes, err := pinger.TestNodePing(stationips, sip, stationips.Region)
+			stationRes, err := pinger.TestNodePing(stationips, sip)
 			if err != nil {
 				logs.Error("TestNodePing fails with error:", err)
 				continue
@@ -216,7 +255,19 @@ func (ips *IPsUpdater) pingRun(conf *util.Conf, sip string) {
 			logs.Info("finish tcpping stationIP")
 
 		}
-
+		// ping speedtestIPs
+		if ips.SafeReadSpeedtestStatus() {
+			logs.Info("begin ping speedtestIP")
+			speedtestips := ips.SafeReadSpeedtestIPs()
+			speedtestRes, err := pinger.TestNodePing(speedtestips, sip)
+			if err != nil {
+				logs.Error("TestNodePing fails with error:", err)
+				continue
+			}
+			Res.UpdateSpeedtestResults(speedtestRes)
+			Res.UpdateSpeedtestResStatus(true)
+			logs.Info("finish ping speedtestIP")
+		}
 		select {
 		case <-timer.C:
 			logs.Info("pingrun timeout!", time.Duration(interval)*time.Second)
@@ -229,9 +280,54 @@ func (ips *IPsUpdater) pingRun(conf *util.Conf, sip string) {
 	}
 
 }
+func SpeedtestRes2Rsp(speedtestResStatus bool, speedtestRes map[util.PingIP]*ping.PingResult, sip, sRegion, sStation string) *util.RspSpeedtestResults {
+	pingSpTime := ""
+
+	rsp := util.RspSpeedtestResults{
+		Status: 0,
+		Msg: &util.SpeedtestMessage{
+			IP:         sip,
+			Region:     sRegion,
+			Station:    sStation,
+			PingSpTime: pingSpTime,
+		},
+	}
+	logs.Debug("speedtestRes:%v\n", speedtestRes)
+	res := make([]*util.SpeedtestResMessage, 0)
+	if speedtestResStatus {
+		for pip, result := range speedtestRes {
+			re := util.SpeedtestResMessage{
+				Country:   pip.Country,
+				Provider:  pip.Provider,
+				City:      pip.City,
+				Host:      pip.Host,
+				Port:      pip.Port,
+				Latitude:  pip.Latitude,
+				Longitude: pip.Longitude,
+				Type:      "speedtest",
+				Result:    new(util.ResultMessage),
+			}
+			re.Result.Ping = &util.ResPing{
+				Avgrtt:  math.Round(result.AverageRtt*100) / 100,
+				Ctime:   math.Round(result.ProbeTime*100) / 100,
+				Loss:    result.LossCount,
+				Maxrtt:  math.Round(result.MaxRtt*100) / 100,
+				Minrtt:  math.Round(result.MinRtt*100) / 100,
+				Package: result.PacketCount,
+			}
+			res = append(res, &re)
+			if pingSpTime == "" {
+				pingSpTime = result.PingAtTime
+			}
+		}
+	}
+	rsp.Msg.Res = res
+	rsp.Msg.PingSpTime = pingSpTime
+	return &rsp
+}
 
 // Res2Rsp convert all res to RspResults
-func Res2Rsp(regionResStatus, stationResStatus, tcpResStatus bool, regionRes map[util.PingIP]*ping.PingResult, stationRes map[util.PingIP]*ping.PingResult, stationTCPRes map[util.PingIP]*util.Statistics, sip, sRegion, sStation string) *util.RspResults {
+func CommonRes2Rsp(regionResStatus, stationResStatus, tcpResStatus bool, regionRes map[util.PingIP]*ping.PingResult, stationRes map[util.PingIP]*ping.PingResult, stationTCPRes map[util.PingIP]*util.Statistics, sip, sRegion, sStation string) *util.RspResults {
 	pingRTime := ""
 	pingSTime := ""
 	tcppingSTime := ""
@@ -323,15 +419,19 @@ func Res2Rsp(regionResStatus, stationResStatus, tcpResStatus bool, regionRes map
 type Results struct {
 	RegionRes              map[util.PingIP]*ping.PingResult
 	StationRes             map[util.PingIP]*ping.PingResult
+	SpeedtestRes           map[util.PingIP]*ping.PingResult
 	StationTCPRes          map[util.PingIP]*util.Statistics
 	RegionResUpdated       bool
 	StationResUpdated      bool
+	SpeedtestResUpdated    bool
 	StationTCPResUpdated   bool
 	regionResMu            *sync.RWMutex
 	stationResMu           *sync.RWMutex
+	speedtestResMu         *sync.RWMutex
 	stationTCPResMu        *sync.RWMutex
 	RegionResUpdatedMu     *sync.RWMutex
 	StationResUpdatedMu    *sync.RWMutex
+	SpeedtestResUpdatedMu  *sync.RWMutex
 	StationTCPResUpdatedMu *sync.RWMutex
 }
 
@@ -339,10 +439,14 @@ func NewResults() *Results {
 	return &Results{
 		make(map[util.PingIP]*ping.PingResult),
 		make(map[util.PingIP]*ping.PingResult),
+		make(map[util.PingIP]*ping.PingResult),
 		make(map[util.PingIP]*util.Statistics),
 		false,
 		false,
 		false,
+		false,
+		new(sync.RWMutex),
+		new(sync.RWMutex),
 		new(sync.RWMutex),
 		new(sync.RWMutex),
 		new(sync.RWMutex),
@@ -387,6 +491,17 @@ func (res *Results) UpdateStationResStatus(status bool) {
 	res.StationResUpdatedMu.Unlock()
 
 }
+func (res *Results) UpdateSpeedtestResults(speedtestRes map[util.PingIP]*ping.PingResult) {
+	res.speedtestResMu.Lock()
+	res.SpeedtestRes = speedtestRes
+	res.speedtestResMu.Unlock()
+	res.UpdateSpeedtestResStatus(true)
+}
+func (res *Results) UpdateSpeedtestResStatus(status bool) {
+	res.SpeedtestResUpdatedMu.Lock()
+	res.SpeedtestResUpdated = status
+	res.SpeedtestResUpdatedMu.Unlock()
+}
 
 // updateResults update PingResults from the ping results
 func (res *Results) SafeReadTCPResults() (stationTCPRes map[util.PingIP]*util.Statistics) {
@@ -423,5 +538,17 @@ func (res *Results) SafeReadStationResStatus() (status bool) {
 	res.StationResUpdatedMu.RLock()
 	status = res.StationResUpdated
 	res.StationResUpdatedMu.RUnlock()
+	return
+}
+func (res *Results) SafeReadSpeedtestResults() (speedtestRes map[util.PingIP]*ping.PingResult) {
+	res.speedtestResMu.RLock()
+	speedtestRes = res.SpeedtestRes
+	res.speedtestResMu.RUnlock()
+	return
+}
+func (res *Results) SafeReadSpeedtestResStatus() (status bool) {
+	res.SpeedtestResUpdatedMu.RLock()
+	status = res.SpeedtestResUpdated
+	res.SpeedtestResUpdatedMu.RUnlock()
 	return
 }

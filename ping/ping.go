@@ -54,7 +54,7 @@ func NewPing(conf *util.Conf) *Ping {
 	}
 	return &p
 }
-func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (result map[util.PingIP]*PingResult, err error) {
+func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip string) (result map[util.PingIP]*PingResult, err error) {
 	result = make(map[util.PingIP]*PingResult)
 	localCN, err := time.LoadLocation("Asia/Shanghai")
 	if err != nil {
@@ -66,8 +66,10 @@ func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (resu
 	var ipType string
 	if _, ok := ipsGetter.(*util.ReqRegion); ok {
 		ipType = "region"
-	} else {
+	} else if _, ok := ipsGetter.(*util.ReqStation); ok {
 		ipType = "station"
+	} else {
+		ipType = "speedtest"
 	}
 	numIP := len(pips)
 	numGroup := int(math.Ceil(float64(numIP) / float64(p.ThreadCount)))
@@ -121,7 +123,7 @@ func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip, sregion string) (resu
 					pingResult.ProbeTime = float64(r.Duration) / float64(time.Millisecond)
 				}
 				result[gpip] = pingResult
-				// 				logs.Debug("packages:%d,avgRtt:%.2f,minRtt:%.2f,maxRtt:%.2f,loss:%d,probeTime:%s", result[ip].PacketCount, result[ip].AverageRtt, result[ip].MinRtt, result[ip].MaxRtt, result[ip].LossCount, result[ip].ProbeTime)
+				//logs.Debug("packages:%d,avgRtt:%.2f,minRtt:%.2f,maxRtt:%.2f,loss:%d,probeTime:%s", result[ip].PacketCount, result[ip].AverageRtt, result[ip].MinRtt, result[ip].MaxRtt, result[ip].LossCount, result[ip].ProbeTime)
 			}
 
 		}
