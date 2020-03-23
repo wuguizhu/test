@@ -52,6 +52,7 @@ func (c *SwitcherController) SwitchOFF() {
 		process.Switcher.UpdateSwitcherStatus(false)
 		process.IPs.UpdateRegionStatus(false)
 		process.IPs.UpdateStationStatus(false)
+		process.IPs.UpdateSpeedtestStatus(false)
 		logs.Info(strSuccess)
 		rsp.Message = strSuccess
 	} else {
