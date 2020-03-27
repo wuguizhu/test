@@ -52,7 +52,7 @@ type SpeedtestIP struct {
 	Longitude string `json:"longitude,omitempty"`
 }
 type RspSpeedtestResults struct {
-	Status int               `json:"status,omitempty"`
+	Status int               `json:"status"`
 	Msg    *SpeedtestMessage `json:"message,omitempty"`
 	Error  string            `json:"error,omitempty"`
 }
