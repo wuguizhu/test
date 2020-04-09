@@ -1,9 +1,10 @@
 package ping
 
 import (
-	"github.com/astaxie/beego/logs"
 	"testnode-pinger/util"
 	"time"
+
+	"github.com/astaxie/beego/logs"
 )
 
 func TcpOptionFromConf(conf *util.Conf) *util.TcpPingOption {
