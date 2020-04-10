@@ -158,8 +158,9 @@ func (stationIPs *ReqStation) GetIPs() (ips []*PingIP) {
 }
 func (speedtestIPs *ReqSpeedtest) GetIPs() (ips []*PingIP) {
 	ipChannel := make(chan *PingIP, len(speedtestIPs.IPs))
+	defer close(ipChannel)
 	for _, speedtestIP := range speedtestIPs.IPs {
-		Host2IP_Producer(speedtestIP, ipChannel)
+		go Host2IP_Producer(speedtestIP, ipChannel)
 	}
 	return Host2IP_Customer(ipChannel)
 }
@@ -179,7 +180,6 @@ func GetLocalPort() int {
 	return rand.Intn(30000) + 30000
 }
 func Host2IP_Producer(speedtestIP *SpeedtestIP, ipChannel chan<- *PingIP) {
-	defer close(ipChannel)
 	IPAddr, err := net.ResolveIPAddr("ip", speedtestIP.Host)
 	if err != nil {
 		logs.Error("Resolution host:%s to ip error %s", speedtestIP.Host, err)
