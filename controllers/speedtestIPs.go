@@ -37,7 +37,7 @@ func (c *SpeedtestIPsController) HandleSpeedtestIPs() {
 		logs.Error("json marshal failed with error: ", err)
 	}
 	logs.Info("get a speedtest ips post")
-	logs.Debug("post body:", string(jsonData))
+	logs.Debug("post body length:", len(jsonData))
 	logs.Debug("get local station info:ip=%s station=%s", req.IP, req.Station)
 	// when get same ips,return with nothing todo
 	if !process.IPs.SpeedtestIPsAreChanged(&req) {
@@ -53,7 +53,7 @@ func (c *SpeedtestIPsController) HandleSpeedtestIPs() {
 	process.IPs.UpdateSpeedtestIPs(&req)
 	// 打开整个探测开关
 	process.Switcher.UpdateSwitcherStatus(true)
-	logs.Info("speedtest IPs updated successful!,Get ready to ping and tcpping!")
+	logs.Info("speedtest IPs updated successful!,switcher is opened,Get ready to ping and tcpping!")
 	//有了新ip，需要屏蔽旧ip的探测结果
 	process.Res.UpdateSpeedtestResStatus(false)
 	logs.Info("Change speedtestRes status  to false successfully,Because of speedtest ips updating")

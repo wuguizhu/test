@@ -37,7 +37,7 @@ func (c *StationIPsController) HandleStationIPs() {
 		logs.Error("json marshal failed with error: ", err)
 	}
 	logs.Info("get a station ips post")
-	logs.Debug("post body:", string(jsonData))
+	logs.Debug("post body length:", len(jsonData))
 	logs.Debug("get local station info:ip=%s station=%s", req.IP, req.Station)
 	// when get same ips,return with nothing todo
 	if !process.IPs.StationIPsAreChanged(&req) {
@@ -53,7 +53,7 @@ func (c *StationIPsController) HandleStationIPs() {
 	process.IPs.UpdateStationIPs(&req)
 	// 打开整个探测开关
 	process.Switcher.UpdateSwitcherStatus(true)
-	logs.Info("station IPs updated successful!,Get ready to ping and tcpping!")
+	logs.Info("station IPs updated successful!,,switcher is opened,Get ready to ping and tcpping!")
 	//有了新ip，需要屏蔽旧ip的探测结果
 	process.Res.UpdateStationResStatus(false)
 	process.Res.UpdateTCPResStatus(false)

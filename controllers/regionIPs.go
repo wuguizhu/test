@@ -39,11 +39,11 @@ func (c *RegionIPsController) HandleRegionIPs() {
 		logs.Error("json marshal failed with error:", err)
 	}
 	logs.Info("get a region ips post")
-	logs.Debug("post body:", string(jsonData))
+	logs.Debug("post body length:", len(jsonData))
 	logs.Debug("get local station info:ip=%s station=%s", req.IP, req.Station)
 	process.IPs.UpdateRegionIPs(&req)
 	process.Switcher.UpdateSwitcherStatus(true)
-	logs.Info("region IPs updated successful!,get ready to ping!")
+	logs.Info("region IPs updated successful!,switcher is opened,get ready to ping!")
 	//no needing to change all res_status to false
 	c.Data["json"] = &rsp
 }
