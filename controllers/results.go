@@ -65,7 +65,7 @@ func (c *ResultsController) GetResults() {
 		} else {
 			rspResult.Status = 2
 			rspResult.Error = "Results have not been updated, please try again later"
-			logs.Warn("REQUEST:%d,User requested unupdated data, request was rejected", reqID)
+			logs.Warn("REQUEST:%d,User requested unupdated data, request was rejected,regionResStatus=%v,stationResStatus=%v,tcpResStatus=%v", reqID, regionResStatus, stationResStatus, tcpResStatus)
 			c.Data["json"] = rspResult
 			logs.Info("REQUEST:%d,finish prepare failed result", reqID)
 		}

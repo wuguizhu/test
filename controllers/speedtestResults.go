@@ -49,7 +49,7 @@ func (c *SpeedtestResultsController) GetResults() {
 		} else {
 			rspResult.Status = 2
 			rspResult.Error = "Results have not been updated, please try again later"
-			logs.Warn("REQUEST:%d,User requested unupdated data, request was rejected", reqID)
+			logs.Warn("REQUEST:%d,User requested unupdated data, request was rejected,speedtestResStatus=%v", reqID, speedtestResStatus)
 			c.Data["json"] = rspResult
 			logs.Info("REQUEST:%d,finish prepare failed result", reqID)
 		}
