@@ -56,6 +56,6 @@ func (c *SpeedtestIPsController) HandleSpeedtestIPs() {
 	logs.Info("speedtest IPs updated successful!,switcher is opened,Get ready to ping and tcpping!")
 	//有了新ip，需要屏蔽旧ip的探测结果
 	// process.Res.UpdateSpeedtestResStatus(false)
-	logs.Info("Change speedtestRes status  to false successfully,Because of speedtest ips updated")
+	// logs.Info("Change speedtestRes status  to false successfully,Because of speedtest ips updated")
 	c.Data["json"] = &rsp
 }

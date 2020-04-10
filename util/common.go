@@ -157,26 +157,11 @@ func (stationIPs *ReqStation) GetIPs() (ips []*PingIP) {
 	return ips
 }
 func (speedtestIPs *ReqSpeedtest) GetIPs() (ips []*PingIP) {
-	ips = make([]*PingIP, 0, len(speedtestIPs.IPs))
+	ipChannel := make(chan *PingIP, len(speedtestIPs.IPs))
 	for _, speedtestIP := range speedtestIPs.IPs {
-		// logs.Debug("speedtest ip %d:%v", i, speedtestIP.IP)
-		IPAddr, err := net.ResolveIPAddr("ip", speedtestIP.Host)
-		if err != nil {
-			logs.Error("Resolution host:%s to ip error %s", speedtestIP.Host, err)
-		}
-		pingIP := &PingIP{
-			IP:        IPAddr.String(),
-			Host:      speedtestIP.Host,
-			Provider:  speedtestIP.Provider,
-			Country:   speedtestIP.Country,
-			City:      speedtestIP.City,
-			Port:      speedtestIP.Port,
-			Longitude: speedtestIP.Longitude,
-			Latitude:  speedtestIP.Latitude,
-		}
-		ips = append(ips, pingIP)
+		Host2IP_Producer(speedtestIP, ipChannel)
 	}
-	return ips
+	return Host2IP_Customer(ipChannel)
 }
 func (regionIPs *ReqRegion) GetIPs() (ips []*PingIP) {
 	ips = make([]*PingIP, 0, len(regionIPs.IPs))
@@ -192,4 +177,28 @@ func (regionIPs *ReqRegion) GetIPs() (ips []*PingIP) {
 }
 func GetLocalPort() int {
 	return rand.Intn(30000) + 30000
+}
+func Host2IP_Producer(speedtestIP *SpeedtestIP, ipChannel chan<- *PingIP) {
+	defer close(ipChannel)
+	IPAddr, err := net.ResolveIPAddr("ip", speedtestIP.Host)
+	if err != nil {
+		logs.Error("Resolution host:%s to ip error %s", speedtestIP.Host, err)
+	}
+	pingIP := &PingIP{
+		IP:        IPAddr.String(),
+		Host:      speedtestIP.Host,
+		Provider:  speedtestIP.Provider,
+		Country:   speedtestIP.Country,
+		City:      speedtestIP.City,
+		Port:      speedtestIP.Port,
+		Longitude: speedtestIP.Longitude,
+		Latitude:  speedtestIP.Latitude,
+	}
+	ipChannel <- pingIP
+}
+func Host2IP_Customer(ipChannel <-chan *PingIP) (ips []*PingIP) {
+	for pingIP := range ipChannel {
+		ips = append(ips, pingIP)
+	}
+	return
 }
