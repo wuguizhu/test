@@ -3,6 +3,7 @@ package util
 import (
 	"math/rand"
 	"net"
+	"sync"
 
 	"github.com/astaxie/beego/logs"
 )
@@ -157,18 +158,20 @@ func (stationIPs *ReqStation) GetIPs() (ips []*PingIP) {
 	return ips
 }
 func (speedtestIPs *ReqSpeedtest) GetIPs() (ips []*PingIP) {
-	ipChannel := make(chan PingIP, len(speedtestIPs.IPs))
-	defer close(ipChannel)
+	ipChannel := make(chan *PingIP, len(speedtestIPs.IPs))
+	wg := &sync.WaitGroup{}
+	wg.Add(len(speedtestIPs.IPs))
 	for _, speedtestIP := range speedtestIPs.IPs {
-		go Host2IP_Producer(speedtestIP, ipChannel)
+		go Host2IP_Producer(speedtestIP, wg, ipChannel)
 	}
+	wg.Wait()
+	close(ipChannel)
 	ips = Host2IP_Customer(ipChannel)
 	logs.Info("Finish Parsing %d host to ip", len(ips))
 	return
 }
 func (regionIPs *ReqRegion) GetIPs() (ips []*PingIP) {
 	ips = make([]*PingIP, 0, len(regionIPs.IPs))
-	logs.Debug("channel size =", len(regionIPs.IPs))
 	for _, regionIP := range regionIPs.IPs {
 		// logs.Debug("reagion ip %d:%v", i, regionIP.IP)
 		pingIP := &PingIP{
@@ -182,14 +185,14 @@ func (regionIPs *ReqRegion) GetIPs() (ips []*PingIP) {
 func GetLocalPort() int {
 	return rand.Intn(30000) + 30000
 }
-func Host2IP_Producer(speedtestIP *SpeedtestIP, ipChannel chan<- PingIP) {
+func Host2IP_Producer(speedtestIP *SpeedtestIP, wg *sync.WaitGroup, ipChannel chan<- *PingIP) {
 	IPAddr, err := net.ResolveIPAddr("ip", speedtestIP.Host)
 	if err != nil {
 		logs.Error("Resolution host:%s to ip error %s", speedtestIP.Host, err)
 	} else {
 		logs.Debug("Resolution host:%s to ip successfully %s", speedtestIP.Host, IPAddr.String())
 	}
-	pingIP := PingIP{
+	pingIP := &PingIP{
 		IP:        IPAddr.String(),
 		Host:      speedtestIP.Host,
 		Provider:  speedtestIP.Provider,
@@ -200,12 +203,13 @@ func Host2IP_Producer(speedtestIP *SpeedtestIP, ipChannel chan<- PingIP) {
 		Latitude:  speedtestIP.Latitude,
 	}
 	ipChannel <- pingIP
+	wg.Done()
 }
-func Host2IP_Customer(ipChannel <-chan PingIP) (ips []*PingIP) {
-	pingIP, ok := <-ipChannel
-	if ok {
-		ips = append(ips, &pingIP)
-		logs.Debug("append %s to ips", pingIP)
+func Host2IP_Customer(ipChannel <-chan *PingIP) (ips []*PingIP) {
+	// 使用for-range读取channel，这样既安全又便利，当channel关闭时，for循环会自动退出，无需主动监测channel是否关闭
+	for pingIP := range ipChannel {
+		ips = append(ips, pingIP)
+		logs.Debug("append %v to ips", pingIP)
 	}
 	return
 }
