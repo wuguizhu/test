@@ -168,6 +168,7 @@ func (speedtestIPs *ReqSpeedtest) GetIPs() (ips []*PingIP) {
 }
 func (regionIPs *ReqRegion) GetIPs() (ips []*PingIP) {
 	ips = make([]*PingIP, 0, len(regionIPs.IPs))
+	logs.Debug("channel size =", len(regionIPs.IPs))
 	for _, regionIP := range regionIPs.IPs {
 		// logs.Debug("reagion ip %d:%v", i, regionIP.IP)
 		pingIP := &PingIP{
@@ -204,6 +205,7 @@ func Host2IP_Customer(ipChannel <-chan PingIP) (ips []*PingIP) {
 	pingIP, ok := <-ipChannel
 	if ok {
 		ips = append(ips, &pingIP)
+		logs.Debug("append %s to ips", pingIP)
 	}
 	return
 }
