@@ -4,6 +4,7 @@ echo "download master.zip"
 rm -rf ./master.zip*
 wget https://github.com/wuguizhu/test/archive/master.zip
 unzip -o master.zip
+ulimit -n 65535
 cd test-master
 chmod 777 testnode-pinger
 (sudo ./testnode-pinger &) 
