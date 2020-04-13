@@ -158,14 +158,10 @@ func (stationIPs *ReqStation) GetIPs() (ips []*PingIP) {
 }
 func (speedtestIPs *ReqSpeedtest) GetIPs() (ips []*PingIP) {
 	ipChannel := make(chan PingIP, len(speedtestIPs.IPs))
-	count := 0
 	for _, speedtestIP := range speedtestIPs.IPs {
 		go Host2IP_Producer(speedtestIP, ipChannel)
-		count++
-		if count == len(speedtestIPs.IPs) {
-			close(ipChannel)
-		}
 	}
+	close(ipChannel)
 	ips = Host2IP_Customer(ipChannel)
 	logs.Info("Finish Parsing %d host to ip", len(ips))
 	return
@@ -205,7 +201,8 @@ func Host2IP_Producer(speedtestIP *SpeedtestIP, ipChannel chan<- PingIP) {
 	ipChannel <- pingIP
 }
 func Host2IP_Customer(ipChannel <-chan PingIP) (ips []*PingIP) {
-	for pingIP := range ipChannel {
+	pingIP, ok := <-ipChannel
+	if ok {
 		ips = append(ips, &pingIP)
 	}
 	return
