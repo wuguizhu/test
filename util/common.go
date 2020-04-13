@@ -162,7 +162,9 @@ func (speedtestIPs *ReqSpeedtest) GetIPs() (ips []*PingIP) {
 	for _, speedtestIP := range speedtestIPs.IPs {
 		go Host2IP_Producer(speedtestIP, ipChannel)
 	}
-	return Host2IP_Customer(ipChannel)
+	ips = Host2IP_Customer(ipChannel)
+	logs.Info("Finish Parsing %d host to ip", len(ips))
+	return
 }
 func (regionIPs *ReqRegion) GetIPs() (ips []*PingIP) {
 	ips = make([]*PingIP, 0, len(regionIPs.IPs))
