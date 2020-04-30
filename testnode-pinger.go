@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"testnode-pinger/process"
+	"testnode-pinger/proxy"
 	_ "testnode-pinger/routers"
 
 	"github.com/astaxie/beego"
@@ -38,6 +39,7 @@ func main() {
 	logs.EnableFuncCallDepth(true)
 	logs.SetLogFuncCallDepth(3)
 	go process.PingProcess()
-	logs.Info("Beego start to run")
+	go proxy.Run()
+	logs.Info("%s start to run", beego.AppConfig.String("appname"))
 	beego.Run()
 }
