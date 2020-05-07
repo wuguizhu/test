@@ -30,6 +30,7 @@ func (c *StationIPsController) HandleStationIPs() {
 		logs.Error("json.Unmarshal failed with error:", err)
 		rsp.Status = 1
 		rsp.RspMsg = err.Error()
+		c.Data["json"] = &rsp
 		return
 	}
 	jsonData, err := json.MarshalIndent(req, "", "  ")
