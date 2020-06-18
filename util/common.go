@@ -5,6 +5,7 @@ import (
 	"net"
 	"sync"
 
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
 )
 
@@ -158,11 +159,15 @@ func (stationIPs *ReqStation) GetIPs() (ips []*PingIP) {
 	return ips
 }
 func (speedtestIPs *ReqSpeedtest) GetIPs() (ips []*PingIP) {
+	maxDNSLimit := beego.AppConfig.DefaultInt64("max_DNS_limit", 512)
 	ipChannel := make(chan *PingIP, len(speedtestIPs.IPs))
 	wg := &sync.WaitGroup{}
 	wg.Add(len(speedtestIPs.IPs))
+	limitChan := make(chan bool, maxDNSLimit)
+	defer close(limitChan)
 	for _, speedtestIP := range speedtestIPs.IPs {
-		go Host2IP_Producer(speedtestIP, wg, ipChannel)
+		limitChan <- true
+		go Host2IP_Producer(speedtestIP, wg, ipChannel, limitChan)
 	}
 	wg.Wait()
 	close(ipChannel)
@@ -185,7 +190,7 @@ func (regionIPs *ReqRegion) GetIPs() (ips []*PingIP) {
 func GetLocalPort() int {
 	return rand.Intn(30000) + 30000
 }
-func Host2IP_Producer(speedtestIP *SpeedtestIP, wg *sync.WaitGroup, ipChannel chan<- *PingIP) {
+func Host2IP_Producer(speedtestIP *SpeedtestIP, wg *sync.WaitGroup, ipChannel chan<- *PingIP, limitChan <-chan bool) {
 	IPAddr, err := net.ResolveIPAddr("ip", speedtestIP.Host)
 	if err != nil {
 		logs.Error("Resolution host:%s to ip error %s", speedtestIP.Host, err)
@@ -204,6 +209,7 @@ func Host2IP_Producer(speedtestIP *SpeedtestIP, wg *sync.WaitGroup, ipChannel ch
 	}
 	ipChannel <- pingIP
 	wg.Done()
+	<-limitChan
 }
 func Host2IP_Customer(ipChannel <-chan *PingIP) (ips []*PingIP) {
 	// 使用for-range读取channel，这样既安全又便利，当channel关闭时，for循环会自动退出，无需主动监测channel是否关闭
