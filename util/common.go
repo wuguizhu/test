@@ -4,6 +4,8 @@ import (
 	"math/rand"
 	"net"
 	"sync"
+	"testnode-pinger/go-cache"
+	"time"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
@@ -13,6 +15,13 @@ const (
 	//MaxRtt 没有返回ping结果的rtt
 	MaxRtt int = 1000
 )
+
+var c = getNewCache()
+
+func getNewCache() *cache.Cache {
+	// create a new cache with a default 10min expiration duration and 5min cleanup interval.
+	return cache.New(10*time.Minute, 5*time.Minute)
+}
 
 type ReqRegion struct {
 	Station string      `json:"Station"`
@@ -191,14 +200,26 @@ func GetLocalPort() int {
 	return rand.Intn(30000) + 30000
 }
 func Host2IP_Producer(speedtestIP *SpeedtestIP, wg *sync.WaitGroup, ipChannel chan<- *PingIP, limitChan <-chan bool) {
-	IPAddr, err := net.ResolveIPAddr("ip", speedtestIP.Host)
-	if err != nil {
-		logs.Error("Resolution host:%s to ip error %s", speedtestIP.Host, err)
+	var ip string
+	// get ip from cache firstly,if not exist,then do net.ResolveIPAddr and save result into cache
+	// expire at random time (60~240min) to avoid cache avalanche
+	ipInterface, found := c.Get(speedtestIP.Host)
+	if found {
+		ip = ipInterface.(string)
+		logs.Debug("get ip %s:%s from cache successfully,no need Resolution host", speedtestIP.Host, ip)
+
 	} else {
+		IPAddr, err := net.ResolveIPAddr("ip", speedtestIP.Host)
+		if err != nil {
+			logs.Error("Resolution host:%s to ip error %s", speedtestIP.Host, err)
+			return
+		}
+		ip = IPAddr.String()
+		c.Set(speedtestIP.Host, ip, time.Duration((60+rand.Intn(180)))*time.Minute)
 		logs.Debug("Resolution host:%s to ip successfully %s", speedtestIP.Host, IPAddr.String())
 	}
 	pingIP := &PingIP{
-		IP:        IPAddr.String(),
+		IP:        ip,
 		Host:      speedtestIP.Host,
 		Provider:  speedtestIP.Provider,
 		Country:   speedtestIP.Country,

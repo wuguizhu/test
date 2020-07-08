@@ -71,6 +71,7 @@ func (p *Ping) TestNodePing(ipsGetter util.IPsGetter, sip string) (result map[ut
 	} else {
 		ipType = "speedtest"
 	}
+	logs.Debug("current ipsGetter get %s ips", ipType)
 	numIP := len(pips)
 	numGroup := int(math.Ceil(float64(numIP) / float64(p.ThreadCount)))
 	// 分组ping
