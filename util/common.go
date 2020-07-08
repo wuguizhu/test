@@ -212,7 +212,6 @@ func Host2IP_Producer(speedtestIP *SpeedtestIP, wg *sync.WaitGroup, ipChannel ch
 		IPAddr, err := net.ResolveIPAddr("ip", speedtestIP.Host)
 		if err != nil {
 			logs.Error("Resolution host:%s to ip error %s", speedtestIP.Host, err)
-			return
 		}
 		ip = IPAddr.String()
 		c.Set(speedtestIP.Host, ip, time.Duration((60+rand.Intn(180)))*time.Minute)
