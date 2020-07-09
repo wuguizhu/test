@@ -2,7 +2,7 @@
     "station":"test-cn1",
 	"ping_packet_size":56,
 	"ping_packet_count":5,
-	"ping_thread_count":700,
+	"ping_thread_count":1800,
 	"ping_timeout_ms":600,
 	"ping_send_package_wait_ms":20,
 	"ping_send_package_interval_min_ms":30,
