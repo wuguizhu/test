@@ -1,3 +1,5 @@
+package util
+
 // Package fastping is an ICMP ping library inspired by AnyEvent::FastPing Perl
 // module to send ICMP ECHO REQUEST packets quickly. Original Perl module is
 // available at
@@ -35,17 +37,16 @@
 //
 //	sudo go test
 //
-package util
 
 import (
 	"fmt"
-	"github.com/astaxie/beego/logs"
 	"net"
 	"strings"
 	"sync"
 	"syscall"
 	"time"
 
+	"github.com/astaxie/beego/logs"
 	"golang.org/x/net/icmp"
 	"golang.org/x/net/ipv4"
 	"golang.org/x/net/ipv6"
@@ -203,7 +204,7 @@ func (p *Pinger) AddIP(ipaddr string, id int) error {
 	}
 
 	p.ip2id[addr.String()] = id
-	p.curAddrCount += 1
+	p.curAddrCount++
 	// add to channel
 	p.addrsChannel <- addr
 
@@ -226,7 +227,7 @@ func (p *Pinger) Run() (map[string]time.Duration, string, error) {
 	if err != nil {
 		close(p.stop)
 		close(p.finish)
-		logs.Error("func failed with error:", err)
+		// logs.Error("func failed with error:", err)
 		return nil, p.source, err
 	}
 	defer conn.Close()
@@ -281,7 +282,7 @@ func (p *Pinger) Run() (map[string]time.Duration, string, error) {
 func (p *Pinger) listen(netProto string, source string) (*icmp.PacketConn, error) {
 	conn, err := icmp.ListenPacket(netProto, source)
 	if err != nil {
-		logs.Error("ListenPacket failed with error:", err)
+		// logs.Error("ListenPacket failed with error:", err)
 		return nil, err
 	}
 	return conn, nil
@@ -315,7 +316,7 @@ func (p *Pinger) sendICMP(conn *icmp.PacketConn) error {
 
 		if err != nil {
 			bytePool.Put(buf)
-			logs.Error("Message Marshal failed with error:", err)
+			// logs.Error("Message Marshal failed with error:", err)
 			return err
 		}
 
@@ -331,7 +332,7 @@ func (p *Pinger) sendICMP(conn *icmp.PacketConn) error {
 						continue
 					}
 				}
-				logs.Error("conn.WriteTo failed with error:", err)
+				// logs.Error("conn.WriteTo failed with error:", err)
 			}
 			break
 		}
@@ -437,7 +438,7 @@ func (p *Pinger) procRecv(recv <-chan *packet) {
 		}
 
 		p.mu.Lock()
-		p.repliedAddrCount += 1
+		p.repliedAddrCount++
 		if p.repliedAddrCount == p.curAddrCount {
 			close(p.finish)
 		}
